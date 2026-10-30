@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="icon" href="data:," />
+  <title>Apex Foods - Sanitation Hub Public Demo (Scrambled Sandbox)</title>
+  <script src="demo_seed_data.js"></script>
+  <script src="mock_dataverse_engine.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+      background: #0F172A;
+      color: #F8FAFC;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .demo-topbar {
+      background: linear-gradient(90deg, #0B3C73 0%, #0F172A 100%);
+      border-bottom: 2px solid #FFB81C;
+      padding: 8px 14px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      z-index: 100;
+    }
+    .demo-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .demo-badge {
+      background: #FFB81C;
+      color: #0F172A;
+      font-size: 10px;
+      font-weight: 900;
+      padding: 3px 8px;
+      border-radius: 999px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .demo-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #FFFFFF;
+    }
+    .demo-sub {
+      font-size: 11px;
+      color: #93C5FD;
+    }
+    .demo-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    .demo-tab {
+      background: rgba(255, 255, 255, 0.08);
+      color: #E2E8F0;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 6px;
+      padding: 6px 11px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .demo-tab:hover {
+      background: rgba(255, 255, 255, 0.16);
+    }
+    .demo-tab.active {
+      background: #006ECD;
+      color: #FFFFFF;
+      border-color: #FFB81C;
+      box-shadow: 0 2px 8px rgba(0, 110, 205, 0.45);
+    }
+    .demo-statsbar {
+      background: #1E293B;
+      border-bottom: 1px solid #334155;
+      padding: 4px 14px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 11px;
+    }
+    .demo-pills {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+    .demo-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: #CBD5E1;
+    }
+    .demo-pill strong {
+      color: #38BDF8;
+      font-family: monospace;
+      font-size: 12px;
+    }
+    .demo-btn {
+      background: #334155;
+      color: #F8FAFC;
+      border: 1px solid #475569;
+      border-radius: 5px;
+      padding: 3px 9px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .demo-btn:hover {
+      background: #475569;
+    }
+    .demo-frame-wrap {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      background: #F8FAFC;
+    }
+    iframe#demo-app-frame {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <header class="demo-topbar">
+    <div class="demo-brand">
+      <span class="demo-badge">Public Demo Sandbox</span>
+      <div>
+        <div class="demo-title">Apex Foods - Midwest Plant 4 Sanitation Hub</div>
+        <div class="demo-sub">100% Scrambled Data &bull; Local In-Browser Mock Dataverse Engine (Zero External Tenant Calls)</div>
+      </div>
+    </div>
+    <nav class="demo-nav" role="navigation" aria-label="Demo Apps">
+      <button type="button" class="demo-tab active" data-app="shiftstart">1. Team Builder (Shift Start)</button>
+      <button type="button" class="demo-tab" data-app="ganttly">2. Team Overview (Ganttly)</button>
+      <button type="button" class="demo-tab" data-app="mss">3. MSS Log &amp; SAP Input</button>
+      <button type="button" class="demo-tab" data-app="bolo">4. Pathogen BOLO</button>
+      <button type="button" class="demo-tab" data-app="manager">5. Managers Hub</button>
+      <button type="button" class="demo-tab" data-app="prodsched">6. Production Scheduler</button>
+    </nav>
+  </header>
+  <div class="demo-statsbar">
+    <div class="demo-pills" id="demo-stats-pills">
+      <span class="demo-pill">Signed In: <strong>Marcus Vance (Supervisor - Crew D)</strong></span>
+      <span class="demo-pill">Shift Boards: <strong id="st-boards">0</strong></span>
+      <span class="demo-pill">Task Rows: <strong id="st-tasks">0</strong></span>
+      <span class="demo-pill">Check-offs: <strong id="st-checkoffs">0</strong></span>
+      <span class="demo-pill">MSS Logs: <strong id="st-logs">0</strong></span>
+      <span class="demo-pill">Swab Results: <strong id="st-swabs">0</strong></span>
+      <span class="demo-pill">Assets: <strong id="st-assets">0</strong></span>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;">
+      <button type="button" class="demo-btn" id="btn-reset-demo">Reset Demo Data</button>
+    </div>
+  </div>
+  <main class="demo-frame-wrap">
+    <iframe id="demo-app-frame" src="app.html?app=shiftstart" title="Demo Application Viewport"></iframe>
+  </main>
+  <script>
+    (function () {
+      var frame = document.getElementById('demo-app-frame');
+      var tabs = Array.prototype.slice.call(document.querySelectorAll('.demo-tab'));
+
+      function switchApp(appKey) {
+        tabs.forEach(function (t) {
+          t.classList.toggle('active', t.getAttribute('data-app') === appKey);
+        });
+        frame.src = 'app.html?app=' + encodeURIComponent(appKey) + '&t=' + Date.now();
+      }
+
+      tabs.forEach(function (t) {
+        t.addEventListener('click', function () {
+          switchApp(t.getAttribute('data-app'));
+        });
+      });
+
+      function refreshStats() {
+        if (!window.ApexDemoEngine) return;
+        var st = window.ApexDemoEngine.getStats();
+        document.getElementById('st-boards').textContent = st.shiftboards;
+        document.getElementById('st-tasks').textContent = st.taskassignments;
+        document.getElementById('st-checkoffs').textContent = st.checkoffs;
+        document.getElementById('st-logs').textContent = st.logs;
+        document.getElementById('st-swabs').textContent = st.swabs;
+        document.getElementById('st-assets').textContent = st.assets;
+      }
+
+      window.__APEX_DEMO_LISTENERS__ = [refreshStats];
+      setInterval(refreshStats, 1000);
+      refreshStats();
+
+      document.getElementById('btn-reset-demo').addEventListener('click', function () {
+        if (window.ApexDemoEngine) {
+          window.ApexDemoEngine.resetToSeed();
+          refreshStats();
+          frame.contentWindow.location.reload();
+        }
+      });
+
+      var urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('app')) {
+        switchApp(urlParams.get('app'));
+      }
+      window.switchDemoApp = switchApp;
+    })();
+  </script>
+</body>
+</html>

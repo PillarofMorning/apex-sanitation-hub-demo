@@ -135,13 +135,27 @@
       color: #F8FAFC;
       border: 1px solid #475569;
       border-radius: 5px;
-      padding: 3px 9px;
+      padding: 4px 10px;
       font-size: 11px;
       font-weight: 700;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s ease;
     }
     .demo-btn:hover {
       background: #475569;
+    }
+    .demo-btn.btn-tour {
+      background: #006ECD;
+      color: #FFFFFF;
+      border-color: #FFB81C;
+      box-shadow: 0 0 10px rgba(255, 184, 28, 0.35);
+    }
+    .demo-btn.btn-tour:hover {
+      background: #0284C7;
+      box-shadow: 0 0 14px rgba(255, 184, 28, 0.55);
     }
     .demo-frame-wrap {
       flex: 1;
@@ -155,6 +169,232 @@
       height: 100%;
       border: 0;
       display: block;
+    }
+
+    /* Guided Tour Popout Card */
+    .tour-popout {
+      position: absolute;
+      right: 18px;
+      bottom: 18px;
+      width: 450px;
+      max-width: calc(100vw - 36px);
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid #38BDF8;
+      border-radius: 12px;
+      box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.75), 0 0 15px rgba(56, 189, 248, 0.25);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .tour-popout.minimized {
+      width: auto;
+      max-width: 380px;
+      border-color: #FFB81C;
+    }
+    .tour-popout.minimized .tour-body,
+    .tour-popout.minimized .tour-footer,
+    .tour-popout.minimized .tour-stepper {
+      display: none;
+    }
+    .tour-header {
+      background: linear-gradient(90deg, #1E293B 0%, #0F172A 100%);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #334155;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .tour-header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tour-badge {
+      background: #FFB81C;
+      color: #0F172A;
+      font-size: 9.5px;
+      font-weight: 900;
+      padding: 2px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .tour-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #F8FAFC;
+    }
+    .tour-header-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tour-icon-btn {
+      background: transparent;
+      border: 0;
+      color: #94A3B8;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .tour-icon-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #FFFFFF;
+    }
+    .tour-stepper {
+      background: #1E293B;
+      padding: 6px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      border-bottom: 1px solid #334155;
+      font-size: 11px;
+      color: #94A3B8;
+    }
+    .tour-dots {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .tour-dot {
+      width: 22px;
+      height: 5px;
+      border-radius: 3px;
+      background: #334155;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .tour-dot.active {
+      background: #38BDF8;
+      width: 32px;
+    }
+    .tour-dot.done {
+      background: #0284C7;
+    }
+    .tour-timer {
+      font-family: monospace;
+      color: #FDE68A;
+      font-size: 10.5px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .tour-body {
+      padding: 14px;
+      max-height: 380px;
+      overflow-y: auto;
+      font-size: 12px;
+      line-height: 1.5;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .tour-sec-title {
+      font-size: 10.5px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #38BDF8;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .tour-box {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(51, 65, 85, 0.8);
+      border-radius: 8px;
+      padding: 9px 11px;
+    }
+    .tour-box.action-box {
+      background: rgba(2, 132, 199, 0.12);
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+    .tour-box p {
+      margin: 0;
+      color: #E2E8F0;
+    }
+    .tour-box ul {
+      margin: 4px 0 0 16px;
+      padding: 0;
+      color: #CBD5E1;
+    }
+    .tour-box li {
+      margin-bottom: 3px;
+    }
+    .tour-highlight {
+      color: #FFB81C;
+      font-weight: 700;
+    }
+    .tour-code {
+      background: rgba(15, 23, 42, 0.8);
+      color: #38BDF8;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-weight: 700;
+      font-size: 11px;
+    }
+    .tour-footer {
+      background: #1E293B;
+      padding: 10px 14px;
+      border-top: 1px solid #334155;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .tour-footer-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tour-footer-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tour-action-btn {
+      background: #0284C7;
+      color: #FFFFFF;
+      border: 1px solid #38BDF8;
+      border-radius: 6px;
+      padding: 5px 11px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+    }
+    .tour-action-btn:hover {
+      background: #0369A1;
+    }
+    .tour-action-btn.primary {
+      background: #FFB81C;
+      color: #0F172A;
+      border-color: #F59E0B;
+    }
+    .tour-action-btn.primary:hover {
+      background: #F59E0B;
+    }
+    .tour-action-btn.secondary {
+      background: #334155;
+      border-color: #475569;
+      color: #E2E8F0;
+    }
+    .tour-action-btn.secondary:hover {
+      background: #475569;
     }
   </style>
 </head>
@@ -190,12 +430,55 @@
       <span class="demo-pill">Assets: <strong id="st-assets">0</strong></span>
     </div>
     <div style="display:flex;align-items:center;gap:6px;">
+      <button type="button" class="demo-btn btn-tour" id="btn-toggle-tour">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8" fill="currentColor"></polygon></svg>
+        Guided Tour (4-5 Min Walkthrough)
+      </button>
       <button type="button" class="demo-btn" id="btn-reset-demo">Reset Demo Data</button>
     </div>
   </div>
   <main class="demo-frame-wrap">
     <iframe id="demo-app-frame" src="app.html?app=calendar" title="Demo Application Viewport"></iframe>
+
+    <!-- Guided Tour Popout -->
+    <aside id="tour-popout-card" class="tour-popout" role="dialog" aria-labelledby="tour-card-title">
+      <header class="tour-header" id="tour-drag-handle">
+        <div class="tour-header-left">
+          <span class="tour-badge" id="tour-step-badge">Step 1 of 7</span>
+          <div class="tour-title" id="tour-card-title">Master Sanitation Schedule (MSS)</div>
+        </div>
+        <div class="tour-header-controls">
+          <button type="button" class="tour-icon-btn" id="tour-btn-minimize" title="Minimize / Expand Tour Window">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          </button>
+          <button type="button" class="tour-icon-btn" id="tour-btn-close" title="Close Tour Window">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+      </header>
+      <div class="tour-stepper">
+        <div class="tour-dots" id="tour-dots-container"></div>
+        <div class="tour-timer">
+          <span id="tour-timer-label">Auto-Play: Off</span>
+          <button type="button" class="tour-icon-btn" id="tour-btn-timer-toggle" title="Toggle Auto-Play Walkthrough">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor"></polygon></svg>
+          </button>
+        </div>
+      </div>
+      <div class="tour-body" id="tour-body-content"></div>
+      <footer class="tour-footer">
+        <div class="tour-footer-left">
+          <button type="button" class="tour-action-btn secondary" id="tour-btn-prev">Previous</button>
+          <button type="button" class="tour-action-btn secondary" id="tour-btn-replay">Replay Step</button>
+        </div>
+        <div class="tour-footer-right">
+          <button type="button" class="tour-action-btn" id="tour-btn-do-action">Try Action</button>
+          <button type="button" class="tour-action-btn primary" id="tour-btn-next">Next Step</button>
+        </div>
+      </footer>
+    </aside>
   </main>
+
   <script>
     (function () {
       var frame = document.getElementById('demo-app-frame');
@@ -242,6 +525,327 @@
         switchApp(urlParams.get('app'));
       }
       window.switchDemoApp = switchApp;
+
+      // =====================================================================
+      // GUIDED TOUR DATA & CONTROLLER (4-5 MIN INTERACTIVE WALKTHROUGH)
+      // =====================================================================
+      var TOUR_STEPS = [
+        {
+          id: 'step_calendar',
+          app: 'calendar',
+          badge: 'Step 1 of 7 - Compliance Engine',
+          title: 'Master Sanitation Schedule (MSS)',
+          desc: 'The regulatory compliance record and single source of truth for the entire facility. Tracks cleaning frequencies (Daily, Weekly, Periodic, Annual) across all 750 equipment assets in 37 plant areas.',
+          connection: 'Master Sanitation never requires manual duplicate paper logs. When work is completed in Ganttly, Shift Start, or SAP Log Input, records write directly to Dataverse craa5___1_l_log and reflect here immediately.',
+          actionTitle: 'Notice the 2 Open Overdue Items',
+          actionDesc: 'Notice the red LATE ONLY 2 button in the header. The plant dataset is pre-seeded with all historical cleans complete EXCEPT two specific items: ibl4 - caseout 74 (IBL4 / Devon Brooks) and hs - makeup 10 (highspeed / Nadia Patel).',
+          actionBtnLabel: 'Filter to Late Items',
+          onAction: function() {
+            try {
+              var doc = frame.contentDocument || frame.contentWindow.document;
+              var lateBtn = Array.from(doc.querySelectorAll('button')).find(function(b) { return /LATE ONLY/i.test(b.innerText || ''); });
+              if (lateBtn) lateBtn.click();
+            } catch (e) {}
+          }
+        },
+        {
+          id: 'step_shiftstart',
+          app: 'shiftstart',
+          badge: 'Step 2 of 7 - Shift Leadership',
+          title: 'Team Builder (Shift Start)',
+          desc: 'Used by Shift Supervisors (such as Marcus Vance / Crew D) before and during the 12-hour shift. Supervisors confirm tech attendance, balance workloads, and assign staff to rooms and equipment.',
+          connection: 'Saved team rosters and room pins write directly to Dataverse craa5___1_s_shiftboard and craa5___1_g_assignment. Floor teams and Ganttly read this exact board to build the shift timeline without manual coordination.',
+          actionTitle: 'Live Floor Staffing in Action',
+          actionDesc: 'Notice Devon Brooks assigned to IBL4 and Nadia Patel assigned to Highspeed. These assignments carry directly into Ganttly worker lanes.',
+          actionBtnLabel: 'Focus Shift Board',
+          onAction: function() {
+            try {
+              var doc = frame.contentDocument || frame.contentWindow.document;
+              var roomCard = doc.querySelector('[data-room-card=\"IBL4\"]') || doc.body;
+              if (roomCard) roomCard.scrollIntoView({ behavior: 'smooth' });
+            } catch (e) {}
+          }
+        },
+        {
+          id: 'step_ganttly_overview',
+          app: 'ganttly',
+          badge: 'Step 3 of 7 - Real-Time Pulse',
+          title: 'Ganttly: 24-Hour Donut Clocks',
+          desc: 'The live floor execution dashboard for leads and supervisors. The OVERVIEW tab displays 24-hour clock donuts visualizing equipment progress and shift completion at a glance.',
+          connection: 'Aggregates live check-off rows and SAP completions. Waterjet and IBL5 show All Done 100% (green), while IBL4 shows 7/8 pcs (84%) and Highspeed shows 13/14 pcs because of our two open items.',
+          actionTitle: 'Room Utilization & Status',
+          actionDesc: 'Click the METRICS tab in Ganttly to see overall plant progress at 99% (311 done, 2 in progress) and 57% crew capacity utilization.',
+          actionBtnLabel: 'Switch to METRICS Tab',
+          onAction: function() {
+            try {
+              var doc = frame.contentDocument || frame.contentWindow.document;
+              var btn = Array.from(doc.querySelectorAll('button')).find(function(b) { return /^METRICS$/i.test((b.innerText || '').trim()); });
+              if (btn) btn.click();
+            } catch (e) {}
+          }
+        },
+        {
+          id: 'step_ganttly_propagation',
+          app: 'ganttly',
+          badge: 'Step 4 of 7 - Live Cross-App Sync',
+          title: 'PBED Timeline & 1-Click Propagation',
+          desc: 'The PBED tab visualizes the staircase Gantt schedule for every technician and piece of equipment. Highspeed and IBL4 are expanded with their cleaning steps.',
+          connection: 'Watch cross-app propagation in action! Click Complete Step on Devon Brooks\'s IBL4 task (ibl4 - caseout 74). In Ganttly, IBL4 becomes 8/8 (100% Done). In Master Sanitation (MSS), the red LATE ONLY count drops immediately from 2 to 1!',
+          actionTitle: 'Complete IBL4 Item in Ganttly',
+          actionDesc: 'Click Complete IBL4 Now below to complete Devon Brooks\'s task directly via the Dataverse engine and see the real-time update propagate across both apps.',
+          actionBtnLabel: 'Complete IBL4 Item Now',
+          onAction: function() {
+            try {
+              var doc = frame.contentDocument || frame.contentWindow.document;
+              var compBtns = Array.from(doc.querySelectorAll('button')).filter(function(b) { return /^Complete Step$/i.test((b.innerText || '').trim()); });
+              var ibl4Btn = compBtns.find(function(b) {
+                var cur = b;
+                while (cur && cur !== doc.body) {
+                  if ((cur.innerText || '').indexOf('IBL4') >= 0) return true;
+                  cur = cur.parentElement;
+                }
+                return false;
+              }) || compBtns[compBtns.length - 1];
+              if (ibl4Btn) {
+                ibl4Btn.click();
+              } else if (window.ApexDemoEngine) {
+                // Fallback direct checkoff write if user is on another tab
+                var chks = window.ApexDemoEngine.getTableRows('craa5___1_g_checkoff');
+                window.ApexDemoEngine.createRow('craa5___1_g_checkoff', {
+                  craa5_equipmentguid: 'e0000000-0000-4000-8000-999999995386',
+                  craa5_status: 'done',
+                  craa5_area: 'IBL4',
+                  craa5_equipment: 'ibl4 - caseout 74',
+                  craa5_cleankind: 'daily',
+                  craa5_shiftdate: new Date().toISOString().slice(0, 10)
+                });
+              }
+              refreshStats();
+            } catch (e) {}
+          }
+        },
+        {
+          id: 'step_sap_mss',
+          app: 'mss',
+          badge: 'Step 5 of 7 - ERP & Work Orders',
+          title: 'SAP Log Input',
+          desc: 'Rapid work order entry for plants integrated with SAP PM. Leads enter SAP codes to bulk-confirm completed sanitations directly into plant records.',
+          connection: 'Enter code SAP-D-175 for Nadia Patel\'s hs - makeup 10 (or click the button below). Submitting this log writes to craa5___1_l_log and craa5___1_g_checkoff, clearing the final overdue item across both MSS and Ganttly.',
+          actionTitle: 'Close Final Overdue Item (SAP-D-175)',
+          actionDesc: 'Submitting this record drops the MSS Calendar late count to 0 (All caught up) and marks Highspeed 14/14 (100% Done) in Ganttly.',
+          actionBtnLabel: 'Submit Nadia\'s SAP Record',
+          onAction: function() {
+            try {
+              var doc = frame.contentDocument || frame.contentWindow.document;
+              var sapInp = doc.querySelector('input[data-row=\"0\"][data-col=\"sap\"]');
+              var hrsInp = doc.querySelector('input[data-row=\"0\"][data-col=\"hours\"], input[placeholder*=\"hour\" i]');
+              var byInp = doc.querySelector('input[data-row=\"0\"][data-col=\"by\"], input[data-row=\"0\"][data-col=\"cleanedby\"]');
+              if (sapInp) {
+                var setVal = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+                setVal.call(sapInp, 'SAP-D-175');
+                sapInp.dispatchEvent(new Event('input', { bubbles: true }));
+                sapInp.dispatchEvent(new Event('change', { bubbles: true }));
+                if (hrsInp) { setVal.call(hrsInp, '0.75'); hrsInp.dispatchEvent(new Event('input', { bubbles: true })); }
+                if (byInp) { setVal.call(byInp, 'Nadia Patel'); byInp.dispatchEvent(new Event('input', { bubbles: true })); }
+                var subBtn = Array.from(doc.querySelectorAll('button')).find(function(b) { return /Submit All Records/i.test(b.innerText || ''); });
+                if (subBtn) subBtn.click();
+                setTimeout(function() {
+                  var yes = doc.querySelector('[data-confirm-yes]') || Array.from(doc.querySelectorAll('button')).find(function(b) { return /Yes, go ahead/i.test(b.innerText || ''); });
+                  if (yes) yes.click();
+                  refreshStats();
+                }, 400);
+              } else if (window.ApexDemoEngine) {
+                window.ApexDemoEngine.createRow('craa5___1_l_log', {
+                  craa5_equipmentguid: 'e0000000-0000-4000-8000-999999995175',
+                  craa5_equipment: 'hs - makeup 10',
+                  craa5_area: 'highspeed',
+                  craa5_sap: 'SAP-D-175',
+                  craa5_cleankind: 'daily',
+                  craa5_daily: true,
+                  craa5_nameofemployee: 'Nadia Patel',
+                  craa5_shiftdate: new Date().toISOString().slice(0, 10),
+                  craa5_hoursworked: 0.75
+                });
+                refreshStats();
+              }
+            } catch (e) {}
+          }
+        },
+        {
+          id: 'step_director',
+          app: 'director',
+          badge: 'Step 6 of 7 - Executive Modeling',
+          title: 'Sanitation Director (Run Modeler)',
+          desc: 'High-level financial and labor modeling for plant managers and corporate directors. Features the Run Week Modeler, Projected Load Graph, and Current Reality Graph.',
+          connection: 'Simulates production run adjustments to forecast required cleaning hours, tech headcounts, and overtime costs based on actual plant asset standards -- without altering active floor boards.',
+          actionTitle: 'Projected Load vs Current Reality',
+          actionDesc: 'Click Projected Load Graph to view day-by-day sanitation labor requirements across all production lines.',
+          actionBtnLabel: 'View Projected Load Graph',
+          onAction: function() {
+            try {
+              var doc = frame.contentDocument || frame.contentWindow.document;
+              var btn = Array.from(doc.querySelectorAll('button')).find(function(b) { return /Projected Load Graph/i.test(b.innerText || ''); });
+              if (btn) btn.click();
+            } catch (e) {}
+          }
+        },
+        {
+          id: 'step_bolo_ecosystem',
+          app: 'bolo',
+          badge: 'Step 7 of 7 - Unified Quality Ecosystem',
+          title: 'Pathogen BOLO & Quality Safeguards',
+          desc: 'Tracks microbiological swab tests, environmental monitoring zones (Zone 1-4), and visual line mapping to prevent contamination and enforce pre-op holds.',
+          connection: 'Together with Managers Hub (audit trails) and Production Scheduler (line coordination), all 8 applications function as a single synchronized sanitation operating system.',
+          actionTitle: 'Reset & Re-Explore',
+          actionDesc: 'The tour is complete! You can click Reset Demo Data anytime to re-arm the two open items and freely test any part of the system.',
+          actionBtnLabel: 'Back to MSS Calendar',
+          onAction: function() {
+            switchApp('calendar');
+            setTourStep(0);
+          }
+        }
+      ];
+
+      var curStepIdx = 0;
+      var autoPlayTimer = null;
+      var autoPlayRemainSec = 40;
+      var tourCard = document.getElementById('tour-popout-card');
+      var tourBody = document.getElementById('tour-body-content');
+      var tourTitle = document.getElementById('tour-card-title');
+      var tourBadge = document.getElementById('tour-step-badge');
+      var dotsContainer = document.getElementById('tour-dots-container');
+      var timerLabel = document.getElementById('tour-timer-label');
+      var btnAction = document.getElementById('tour-btn-do-action');
+
+      function renderDots() {
+        dotsContainer.innerHTML = '';
+        TOUR_STEPS.forEach(function (st, idx) {
+          var dot = document.createElement('div');
+          dot.className = 'tour-dot' + (idx === curStepIdx ? ' active' : (idx < curStepIdx ? ' done' : ''));
+          dot.title = (idx + 1) + '. ' + st.title;
+          dot.addEventListener('click', function () { setTourStep(idx); });
+          dotsContainer.appendChild(dot);
+        });
+      }
+
+      function setTourStep(idx) {
+        if (idx < 0) idx = 0;
+        if (idx >= TOUR_STEPS.length) idx = TOUR_STEPS.length - 1;
+        curStepIdx = idx;
+        var s = TOUR_STEPS[idx];
+
+        tourBadge.textContent = s.badge;
+        tourTitle.textContent = s.title;
+
+        // Render card body
+        tourBody.innerHTML =
+          '<div class="tour-box">' +
+            '<div class="tour-sec-title">' +
+              '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>' +
+              'What This Does' +
+            '</div>' +
+            '<p>' + s.desc + '</p>' +
+          '</div>' +
+          '<div class="tour-box">' +
+            '<div class="tour-sec-title">' +
+              '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>' +
+              'How It Connects' +
+            '</div>' +
+            '<p>' + s.connection + '</p>' +
+          '</div>' +
+          '<div class="tour-box action-box">' +
+            '<div class="tour-sec-title" style="color:#FDE68A;">' +
+              '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="#FDE68A"></polygon></svg>' +
+              s.actionTitle +
+            '</div>' +
+            '<p>' + s.actionDesc + '</p>' +
+          '</div>';
+
+        btnAction.textContent = s.actionBtnLabel;
+        document.getElementById('tour-btn-prev').disabled = (curStepIdx === 0);
+        document.getElementById('tour-btn-next').textContent = (curStepIdx === TOUR_STEPS.length - 1 ? 'Finish Tour' : 'Next Step');
+
+        renderDots();
+        switchApp(s.app);
+        autoPlayRemainSec = 40;
+      }
+
+      btnAction.addEventListener('click', function () {
+        var s = TOUR_STEPS[curStepIdx];
+        if (typeof s.onAction === 'function') s.onAction();
+      });
+
+      document.getElementById('tour-btn-next').addEventListener('click', function () {
+        if (curStepIdx < TOUR_STEPS.length - 1) {
+          setTourStep(curStepIdx + 1);
+        } else {
+          tourCard.style.display = 'none';
+        }
+      });
+
+      document.getElementById('tour-btn-prev').addEventListener('click', function () {
+        if (curStepIdx > 0) setTourStep(curStepIdx - 1);
+      });
+
+      document.getElementById('tour-btn-replay').addEventListener('click', function () {
+        setTourStep(curStepIdx);
+      });
+
+      // Minimize / close / toggle
+      var btnMin = document.getElementById('tour-btn-minimize');
+      btnMin.addEventListener('click', function () {
+        tourCard.classList.toggle('minimized');
+      });
+
+      document.getElementById('tour-drag-handle').addEventListener('dblclick', function () {
+        tourCard.classList.toggle('minimized');
+      });
+
+      document.getElementById('tour-btn-close').addEventListener('click', function () {
+        tourCard.style.display = 'none';
+        stopAutoPlay();
+      });
+
+      document.getElementById('btn-toggle-tour').addEventListener('click', function () {
+        tourCard.style.display = 'flex';
+        tourCard.classList.remove('minimized');
+        setTourStep(curStepIdx);
+      });
+
+      // Auto-Play Timer (4-5 minutes total walkthrough)
+      function startAutoPlay() {
+        stopAutoPlay();
+        autoPlayRemainSec = 40;
+        timerLabel.textContent = 'Auto: ' + autoPlayRemainSec + 's';
+        document.getElementById('tour-btn-timer-toggle').innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="6" y="4" width="4" height="16" fill="currentColor"></rect><rect x="14" y="4" width="4" height="16" fill="currentColor"></rect></svg>';
+        autoPlayTimer = setInterval(function () {
+          autoPlayRemainSec--;
+          if (autoPlayRemainSec <= 0) {
+            if (curStepIdx < TOUR_STEPS.length - 1) {
+              setTourStep(curStepIdx + 1);
+            } else {
+              stopAutoPlay();
+            }
+          } else {
+            timerLabel.textContent = 'Auto: ' + autoPlayRemainSec + 's';
+          }
+        }, 1000);
+      }
+
+      function stopAutoPlay() {
+        if (autoPlayTimer) clearInterval(autoPlayTimer);
+        autoPlayTimer = null;
+        timerLabel.textContent = 'Auto-Play: Off';
+        document.getElementById('tour-btn-timer-toggle').innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor"></polygon></svg>';
+      }
+
+      document.getElementById('tour-btn-timer-toggle').addEventListener('click', function () {
+        if (autoPlayTimer) stopAutoPlay();
+        else startAutoPlay();
+      });
+
+      // Initialize Step 1 on page load
+      setTourStep(0);
     })();
   </script>
 </body>

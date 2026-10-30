@@ -155,7 +155,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
  *                  Removed Crew plan tab and engine, MSS MANPOWER block, and staff rows. Shifts tab displays director's
  *                  planned crew size via Hub config DIRECTOR_HEADS beside People).
  *                  v4.8.2 (HUB SHARED v1.3 contract 1.0.62; table manifest specifications passed to Hub config).
- *                  v4.8 (Gerald's ruling: apps no longer create/change tables; Data Check > Columns shows found/missing status;
+ *                  v4.8 (Alex's ruling: apps no longer create/change tables; Data Check > Columns shows found/missing status;
  *                  saves table/column schemas to Hub config manifest|prodsched via hubSaveManifest).
  *                  v4.7 (Phase 3: Crew plan tab, Clean Plan line cleans + mandatory tasks via craa5___1_e_shifttask).
  *                  v4.6 (Phase 2: Clean Plan board as planner; pin clean starts inside stops; linked lines shared settings).
@@ -163,7 +163,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
  *                  v4.4 (Imported weeks replace existing runs; clash resolution and undo support).
  *                  v4.3 (Import Weeks handles numbered lines: WJ2 to WJ line 2, Breading 2, Highspeed 2).
  *                  v4.2 (Clean Plan tab reads top to bottom; chunked configpart settings storage).
- *                  v4.1 (Gerald's line rules: IBL4 72h Midweek clean, clean override support in craa5_cleanoverride).
+ *                  v4.1 (Alex's line rules: IBL4 72h Midweek clean, clean override support in craa5_cleanoverride).
  *                  v4.0 (Multi-Week Excel Ingestion Engine, Gantt schedule view, change requests import).
  * FOLDER STATUS:   Live - current working
  * REPO SOURCE:     P1.1 - production schedule
@@ -663,7 +663,7 @@ var COLUMN_GUIDE = [
 // The manifest this page saves to Hub config (data contract 12.1): logical names only, never data.
 var PS_WRITES = { runs: 1, run_rules: 1, inbox: 1, areas: 1, assets: 1, cleanplan: 1, sku_master: 1, p_plan: 1 };
 // Column types and a schema specification for the tables this page owns (HUB SHARED v1.3, ground rule 10): the Dataverse monitor shows
-// them and tests what is there; Gerald makes them in Dataverse. Nothing here creates or changes a table.
+// them and tests what is there; Alex makes them in Dataverse. Nothing here creates or changes a table.
 // prompt = the recommended schema specification for that table (2,000 characters at most); HUB SHARED v1.3 passes it on.
 var PS_BUILD = {
     cleanplan: { primary: { n: 'craa5_cleanplanname', len: 100, label: 'Clean Plan Name' }, prompt: 'Create a table named "Clean Plan" (schema name craa5___1_p_cleanplan / craa5___1_p_cleanplan), Organization ownership. Primary column "Clean Plan Name" craa5_cleanplanname (single line of text, 100). Columns: "Plan Key" craa5_plankey (text 200); "Row Type" craa5_rowtype (text 20); "Line Key" craa5_linekey (text 100); "Start" craa5_start (date and time); "End" craa5_end (date and time); "Day" craa5_day (text 10); "Clean Kind" craa5_cleankind (text 50); "Minutes" craa5_minutes (whole number); "Status" craa5_status (text 20); "Details" craa5_details (multiple lines of text, maximum 1,048,576); "Reason" craa5_reason (multiple lines of text, 2000); "Content Hash" craa5_contenthash (text 20); "Area" craa5_area (text 100); "Line" craa5_line (whole number); "MSS Area GUID" craa5_mssareaguid (text 100); "Publish Batch" craa5_publishbatch (text 200). None required. No lookup or choice columns.' },
@@ -1384,7 +1384,7 @@ var colLabel = function (c) {
         _a[F_BATCH] = 'Import Batch',
         _a[F_CLEAN_OV] = 'Clean Override',
         _a)[c] || (CP_COLS.filter(function (x) { return x.name === c; })[0] || {}).label || c);
-}; // the display names the Columns list tells Gerald to create
+}; // the display names the Columns list tells Alex to create
 // "Doe, John" -> "John Doe"
 function formatFullName(name) {
     var parsed = renderSafe(name).trim();
@@ -4632,7 +4632,7 @@ function hubNameList(a, keepCase) {
 }
 // The manifest as stored: fixed key order, sorted lists, so the same app build always gives the same text and hash.
 // What an app needs built, declared in its manifest (ground rule 10: nothing writes Dataverse tables or columns;
-// the Dataverse monitor reads, shows and tests these and Gerald builds from its prompts). Per table, all optional: cols { column: { type, len, label, options, min, max,
+// the Dataverse monitor reads, shows and tests these and Alex builds from its prompts). Per table, all optional: cols { column: { type, len, label, options, min, max,
 // precision, default } }, label (display name), new (true = a table still to make), owner ('org' or 'user'),
 // primary { n, len, label }, prompt (the app's recommended schema specification for the table, at most 2000 characters). type = text|memo|int|decimal|money|yesno|date|datetime|choice|guid (guid = text 100,
 // never a lookup). contract.json colTypes decides; a manifest type that disagrees is shown as a conflict.
@@ -5788,7 +5788,7 @@ var CR_LAST_LOOK_MS = 7 * DAY; // the clean after the last run: the crew has thi
 var CR_MAX_RUN_MS = 31 * DAY; // a run longer than this is a mistyped end date: left out
 // What each clean leaves out: words matched on a piece's area, room and name (letters and digits only), set per line on Cleaning Times.
 // Midweek (IBL4): everything except caseout / dry clean items and the freezer. Daily (IBL5, Waterjet nightly): every PIC item, but
-// not the floors, the shadow boards or anything on caseout (Gerald, 23 Oct). EOW and allergen cleans leave nothing out.
+// not the floors, the shadow boards or anything on caseout (Alex, 23 Oct). EOW and allergen cleans leave nothing out.
 var CR_SKIP_DEFAULT = { midweek: 'caseout, case out, dry clean, freezer', full: 'floors, shadowboard, shadow board, caseout, case out' };
 var DEFAULT_CLEAN = { same: 0, changeover: 30, crumb: 45, allergen: 240, full: 180, midweek: 240, weekly: 360 };
 // Dough room, silo and sifter end (and start again) about 4 to 6 hours before Highspeed / Custard: with no offset on the MSS area
@@ -14320,8 +14320,8 @@ function RunCheckPanel(_a) {
 }
 function ColumnsPanel(_a) {
     var colStatus = _a.colStatus, probeColumns = _a.probeColumns, probing = _a.probing, resetRefused = _a.resetRefused, apiReady = _a.apiReady, refusedCols = _a.refusedCols, tablesFound = _a.tablesFound, onRefreshAll = _a.onRefreshAll, manifest = _a.manifest;
-    // Gerald, 23 Oct: apps no longer create or change Dataverse tables. This page only checks what it uses is there, and saves that
-    // list to Hub config (manifest|prodsched); the Dataverse monitor shows and tests it, and Gerald makes what is missing.
+    // Alex, 23 Oct: apps no longer create or change Dataverse tables. This page only checks what it uses is there, and saves that
+    // list to Hub config (manifest|prodsched); the Dataverse monitor shows and tests it, and Alex makes what is missing.
     var rowsOf = function (t) { return t.cols.map(function (c) { return ({ c: c, st: colStatus(t.key, c) }); }); };
     var untested = [];
     COLUMN_GUIDE.forEach(function (t) { if (t.key === 'runs')

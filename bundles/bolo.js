@@ -97,14 +97,14 @@ FILE NAME: P1.1 - pathogen bolo.txt (pathogen bolo.txt)
 TARGET APP: Sanitation Inventory -> Pathogen BOLO (84a67f67-73fb-4e45-85db-0cded841bbd3)
 DO NOT OVERWRITE WITH MSS CALENDAR (P0.1 - mss calendar.txt)
 =======================================================================
-v2.5.2 (2026-10-23) - only Gerald builds tables (data contract 1.0.62, ground rule 10 as Gerald corrected it):
+v2.5.2 (2026-10-23) - only Alex builds tables (data contract 1.0.62, ground rule 10 as Alex corrected it):
 - The Dataverse monitor never writes Dataverse either: it reads what each app needs from Hub config, shows it with
-  prompts and steps, and tests the result. Gerald makes the tables and columns.
+  prompts and steps, and tests the result. Alex makes the tables and columns.
 - Shared block hub-shared.js v1.3: the manifest also carries the recommended Copilot prompt for the _b_ Swab result
   table (written from the column types, with the exact schema names, under 2,000 characters). The monitor shows it
   with a copy button if the table is ever missing.
 - The guide and the Developer view say tables are made by hand from the Dataverse monitor's list and prompts.
-v2.5.1 (2026-10-23) - apps never build tables (Gerald; data contract 1.0.60, ground rule 10):
+v2.5.1 (2026-10-23) - apps never build tables (Alex; data contract 1.0.60, ground rule 10):
 - The Developer view's table builder is gone: the recommended tables list, the ChatGPT / Copilot table prompts, the
   table probe and the schema download. Tables and columns are made by hand from the Dataverse monitor's list.
 - The manifest (Hub config row manifest|bolo) gives every column BOLO needs with its type (HUB SHARED v1.2 cols, plus
@@ -134,7 +134,7 @@ v2.5 (2026-10-23) - four views and the color rules (plan: https://claude.ai/arti
   (contract 1.0.52 / 1.0.53); a pin pushed by v2.4 had another row id, so that row is found and updated in place.
 - Harborage: a concern with no photo has no picture (no drawn stand-in); removing a concern asks first.
 - Removed: the old Dashboard, Graph studio and celebration pictures, and the dashboard switches in user setup.
-v2.4 (2026-10-23) - the swab table is the record, and Gerald's answers:
+v2.4 (2026-10-23) - the swab table is the record, and Alex's answers:
 - Every open loads the "_b_ Swab result" table and joins it to what this computer holds, so a computer whose saved
   copy is gone (Power Apps may clear it) shows every row without a re-upload. The read asks only for the columns the
   table has and skips rows marked replaced.
@@ -701,7 +701,7 @@ function hubNameList(a, keepCase) {
 }
 // The manifest as stored: fixed key order, sorted lists, so the same app build always gives the same text and hash.
 // What an app needs built, declared in its manifest (ground rule 10: nothing writes Dataverse tables or columns;
-// the Dataverse monitor reads, shows and tests these and Gerald builds from its prompts). Per table, all optional: cols { column: { type, len, label, options, min, max,
+// the Dataverse monitor reads, shows and tests these and Alex builds from its prompts). Per table, all optional: cols { column: { type, len, label, options, min, max,
 // precision, default } }, label (display name), new (true = a table still to make), owner ('org' or 'user'),
 // primary { n, len, label }, prompt (the app's recommended Copilot prompt for the table, at most 2000 characters). type = text|memo|int|decimal|money|yesno|date|datetime|choice|guid (guid = text 100,
 // never a lookup). contract.json colTypes decides; a manifest type that disagrees is shown as a conflict.
@@ -3827,7 +3827,7 @@ function mapLabHeader(cols) {
     return map.desc !== undefined && (map.sampleId !== undefined || map.date !== undefined) ? map : null;
 }
 // A lab number as the lab writes it: "150", "<10 CFU/swab", ">2,500,000 est", "Est. 1.2E+04", "2.4 x 10^3 CFU/sponge",
-// "TNTC". Gerald (2026-10-23): ">" means more than the number and is always past the threshold; "est" (estimated) is
+// "TNTC". Alex (2026-10-23): ">" means more than the number and is always past the threshold; "est" (estimated) is
 // only the lab's wording, the number is the number. "TNTC" (too numerous to count) is past the countable range, so it
 // reads like ">". Returns { over, under, value } or null when the text is not a number.
 var LAB_ESTIMATE_WORDS = /\(\s*(est\.?|estimated|approx\.?|approximately)\s*\)|\b(est|estimated|approx|approximately|ca)\b\.?|~/g;
@@ -5133,12 +5133,12 @@ var INLINE_THEME = {
 // Every number below comes from loaded swab rows (ledger) or, when no ledger rows exist for this year,
 // from the totals printed in the pasted weekly email. Nothing is invented: a rate with no swabs behind it is null and shows as "--".
 // ---------- Targets and alert rules (v2.4) ----------
-// Gerald (2026-10-23): the goal is 2.0% for pathogen and 5% for APC and ATP, kept where it can be edited; two hits at a
+// Alex (2026-10-23): the goal is 2.0% for pathogen and 5% for APC and ATP, kept where it can be edited; two hits at a
 // site within 3 weeks call for action; alerts look back 2 months. Saved in Hub config (PATHOGEN_BOLO_RULES) so every
 // computer and the other apps read the same numbers. These are the values until someone saves others.
 var BOLO_RULES_KEY = 'PATHOGEN_BOLO_RULES';
 // v2.5: closeDays = days after the swab day a positive may stay open before it shows as Overdue (default 7: the lab
-// takes a few days to answer, then a clean is due; Gerald has not set a number, so 7 is the stated default)
+// takes a few days to answer, then a clean is due; Alex has not set a number, so 7 is the stated default)
 var BOLO_RULES_DEFAULT = { targets: { pathogen: 2, apc: 5, atp: 5 }, repeatDays: 21, alertMonths: 2, closeDays: 7 };
 function normalizeBoloRules(raw) {
     var src = raw && typeof raw === 'object' ? raw : {};
@@ -5178,7 +5178,7 @@ function dayDiff(fromKey, toKey) {
     var b = Date.parse("".concat(toKey, "T12:00:00Z"));
     return isNaN(a) || isNaN(b) ? NaN : Math.round((b - a) / 86400000);
 }
-// Who acts on a positive (Gerald 2026-10-23): Sanitation owns start-up (ST), Production owns in-process (INP)
+// Who acts on a positive (Alex 2026-10-23): Sanitation owns start-up (ST), Production owns in-process (INP)
 function ownerOfStage(stage) {
     if (stage === 'ST')
         return 'Sanitation';
@@ -6908,7 +6908,7 @@ function boloSaveConfig(key, obj) {
 // ---------- App manifest (data contract 12.1) ----------
 // The tables and columns this build reads and writes (logical names only, never data), saved when the app opens as
 // the Hub config row manifest|bolo so the Dataverse monitor can check them. hubSaveManifest writes only on a change.
-// Ground rule 10 (contract 1.0.62): only Gerald makes or changes tables and columns. The Dataverse monitor shows what
+// Ground rule 10 (contract 1.0.62): only Alex makes or changes tables and columns. The Dataverse monitor shows what
 // this list needs, with prompts, and tests it. cols (HUB SHARED v1.2) gives the type of every column BOLO needs; prompt
 // (v1.3) is the swab table's recommended Copilot prompt. The types follow the Copilot prompts the tables were made
 // from (pathogen-bolo/table-prompts.md); a guid is text, never a lookup.
@@ -7602,7 +7602,7 @@ function useSwabDataverse(_a) {
         var t = window.setTimeout(function () { runSync(); }, 1500);
         return function () { return window.clearTimeout(t); };
     }, [runSync]);
-    // 4. Closures. Gerald (2026-10-23): every clean in the plant follows the presumptive process (three sanitizers, extra
+    // 4. Closures. Alex (2026-10-23): every clean in the plant follows the presumptive process (three sanitizers, extra
     // ppm), so every clean is a pathogen clean: any MSS log clean of the same equipment (or area) on or after the swab day
     // closes a positive. Only positives inside the alert window are looked up; older ones are history.
     var alertSince = alertSinceOf(rules);
@@ -13831,7 +13831,7 @@ function TableCheckPanel(_a) {
                     markDone && markDone.ok && !reupload && (React.createElement("div", { className: "font-bold", "data-reupload-done": "1" }, tr("Re-upload finished: ".concat(fmt(markDone.marked), " rows no file holds were marked replaced. The swab table now matches your files."), "Volver a subir terminado: ".concat(fmt(markDone.marked), " filas que ningun archivo tiene se marcaron como reemplazadas. La tabla de hisopos ahora coincide con sus archivos.")))))))))));
 }
 // =======================================================================
-// TARGETS AND ALERT RULES (Data Manipulation tab): the numbers from Gerald's answers, editable, saved in Hub config
+// TARGETS AND ALERT RULES (Data Manipulation tab): the numbers from Alex's answers, editable, saved in Hub config
 // =======================================================================
 function RulesPanel(_a) {
     var _this = this;
@@ -16818,7 +16818,7 @@ function SwabCatalogExplorerView(_a) {
 // 1. User profiles and view preferences
 // 2. Who Has Accessed the App and When (Access Audit Log + Dataverse Sync)
 // 3. Potential Error Logs & 10-Point Proactive Diagnostic Scanner
-// No table building here: only Gerald makes Dataverse tables and columns (contract 1.0.62), from the Dataverse
+// No table building here: only Alex makes Dataverse tables and columns (contract 1.0.62), from the Dataverse
 // monitor's list and prompts; the monitor reads what this app needs from its manifest|bolo row in Hub config.
 // =======================================================================
 function DevConsoleView(_a) {

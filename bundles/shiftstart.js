@@ -151,7 +151,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
  * [PERSISTENT MEMORY & APP REGISTRATION BLOCK]
  * APP NAME:        Shift Start & Roster Allocation Hub
  * PHASE ID:        P2.1 (Ref: _00 - list of apps - defined how to integrate - link to masterplan)
- * CURRENT VERSION: v0.0018 (2026-10-23: Gerald's rulings, ground rules 10 and 11 of the data contract (paste Ganttly v1.6.3 first). The app makes no table and no
+ * CURRENT VERSION: v0.0018 (2026-10-23: Alex's rulings, ground rules 10 and 11 of the data contract (paste Ganttly v1.6.3 first). The app makes no table and no
  *                  column: the Table Setup tab, the Copy Access Log Table Spec button, the composer's Suggested Dataverse table and every "create the table"
  *                  message are gone. A table or column that is not there says "not made yet, see the Dataverse monitor" and the app goes on without it.
  *                  What the app needs (tables, columns, types, lengths) goes to Hub config as manifest|shiftstart a few seconds after the page opens, once
@@ -168,7 +168,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
  *                  browser copies are no longer written or read and are removed on open; a clean type picked by hand lives only in the board and
  *                  lasts that shift; each attendance group on the board carries the contract's code (sick, pto, late, left_early))
  *                  v0.0015 (2026-10-23: a changeover clean now lists the Daily pieces and keys them as kind changeover, so it is logged
- *                  to the MSS like every other clean (Gerald); a room with no piece due says which pieces its clean covers)
+ *                  to the MSS like every other clean (Alex); a room with no piece due says which pieces its clean covers)
  *                  v0.0014 (2026-10-23: ASSIGN SPLIT v1.1: team members are filled to the shift length less 1 hour before the lead
  *                  gets pieces; each person's minutes show against that mark, amber past it; table probed as craa5___1_g_assignment first)
  *                  v0.0013 (2026-10-23: the split gets the same inputs as Ganttly: Tech 3 / inspectors take PIC pieces only (craa5_roleid),
@@ -501,7 +501,7 @@ function hubNameList(a, keepCase) {
 }
 // The manifest as stored: fixed key order, sorted lists, so the same app build always gives the same text and hash.
 // What an app needs built, declared in its manifest (ground rule 10: nothing writes Dataverse tables or columns;
-// the Dataverse monitor reads, shows and tests these and Gerald builds from its prompts). Per table, all optional: cols { column: { type, len, label, options, min, max,
+// the Dataverse monitor reads, shows and tests these and Alex builds from its prompts). Per table, all optional: cols { column: { type, len, label, options, min, max,
 // precision, default } }, label (display name), new (true = a table still to make), owner ('org' or 'user'),
 // primary { n, len, label }, prompt (the app's recommended Copilot prompt for the table, at most 2000 characters). type = text|memo|int|decimal|money|yesno|date|datetime|choice|guid (guid = text 100,
 // never a lookup). contract.json colTypes decides; a manifest type that disagrees is shown as a conflict.
@@ -3223,7 +3223,7 @@ function saveShiftStartManifest(props) {
     }
 }
 // ============================================================================
-// THE SANITATION DIRECTOR'S NUMBERS (ground rule 11, Gerald 2026-10-23). How many people a shift needs is worked out only in the
+// THE SANITATION DIRECTOR'S NUMBERS (ground rule 11, Alex 2026-10-23). How many people a shift needs is worked out only in the
 // Sanitation director, which writes Hub config DIRECTOR_HEADS (/mnt/project-files/sanitation-director/director-heads.md). This app
 // only shows that number beside Available vs Assigned. It never adds, cuts or seats anyone because of it: the board is who is here
 // today and which team cleans what. Read on open and every 30 minutes; nothing shows until the director has saved once.
@@ -4822,7 +4822,7 @@ function diffBoardRows(prev, next, prevAtt, nextAtt) {
 // ---- MSS log (craa5___1_l_log): what an area marked finished tells the MSS calendar ----
 // Interim, until Ganttly logs each piece as it is done: only the equipment that belongs to the area's clean is logged.
 //   Daily / Everyday / Allergen / Dry clean: pieces marked Daily.  Midweek: Daily or Midweek.  EOW: Daily, Midweek or Weekly.
-//   Changeover (product change / crumb): Daily pieces, logged as kind changeover (contract 6.2; Gerald: every clean is logged to the MSS).
+//   Changeover (product change / crumb): Daily pieces, logged as kind changeover (contract 6.2; Alex: every clean is logged to the MSS).
 //   Monthly, quarterly and annual pieces are never logged from here.
 // The row says which clean was done (EOW = daily + weekly, never monthly). A row without those flags would count for every
 // frequency in the MSS calendar, so a row is never sent without them. Data contract 1.0.1 (section 6.3, transition rule):

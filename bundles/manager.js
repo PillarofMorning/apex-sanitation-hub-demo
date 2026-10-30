@@ -163,7 +163,7 @@ var React = window.React; var { useState, useEffect, useMemo, useRef, useCallbac
  * [PERSISTENT MEMORY & APP REGISTRATION BLOCK]
  * APP NAME:        Production & Sanitation Manager Hub
  * PHASE ID:        P4.3 (Ref: _00 - list of apps - defined how to integrate - link to masterplan)
- * CURRENT VERSION: v7.1 (2026-10-23: Gerald's ruling, data contract 1.0.60 & 1.0.62, ground rules 10 and 11.
+ * CURRENT VERSION: v7.1 (2026-10-23: Alex's ruling, data contract 1.0.60 & 1.0.62, ground rules 10 and 11.
  *                  (1) Dataverse check is a read-only list (found or not made yet); manifest|managerhub sent
  *                  to Hub config. (2) Line clean cost tab no longer works out people; priced as paid minutes x wage plus chemicals).
  *                  v7.0 (Line clean cost tab: regular clean vs allergen clean cost, minutes from equipment list,
@@ -637,7 +637,7 @@ var fmtDayYear = function (d) { return d.toLocaleDateString([], { month: 'short'
 // ============================================================================
 // RUN HELPERS: how a run is read (maintenance, allergen, its name) and the gap rules the Overview line status follows
 // ============================================================================
-var ALLERGEN_SHORT_GAP_H = 8; // an allergen clean of this many hours or less is flagged red (Gerald's rule from the old Gantt)
+var ALLERGEN_SHORT_GAP_H = 8; // an allergen clean of this many hours or less is flagged red (Alex's rule from the old Gantt)
 var IDLE_GAP_H = 48; // a gap longer than this is "no run scheduled", not a sanitation window
 var isMaintenanceRun = function (r) { return /maintenance/i.test(renderSafe(r.craa5_product || r.craa5_Product)); };
 var isAllergenRun = function (r) { return r.craa5_allergen === true || r.craa5_allergen === 1; };
@@ -713,7 +713,7 @@ function collectLanes(runs, areas) {
 /* ============================================================================
  * LINE PRIORITY READER  v4  (paste this whole block into any app that lists production lines)
  * ----------------------------------------------------------------------------
- * Gerald's rule (Oct 10): the production lines are shown in ONE order in every app:
+ * Alex's rule (Oct 10): the production lines are shown in ONE order in every app:
  *     IBL 4, IBL 5, Waterjet, High Speed, Custard, Breading, Dough Room, Kettles
  * Anything not on that list follows (production lines first, then support, then by name). He edits the order in Hub - manager
  * ("Line order" tab); it is saved in the Dataverse table craa5___1_p_linepriority. Guide: line-priority-spec.md.
@@ -734,7 +734,7 @@ function collectLanes(runs, areas) {
  *   linePriorityRead(dataApi, picks) -> Promise of { found, source, entries, table, cols, why, missing }
  *        source 'dataverse' = rows read from the table; 'default' = the table is missing/unreadable or empty, the built-in list
  *        above is used (found is false then, why says why). Never throws. `picks` is optional: { table, name, priority, aliases }
- *        = names typed by hand (Gerald's "my column is called ..."); linePriorityPicksLoad() gives the saved ones.
+ *        = names typed by hand (Alex's "my column is called ..."); linePriorityPicksLoad() gives the saved ones.
  *        missing = ['aliases'] when the table answers but has no aliases column (the order still works, only the other spellings are lost).
  *   linePriorityRank(entries, area, line) -> 0,1,2... (position on the list) or LINE_PRIORITY_NONE (9999) when the line is not listed.
  *        `area` is the run's area text ("IBL 4", "Breading"), `line` its line number (1 when unknown). An entry "Breading" answers to every
@@ -753,7 +753,7 @@ var LINE_PRIORITY_COLS = { name: 'craa5_name', priority: 'craa5_priority', alias
 var LINE_PRIORITY_NONE = 9999;
 var LINE_PRIORITY_TIMEOUT_MS = 20000;
 var LINE_PRIORITY_PICKS_KEY = 'Midwest Plant.columnPicks';
-// What Gerald creates in Dataverse (shown by every app that has the columns card).
+// What Alex creates in Dataverse (shown by every app that has the columns card).
 var LINE_PRIORITY_SPEC = {
     app: 'linepriority', // key prefix of the typed names in 'Midwest Plant.columnPicks' (shared/Midwest Plant-columns.jsx uses the same)
     table: 'craa5___1_p_linepriority',
@@ -1144,11 +1144,11 @@ function linePriorityCompare(entries, x, y) {
 /* ============================================================================
  * Midwest Plant COLUMNS  v1   ("Columns this needs" for any app that saves to Dataverse)
  * ----------------------------------------------------------------------------
- * Gerald, Oct 10: "assume column names after double checking. then tell me which column name they should be for which table and
+ * Alex, Oct 10: "assume column names after double checking. then tell me which column name they should be for which table and
  * i'll create them. have it check/retry. ... if i need to change the column to something else i can manually type it and it will update."
  *
  * One block, pasted once per app (no imports). It gives an app:
- *   1. a SPEC of the table and columns it writes (shown to Gerald);
+ *   1. a SPEC of the table and columns it writes (shown to Alex);
  *   2. a PROBE that asks Dataverse which of them exist (found / not found / no permission / could not tell);
  *   3. the names TYPED BY HAND, kept on this computer in the device setting 'Midwest Plant.columnPicks' (keys '<app>.table',
  *      '<app>.<column key>'), the same place Map addition and the Line Priority reader keep theirs;
@@ -1169,7 +1169,7 @@ function linePriorityCompare(entries, x, y) {
  * THE SPEC (one per table the app writes):
  *   var MY_SPEC = {
  *       app: 'ganttly',                         // key prefix for the typed names on this computer
- *       table: 'craa5___1_s_cleancheckoff',           // the logical name Gerald creates
+ *       table: 'craa5___1_s_cleancheckoff',           // the logical name Alex creates
  *       tables: ['craa5__cleancheckoff'],       // other spellings worth trying (optional)
  *       tableLabel: 'Clean Check-off', tableSchema: 'cleancheckoff',
  *       why: 'One row per Start / Done pressed in Ganttly, so every computer sees the same progress.',
@@ -3540,7 +3540,7 @@ function empStatusOf(people, empRows, idOnly) {
 // IMPORTANT: this lock only hides screens. Dataverse security roles are what protect the data: anyone can call the Web API directly,
 // so every table the locked screens use must also be secured with security roles.
 // ============================================================================
-// Gerald may add his work email here on his own copy (for example ['first.last@example.com']) so a blank email on his employee row
+// Alex may add his work email here on his own copy (for example ['first.last@example.com']) so a blank email on his employee row
 // never locks him out. Anything typed here can be read by anyone who can read this file (the repository is public), and it only
 // changes what this page shows: a convenience for setting up, not security. An array, or one string split by commas or semicolons.
 var MH_ACCESS_OVERRIDES = [];
@@ -5203,8 +5203,8 @@ var MH_CHK_HEADERS = { 'Accept': 'application/json', 'OData-MaxVersion': '4.0', 
 var MH_CHK_TIMEOUT_MS = 20000;
 var MH_CHK_SYSTEM_COLUMNS = ['statecode', 'statuscode', 'createdon', 'modifiedon', 'versionnumber']; // every table has them: not worth a line
 var MH_CHK_NO_API_MESSAGE = 'Cannot check from here: this page has no Dataverse connection (it is the preview with sample data). Open Manager Hub in the Power Apps app and press Check again.';
-// Gerald only, because the notes hold HR-like ratings and Dataverse cannot hide rows by kind.
-var MH_CHK_NOTES_SECURITY = 'Only Gerald may read or write these notes. Make one security role for this table (for example "Manager notes") with Create, Read and Write at Organization level, and no Delete (the hub never deletes a note: Remove marks it Removed). Give that role to Gerald and to nobody else, and do not add this table to any other role. Then switch on auditing for the table (its Properties, Advanced options, Audit changes to its data; auditing must also be on for the environment), so every change is recorded. Two built-in roles reach this table anyway: System Administrator can always read every row, and System Customizer gets full access to new custom tables by default. Open the System Customizer role and set the notes table (display name Employee note, or _m_Employee note if yours is craa5___1_m_employeenote) to None (or User level), and check who holds System Administrator in this environment.';
+// Alex only, because the notes hold HR-like ratings and Dataverse cannot hide rows by kind.
+var MH_CHK_NOTES_SECURITY = 'Only Alex may read or write these notes. Make one security role for this table (for example "Manager notes") with Create, Read and Write at Organization level, and no Delete (the hub never deletes a note: Remove marks it Removed). Give that role to Alex and to nobody else, and do not add this table to any other role. Then switch on auditing for the table (its Properties, Advanced options, Audit changes to its data; auditing must also be on for the environment), so every change is recorded. Two built-in roles reach this table anyway: System Administrator can always read every row, and System Customizer gets full access to new custom tables by default. Open the System Customizer role and set the notes table (display name Employee note, or _m_Employee note if yours is craa5___1_m_employeenote) to None (or User level), and check who holds System Administrator in this environment.';
 // One column of the list. extra: primary, maxLength, min, max, options, optionValues, optionsNote, guess (the type is not confirmed:
 // the page only reads the value), swKey (the key the Line order card keeps a typed name under).
 function mhChkCol(logical, label, type, required, purpose, extra) {
@@ -6490,7 +6490,7 @@ function hubNameList(a, keepCase) {
 }
 // The manifest as stored: fixed key order, sorted lists, so the same app build always gives the same text and hash.
 // What an app needs built, declared in its manifest (ground rule 10: nothing writes Dataverse tables or columns;
-// the Dataverse monitor reads, shows and tests these and Gerald builds from its prompts). Per table, all optional: cols { column: { type, len, label, options, min, max,
+// the Dataverse monitor reads, shows and tests these and Alex builds from its prompts). Per table, all optional: cols { column: { type, len, label, options, min, max,
 // precision, default } }, label (display name), new (true = a table still to make), owner ('org' or 'user'),
 // primary { n, len, label }, prompt (the app's recommended Copilot prompt for the table, at most 2000 characters). type = text|memo|int|decimal|money|yesno|date|datetime|choice|guid (guid = text 100,
 // never a lookup). contract.json colTypes decides; a manifest type that disagrees is shown as a conflict.
@@ -6781,7 +6781,7 @@ var Chip = function (_a) {
     return (React.createElement("button", { type: "button", onClick: onClick, title: title, "aria-pressed": !!on, className: "px-3 py-1.5 min-h-[44px] sm:min-h-0 rounded-lg text-xs font-extrabold border transition-colors whitespace-nowrap ".concat(on ? 'bg-[#0072CE] text-white border-[#0072CE] shadow-sm' : 'bg-white text-slate-600 border-slate-300 hover:bg-[#E6F1FB] hover:text-[#0072CE] hover:border-[#B3D4F2]') }, children));
 };
 // ==== MH TABLE NAMES (v6.8) ====   (moved ahead of MH FEATURE NOTES in v6.9)
-// Gerald made the three v6.7 tables under a prefix of his own, the way the chemical tables use "_c_": craa5___1_m_formtemplate (display name
+// Alex made the three v6.7 tables under a prefix of his own, the way the chemical tables use "_c_": craa5___1_m_formtemplate (display name
 // "_m_Form template"), craa5___1_m_timelosslog and craa5___1_m_quicktask. The forms library, the time-loss log, the quick tasks and (v6.9) the manager notes (craa5___1_m_employeenote,
 // craa5___1_m_employeenote) therefore know two names each: the "_m_" one first and the plain v6.7 one (craa5_formtemplate ...) second for the first three, and for the manager notes the plain
 // one first (the real table is craa5___1_m_employeenote, data contract 1.0.51) and the "_m_" one second. mhTnEnsure(dataApi, key) looks for the first one that
@@ -6926,7 +6926,7 @@ function mhTnReset() {
 //   no braces), craa5_kind (Comment, Note, Pro, Con, Snapshot), craa5_status (Active or Removed), craa5_data (JSON: { v: 1, text (markdown),
 //   rating (-5..5 or null), snapshot (object or null), by (author), at (ISO) }), and the recommended craa5_rating and craa5_notedate.
 // Privacy: the panel and the dialog only show for supervisors and managers, but Dataverse security roles decide who can really read the
-// table (it should be Gerald only). A refused read says so; nothing is ever deleted (Remove sets the status to Removed); the notes fold
+// table (it should be Alex only). A refused read says so; nothing is ever deleted (Remove sets the status to Removed); the notes fold
 // after 10 minutes without use or when the browser tab is hidden (the People page's PIP-marks rule).
 // Saving: getWriteApi + lpGuardApi/lpTryWrite with an id fixed up front (swGuid), so a try that timed out but landed makes the next try
 // fail as a duplicate, which counts as saved (Ganttly's ckPut rule); every save is read back. No employee row is ever written here.
@@ -18613,7 +18613,7 @@ function MhCalloutsTab(props) {
 // tab) now renders MhTlTab; the Teams paste lives on as the import path inside it (section "Import from Teams").
 // props of MhTlTab: { dataApi, access (useMhAccess), notify(message, type), reloadTick (Reload data), areas (the page's loaded areas
 //   state: rows with craa5_area), sample (tests only: a paste read at once) }.
-// The table: craa5_timelosslog (entity set craa5_timelosslogs, id craa5_timelosslogid), Organization-owned, created by Gerald from the
+// The table: craa5_timelosslog (entity set craa5_timelosslogs, id craa5_timelosslogid), Organization-owned, created by Alex from the
 // Dataverse check prompt (mhTlChkEntries adds it to the check). Needed columns: MH_TL_NEEDED; optional (the page works without them and
 // says so): MH_TL_OPTIONAL plus the picture (Image) and the IR (File). The list reads the marker columns Dataverse makes beside them
 // (craa5_ir_name, craa5_picture_timestamp) and steps the select down when a host refuses one (mhTlNextSelect).
@@ -22179,7 +22179,7 @@ function mhLcRoleKey(r) { return mhLcOneLine(r).toLowerCase(); }
 // The hourly rate for a day from the _e_ Labor rate rows. A row is used when its rate is above 0, it has an Effective from date on or before the day, and its role is one of the roles
 // asked, in order (MH_LC_RATE_ROLES: a text asked for alone is that role, else All). The first role in the order that has a usable row wins, then the newest Effective from within it.
 // Rows with no date and rows that start after the day are counted and not used; two rows of the same role that start the same day with different rates cannot be told apart, so no rate
-// is chosen. No usable row = best null (nothing is guessed). The row's name column is never read: in Gerald's table it holds people's first names.
+// is chosen. No usable row = best null (nothing is guessed). The row's name column is never read: in Alex's table it holds people's first names.
 // Returns { best: { rate, from, role } or null, undated, future, tie, badRate (rows with no usable rate), otherRole }.
 function mhLcRateSelect(rows, day, roles) {
     var list = (Array.isArray(roles) ? roles : [roles || 'Sanitor', 'All']).map(mhLcRoleKey).filter(function (k) { return !!k; }), best = null, tieRates = [];

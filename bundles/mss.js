@@ -744,7 +744,7 @@ function hubNameList(a, keepCase) {
 }
 // The manifest as stored: fixed key order, sorted lists, so the same app build always gives the same text and hash.
 // What an app needs built, declared in its manifest (ground rule 10: nothing writes Dataverse tables or columns;
-// the Dataverse monitor reads, shows and tests these and Gerald builds from its prompts). Per table, all optional: cols { column: { type, len, label, options, min, max,
+// the Dataverse monitor reads, shows and tests these and Alex builds from its prompts). Per table, all optional: cols { column: { type, len, label, options, min, max,
 // precision, default } }, label (display name), new (true = a table still to make), owner ('org' or 'user'),
 // primary { n, len, label }, prompt (the app's recommended schema specification for the table, at most 2000 characters). type = text|memo|int|decimal|money|yesno|date|datetime|choice|guid (guid = text 100,
 // never a lookup). contract.json colTypes decides; a manifest type that disagrees is shown as a conflict.
@@ -1507,7 +1507,7 @@ var uniqueRows = function (rows) { return Array.from(new Map(rows.map(function (
 //   - craa5_completionkey = equipment | shift date | kind, and the row id is fixed from it (hubLogIdOf), so a retry or a second
 //     device updates the same row instead of adding one. Before saving, that row is read: there, active and by the same people
 //     = already logged. v1.4: there and active but by OTHER people (a second crew, the night shift of the same plant day) = a
-//     separate entry, never dropped: it is saved as its own row under key|2 (then |3 ... |9), id hubLogIdOf(key|n). Gerald
+//     separate entry, never dropped: it is saved as its own row under key|2 (then |3 ... |9), id hubLogIdOf(key|n). Alex
 //     (2026-10-23): duplicates are better than missed entries. mlwBaseKey(key) gives the clean's key without the |n, to count
 //     a clean once; the labor minutes of every entry add up.
 //   - The flags (craa5_daily / weekly / monthly) come from the kind of clean done (contract 6.2), never from the piece's highest
@@ -12480,7 +12480,7 @@ var CHECK_WARN = ['no_pathogen', 'no_kind', 'second_entry'];
 var checkSourceOf = function (r) { return safeString(r.craa5_source) || (isAutoSap(r.craa5_sap) ? 'Ganttly / Shift Start' : 'Log input'); };
 // Every row with its problems. A repeat = a second "auto-" row of the same equipment, day and clean kind BY THE SAME PEOPLE as
 // another row (the SAP row, or the first saved, is the one kept). By other people it is a second entry: MSS LOG WRITE 1.4 saves
-// it on purpose (key|2), since a duplicate is better than a missed entry (Gerald, 2026-10-23). It is shown as a note and turned
+// it on purpose (key|2), since a duplicate is better than a missed entry (Alex, 2026-10-23). It is shown as a note and turned
 // off one at a time, never in bulk. Old Log input rows are never called repeats: the same order was allowed twice then.
 var checkRows = function (list) {
     var out = list.map(function (r) { return ({
@@ -13946,7 +13946,7 @@ var saveAccessAuditLogsLocal = function (logs) {
 // --- WHAT THIS PAGE USES IN DATAVERSE (manifest|msslog: data contract 12.1, ground rule 10) ---
 // This page never creates or changes a table, column, key or choice. It lists the tables and columns it reads and writes,
 // saves that list to Hub config once after it opens (hubSaveManifest). The Dataverse monitor reads it, shows and tests what is
-// missing, and Gerald makes it there; the monitor itself never changes Dataverse either.
+// missing, and Alex makes it there; the monitor itself never changes Dataverse either.
 // opt = columns the page works without (shown as "not made yet"); cols = the type of each column that may still need making
 // (contract.json colTypes decides; these match it).
 var MSS_LOG_APP_VERSION = '2.1';

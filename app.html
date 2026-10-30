@@ -32,12 +32,12 @@
   <script>
     (function () {
       var params = new URLSearchParams(window.location.search);
-      var appKey = (params.get('app') || 'shiftstart').toLowerCase().replace(/[^a-z0-9]/g, '');
-      var validApps = ['shiftstart', 'ganttly', 'mss', 'bolo', 'manager', 'prodsched'];
-      if (validApps.indexOf(appKey) === -1) appKey = 'shiftstart';
+      var appKey = (params.get('app') || 'calendar').toLowerCase().replace(/[^a-z0-9]/g, '');
+      var validApps = ['calendar', 'ganttly', 'shiftstart', 'mss', 'director', 'bolo', 'manager', 'prodsched'];
+      if (validApps.indexOf(appKey) === -1) appKey = 'calendar';
 
       var s = document.createElement('script');
-      s.src = 'bundles/' + appKey + '.js?v=1';
+      s.src = 'bundles/' + appKey + '.js?v=2';
       s.onload = function () {
         var Comp = window.__DEMO_APP_COMPONENT__;
         var rootEl = document.getElementById('root');

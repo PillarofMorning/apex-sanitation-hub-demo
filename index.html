@@ -25,12 +25,12 @@
     .demo-topbar {
       background: linear-gradient(90deg, #0B3C73 0%, #0F172A 100%);
       border-bottom: 2px solid #FFB81C;
-      padding: 8px 14px;
+      padding: 7px 12px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
+      gap: 8px;
       z-index: 100;
     }
     .demo-brand {
@@ -60,15 +60,15 @@
     .demo-nav {
       display: flex;
       flex-wrap: wrap;
-      gap: 5px;
+      gap: 4px;
     }
     .demo-tab {
       background: rgba(255, 255, 255, 0.08);
       color: #E2E8F0;
       border: 1px solid rgba(255, 255, 255, 0.16);
       border-radius: 6px;
-      padding: 6px 11px;
-      font-size: 12px;
+      padding: 5px 10px;
+      font-size: 11.5px;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.15s ease;
@@ -85,7 +85,7 @@
     .demo-statsbar {
       background: #1E293B;
       border-bottom: 1px solid #334155;
-      padding: 4px 14px;
+      padding: 4px 12px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
@@ -108,7 +108,27 @@
     .demo-pill strong {
       color: #38BDF8;
       font-family: monospace;
-      font-size: 12px;
+      font-size: 11.5px;
+    }
+    .demo-open-callout {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      color: #FDE68A;
+      padding: 2px 8px;
+      border-radius: 5px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .demo-open-callout code {
+      color: #FFFFFF;
+      background: rgba(15, 23, 42, 0.65);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-family: monospace;
+      font-weight: 700;
     }
     .demo-btn {
       background: #334155;
@@ -144,26 +164,29 @@
       <span class="demo-badge">Public Demo Sandbox</span>
       <div>
         <div class="demo-title">Apex Foods - Midwest Plant 4 Sanitation Hub</div>
-        <div class="demo-sub">100% Scrambled Data &bull; Local In-Browser Mock Dataverse Engine (Zero External Tenant Calls)</div>
+        <div class="demo-sub">Spoofed Plant Dataset - Local In-Browser Dataverse Engine (Changes Persist Locally)</div>
       </div>
     </div>
     <nav class="demo-nav" role="navigation" aria-label="Demo Apps">
-      <button type="button" class="demo-tab active" data-app="shiftstart">1. Team Builder (Shift Start)</button>
+      <button type="button" class="demo-tab active" data-app="calendar">1. Master Sanitation (MSS)</button>
       <button type="button" class="demo-tab" data-app="ganttly">2. Team Overview (Ganttly)</button>
-      <button type="button" class="demo-tab" data-app="mss">3. MSS Log &amp; SAP Input</button>
-      <button type="button" class="demo-tab" data-app="bolo">4. Pathogen BOLO</button>
-      <button type="button" class="demo-tab" data-app="manager">5. Managers Hub</button>
-      <button type="button" class="demo-tab" data-app="prodsched">6. Production Scheduler</button>
+      <button type="button" class="demo-tab" data-app="shiftstart">3. Team Builder (Shift Start)</button>
+      <button type="button" class="demo-tab" data-app="mss">4. SAP Log Input</button>
+      <button type="button" class="demo-tab" data-app="director">5. Sanitation Director (Modeler)</button>
+      <button type="button" class="demo-tab" data-app="bolo">6. Pathogen BOLO</button>
+      <button type="button" class="demo-tab" data-app="manager">7. Managers Hub</button>
+      <button type="button" class="demo-tab" data-app="prodsched">8. Production Scheduler</button>
     </nav>
   </header>
   <div class="demo-statsbar">
     <div class="demo-pills" id="demo-stats-pills">
-      <span class="demo-pill">Signed In: <strong>Marcus Vance (Supervisor - Crew D)</strong></span>
-      <span class="demo-pill">Shift Boards: <strong id="st-boards">0</strong></span>
-      <span class="demo-pill">Task Rows: <strong id="st-tasks">0</strong></span>
+      <span class="demo-pill">Supervisor: <strong>Marcus Vance (Crew D)</strong></span>
+      <span class="demo-open-callout">2 Open MSS Items: <code>ibl4 - caseout 74</code> (<code>SAP-D-386</code> / Devon Brooks) &amp; <code>hs - makeup 10</code> (<code>SAP-D-175</code> / Nadia Patel)</span>
+      <span class="demo-pill">Boards: <strong id="st-boards">0</strong></span>
+      <span class="demo-pill">Assignments: <strong id="st-tasks">0</strong></span>
       <span class="demo-pill">Check-offs: <strong id="st-checkoffs">0</strong></span>
       <span class="demo-pill">MSS Logs: <strong id="st-logs">0</strong></span>
-      <span class="demo-pill">Swab Results: <strong id="st-swabs">0</strong></span>
+      <span class="demo-pill">Swabs: <strong id="st-swabs">0</strong></span>
       <span class="demo-pill">Assets: <strong id="st-assets">0</strong></span>
     </div>
     <div style="display:flex;align-items:center;gap:6px;">
@@ -171,7 +194,7 @@
     </div>
   </div>
   <main class="demo-frame-wrap">
-    <iframe id="demo-app-frame" src="app.html?app=shiftstart" title="Demo Application Viewport"></iframe>
+    <iframe id="demo-app-frame" src="app.html?app=calendar" title="Demo Application Viewport"></iframe>
   </main>
   <script>
     (function () {
@@ -195,7 +218,7 @@
         if (!window.ApexDemoEngine) return;
         var st = window.ApexDemoEngine.getStats();
         document.getElementById('st-boards').textContent = st.shiftboards;
-        document.getElementById('st-tasks').textContent = st.taskassignments;
+        document.getElementById('st-tasks').textContent = st.assignments || st.taskassignments;
         document.getElementById('st-checkoffs').textContent = st.checkoffs;
         document.getElementById('st-logs').textContent = st.logs;
         document.getElementById('st-swabs').textContent = st.swabs;

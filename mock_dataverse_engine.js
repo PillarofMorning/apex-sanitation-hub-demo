@@ -1,6 +1,6 @@
 (function (global) {
   var STORAGE_PREFIX = '__APEX_DEMO_TABLE_V1__';
-  var META_KEY = '__APEX_DEMO_META_V1__';
+  var META_KEY = '__APEX_DEMO_META_V2__';
 
   // Canonical table registry
   var TABLE_ALIASES = {
@@ -21,6 +21,8 @@
     'craa5___1_a_roles': 'craa5___1_a_role',
     'craa5___1_e_hubconfig': 'craa5___1_e_hubconfig',
     'craa5___1_e_hubconfigs': 'craa5___1_e_hubconfig',
+    'craa5___1_e_laborrate': 'craa5___1_e_laborrate',
+    'craa5___1_e_laborrates': 'craa5___1_e_laborrate',
     'craa5___1_e_shifttask': 'craa5___1_e_shifttask',
     'craa5___1_e_shifttasks': 'craa5___1_e_shifttask',
     'craa5___1_g_assignment': 'craa5___1_g_assignment',
@@ -57,6 +59,8 @@
     'craa5___1_p_plans': 'craa5___1_p_plan',
     'craa5___1_p_prodschedule': 'craa5___1_p_prodschedule',
     'craa5___1_p_prodschedules': 'craa5___1_p_prodschedule',
+    'craa5___1_p_skumaster': 'craa5___1_p_skumaster',
+    'craa5___1_p_skumasters': 'craa5___1_p_skumaster',
     'craa5___1_s_cleancheckoff': 'craa5___1_s_cleancheckoff',
     'craa5___1_s_cleancheckoffs': 'craa5___1_s_cleancheckoff',
     'craa5___1_s_shiftarchive': 'craa5___1_s_shiftarchive',
@@ -141,11 +145,31 @@
     return global;
   }
 
-  var rootWin = getRootWin();
-
-  function loadTableFromStorage(canon) {
+  function loadTableFromStorage(canon, seedRows) {
     try {
       var raw = global.localStorage ? global.localStorage.getItem(STORAGE_PREFIX + canon) : null;
+      if (canon === 'craa5___1_l_log') {
+        var base = Array.isArray(seedRows) ? seedRows.slice() : [];
+        if (!raw) return base;
+        var deltas = JSON.parse(raw);
+        if (!Array.isArray(deltas) || deltas.length === 0) return base;
+        var pk = primaryKeyOf(canon);
+        var byId = {};
+        for (var i = 0; i < base.length; i++) {
+          var bid = cleanGuid(base[i][pk] || base[i].id);
+          if (bid) byId[bid] = i;
+        }
+        deltas.forEach(function (d) {
+          var did = cleanGuid(d[pk] || d.id);
+          if (did && byId[did] !== undefined) {
+            base[byId[did]] = d;
+          } else {
+            base.push(d);
+            if (did) byId[did] = base.length - 1;
+          }
+        });
+        return base;
+      }
       if (raw) {
         var parsed = JSON.parse(raw);
         if (Array.isArray(parsed)) return parsed;
@@ -157,7 +181,12 @@
   function saveTableToStorage(canon, rows) {
     try {
       if (global.localStorage) {
-        global.localStorage.setItem(STORAGE_PREFIX + canon, JSON.stringify(rows));
+        if (canon === 'craa5___1_l_log') {
+          var deltas = (rows || []).filter(function (r) { return !r.__seed || r.__modified; });
+          global.localStorage.setItem(STORAGE_PREFIX + canon, JSON.stringify(deltas));
+        } else {
+          global.localStorage.setItem(STORAGE_PREFIX + canon, JSON.stringify(rows));
+        }
       }
     } catch (e) {}
     notifyListeners(canon);
@@ -174,12 +203,36 @@
     } catch (e) {}
   }
 
+  function clearStaleStorageIfNeeded(seed) {
+    try {
+      if (!global.localStorage) return;
+      var wantMeta = JSON.stringify({ day: seed.demoDay || '', version: seed.seedVersion || 'v2' });
+      var curMeta = global.localStorage.getItem(META_KEY);
+      if (curMeta !== wantMeta) {
+        var keys = [];
+        for (var i = 0; i < global.localStorage.length; i++) {
+          var k = global.localStorage.key(i);
+          if (k && (k.indexOf(STORAGE_PREFIX) === 0 || k.indexOf('__APEX_DEMO_META') === 0 || k.indexOf('__1_') === 0 || k.indexOf('ss_') === 0 || k.indexOf('ganttly') === 0 || k.indexOf('mss_') === 0)) {
+            keys.push(k);
+          }
+        }
+        keys.forEach(function (k) { global.localStorage.removeItem(k); });
+        global.localStorage.setItem(META_KEY, wantMeta);
+        global.localStorage.setItem('__1_ss_lang_v1', 'en');
+        global.localStorage.setItem('__1_hub_lang', 'en');
+        global.localStorage.setItem('__1_mss-log-read-sheet', '0');
+      }
+    } catch (e) {}
+  }
+
   function ensureDb() {
     var rw = getRootWin();
     if (rw.__APEX_DEMO_DB__ && rw.__APEX_DEMO_DB__.__initialized) {
       return rw.__APEX_DEMO_DB__;
     }
     var seed = (rw.__APEX_DEMO_SEED__ || global.__APEX_DEMO_SEED__ || { tables: {}, currentUser: {} });
+    clearStaleStorageIfNeeded(seed);
+
     var db = {
       __initialized: true,
       currentUser: seed.currentUser || {
@@ -199,11 +252,12 @@
     var seedTables = seed.tables || {};
     Object.keys(seedTables).forEach(function (k) {
       var canon = canonicalTable(k);
-      var stored = loadTableFromStorage(canon);
+      var sRows = seedTables[k] || [];
+      var stored = loadTableFromStorage(canon, sRows);
       if (stored !== null) {
         db.tables[canon] = stored;
       } else {
-        var cloned = JSON.parse(JSON.stringify(seedTables[k] || []));
+        var cloned = JSON.parse(JSON.stringify(sRows));
         db.tables[canon] = cloned;
         saveTableToStorage(canon, cloned);
       }
@@ -218,7 +272,7 @@
     var db = ensureDb();
     var canon = canonicalTable(tableName);
     if (!db.tables[canon]) {
-      var stored = loadTableFromStorage(canon);
+      var stored = loadTableFromStorage(canon, []);
       db.tables[canon] = stored || [];
     }
     return db.tables[canon];
@@ -229,6 +283,11 @@
     var canon = canonicalTable(tableName);
     db.tables[canon] = rows;
     saveTableToStorage(canon, rows);
+    if (canon === 'craa5___1_l_log') {
+      try {
+        if (global.localStorage) global.localStorage.removeItem('__1_itp_overdue_v1');
+      } catch (e) {}
+    }
   }
 
   function recordOp(op, table, detail) {
@@ -310,7 +369,7 @@
       out['_createdby_value@OData.Community.Display.V1.FormattedValue'] = db.currentUser.userName;
     }
     Object.keys(out).forEach(function (k) {
-      if (k.indexOf('@') > -1) return;
+      if (k.indexOf('@') > -1 || k.indexOf('__') === 0) return;
       var v = out[k];
       if (typeof v === 'boolean' && out[k + '@OData.Community.Display.V1.FormattedValue'] === undefined) {
         out[k + '@OData.Community.Display.V1.FormattedValue'] = v ? 'Yes' : 'No';
@@ -510,6 +569,8 @@
     if (!row || !prop) return undefined;
     if (prop in row) return row[prop];
     var lp = prop.toLowerCase();
+    if (lp === 'statecode' && row.statecode === undefined) return 0;
+    if (lp === 'statuscode' && row.statuscode === undefined) return 1;
     var keys = Object.keys(row);
     for (var i = 0; i < keys.length; i++) {
       if (keys[i].toLowerCase() === lp) return row[keys[i]];
@@ -626,7 +687,7 @@
 
   // Parse FetchXML queries (used by Shift Start & Ganttly)
   function executeFetchXml(canon, xmlStr) {
-    var rows = getTableRows(canon).map(function (r) { return decorateRow(canon, r); });
+    var rawRows = getTableRows(canon);
     var topMatch = String(xmlStr).match(/<fetch[^>]*\btop=['"](\d+)['"]/i);
     var topLimit = topMatch ? parseInt(topMatch[1], 10) : 5000;
 
@@ -647,8 +708,9 @@
       }
     }
 
+    var rows = rawRows;
     if (conditions.length > 0) {
-      rows = rows.filter(function (row) {
+      rows = rawRows.filter(function (row) {
         return conditions.every(function (c) {
           var rv = getRowPropCaseInsensitive(row, c.attr);
           if (c.op === 'null') return rv === null || rv === undefined || rv === '';
@@ -662,6 +724,8 @@
           return compareValues(rv, c.op, c.val);
         });
       });
+    } else {
+      rows = rawRows.slice();
     }
 
     var orderM = String(xmlStr).match(/<order\b[^>]*\battribute=['"]([^'"]+)['"][^>]*>/i);
@@ -678,7 +742,7 @@
       });
     }
 
-    return rows.slice(0, topLimit);
+    return rows.slice(0, topLimit).map(function (r) { return decorateRow(canon, r); });
   }
 
   function queryInternal(tableName, queryStr, maxPageSize) {
@@ -692,17 +756,17 @@
       return { entities: fxRows, nextLink: undefined };
     }
 
-    var allRows = getTableRows(canon).map(function (r) { return decorateRow(canon, r); });
+    var rawRows = getTableRows(canon);
     var filterExpr = opts.$filter || opts.filter || '';
     var pred = compileFilter(filterExpr);
-    var filtered = allRows.filter(pred);
+    var filteredRaw = filterExpr ? rawRows.filter(pred) : rawRows.slice();
 
     var orderExpr = opts.$orderby || opts.orderBy || '';
     if (orderExpr) {
       var oParts = String(orderExpr).trim().split(/\s+/);
       var oCol = oParts[0];
       var oDesc = oParts[1] && oParts[1].toLowerCase() === 'desc';
-      filtered.sort(function (a, b) {
+      filteredRaw.sort(function (a, b) {
         var va = getRowPropCaseInsensitive(a, oCol);
         var vb = getRowPropCaseInsensitive(b, oCol);
         if (va === vb) return 0;
@@ -720,13 +784,13 @@
     var skiptoken = opts.$skiptoken ? parseInt(opts.$skiptoken, 10) : 0;
     var pageLimit = maxPageSize ? parseInt(maxPageSize, 10) : (opts.pageSize ? parseInt(opts.pageSize, 10) : null);
 
-    var sliced = filtered;
+    var slicedRaw = filteredRaw;
     var nextLink = undefined;
     if (topLimit !== null && !isNaN(topLimit)) {
-      sliced = filtered.slice(0, topLimit);
+      slicedRaw = filteredRaw.slice(0, topLimit);
     } else if (pageLimit !== null && !isNaN(pageLimit) && pageLimit > 0) {
-      sliced = filtered.slice(skiptoken, skiptoken + pageLimit);
-      if (skiptoken + pageLimit < filtered.length) {
+      slicedRaw = filteredRaw.slice(skiptoken, skiptoken + pageLimit);
+      if (skiptoken + pageLimit < filteredRaw.length) {
         var nextParts = [];
         if (opts.$select) nextParts.push('$select=' + encodeURIComponent(opts.$select));
         if (filterExpr) nextParts.push('$filter=' + encodeURIComponent(filterExpr));
@@ -735,6 +799,8 @@
         nextLink = 'https://demo.apexfoods.local/api/data/v9.2/' + canon + 's?' + nextParts.join('&');
       }
     }
+
+    var sliced = slicedRaw.map(function (r) { return decorateRow(canon, r); });
 
     var selectExpr = opts.$select || (Array.isArray(opts.select) ? opts.select.join(',') : opts.select) || '';
     if (selectExpr) {
@@ -804,7 +870,8 @@
       statuscode: 1,
       createdon: nowIso,
       modifiedon: nowIso,
-      _createdby_value: db.currentUser.userId
+      _createdby_value: db.currentUser.userId,
+      __modified: true
     }, payload);
     newRow[pk] = id;
     if (canon === 'craa5___1_a_employee') {
@@ -818,8 +885,117 @@
     }
     rows.push(newRow);
     setTableRows(canon, rows);
+    if (canon === 'craa5___1_l_log') {
+      syncLogToCheckoff(newRow);
+    }
     recordOp('create', canon, 'id=' + id);
     return decorateRow(canon, newRow);
+  }
+
+  function syncLogToCheckoff(logRow) {
+    try {
+      if (!logRow) return;
+      var assets = getTableRows('craa5___1_a_assets') || [];
+      var eqGuid = cleanGuid(logRow.craa5_equipmentguid || logRow.craa5_assetid || '');
+      var eqName = String(logRow.craa5_equipment || logRow.craa5_title || '').trim();
+      var sapCode = String(logRow.craa5_sap || '').trim();
+      var asset = null;
+      if (eqGuid) {
+        asset = assets.find(function (a) { return cleanGuid(a.craa5___1_a_assetsid) === eqGuid; });
+      }
+      if (!asset && eqName) {
+        var lowName = eqName.toLowerCase();
+        asset = assets.find(function (a) { return String(a.craa5_equipmentidentifier || '').trim().toLowerCase() === lowName; });
+      }
+      if (!asset && sapCode) {
+        var lowSap = sapCode.toLowerCase();
+        asset = assets.find(function (a) { return String(a.craa5_sapdaily || '').trim().toLowerCase() === lowSap; });
+      }
+      if (asset && !eqGuid) {
+        eqGuid = cleanGuid(asset.craa5___1_a_assetsid);
+      }
+      if (!eqGuid) return;
+
+      var areaName = String((asset && asset.craa5_areaname) || logRow.craa5_area || '').trim();
+      var dispName = String((asset && asset.craa5_equipmentidentifier) || eqName || 'Equipment').trim();
+      var mins = Number((asset && asset.craa5_hoursrequired) || logRow.craa5_laborminutes || 45) || 45;
+
+      var asgns = getTableRows('craa5___1_g_assignment') || [];
+      var asgn = asgns.find(function (x) { return cleanGuid(x.craa5_equipmentguid) === eqGuid; });
+      var slotStartIso = (asgn && asgn.craa5_slotstart) || '';
+      var slotStartMs = slotStartIso ? Date.parse(slotStartIso) : (Date.now() - 4 * 3600000);
+      var slotBase36 = Math.round(slotStartMs / 60000).toString(36);
+      var empGuid = cleanGuid((asgn && asgn.craa5_employeeguids) || logRow.craa5_employeeguids || '');
+
+      var dnMs = Date.now();
+      var stMs = dnMs - mins * 60000;
+      var stIso = new Date(stMs).toISOString();
+      var dnIso = new Date(dnMs).toISOString();
+      var chkKey = eqGuid + '~' + slotBase36;
+      var recObj = {
+        status: 'done',
+        parentId: eqGuid,
+        name: dispName,
+        startMs: stMs,
+        durationMins: mins,
+        laneKeys: empGuid ? [empGuid] : [],
+        workMins: mins,
+        heads: 1,
+        updatedAt: dnMs,
+        startedAt: stMs,
+        doneAt: dnMs,
+        syncAt: dnMs
+      };
+      var detailsObj = {
+        v: 1,
+        id: eqGuid,
+        area: areaName,
+        rec: recObj
+      };
+      var chkRows = getTableRows('craa5___1_g_checkoff').slice();
+      var existingIdx = chkRows.findIndex(function (r) {
+        return cleanGuid(r.craa5_equipmentguid) === eqGuid || r.craa5_checkoffkey === chkKey;
+      });
+      var chkRow = {
+        craa5___1_s_cleancheckoffid: existingIdx >= 0 ? chkRows[existingIdx].craa5___1_s_cleancheckoffid : newGuid(),
+        craa5_checkoffkey: chkKey,
+        craa5_status: 'done',
+        craa5_details: JSON.stringify(detailsObj),
+        craa5_equipmentguid: eqGuid,
+        craa5_area: areaName,
+        craa5_shiftdate: String(logRow.craa5_shiftdate || dnIso.slice(0, 10)),
+        craa5_cleankind: String(logRow.craa5_cleankind || 'daily'),
+        craa5_completionkey: eqGuid + '|' + String(logRow.craa5_shiftdate || dnIso.slice(0, 10)) + '|daily',
+        craa5_startedat: stIso,
+        craa5_doneat: dnIso,
+        craa5_keepuntil: new Date(dnMs + 7 * 86400000).toISOString(),
+        createdon: stIso,
+        modifiedon: dnIso,
+        statecode: 0,
+        statuscode: 1
+      };
+      if (existingIdx >= 0) {
+        chkRows[existingIdx] = Object.assign({}, chkRows[existingIdx], chkRow);
+      } else {
+        chkRows.push(chkRow);
+      }
+      setTableRows('craa5___1_g_checkoff', chkRows);
+
+      if (global.localStorage) {
+        var rawPlan = global.localStorage.getItem('__1_itp_plan_current_v1');
+        var planObj = rawPlan ? JSON.parse(rawPlan) : { overrides: {}, taskStatus: {}, customTasks: [], assetEdits: {} };
+        if (!planObj.taskStatus) planObj.taskStatus = {};
+        planObj.taskStatus[eqGuid] = recObj;
+        global.localStorage.setItem('__1_itp_plan_current_v1', JSON.stringify(planObj));
+
+        var rawSync = global.localStorage.getItem('__1_itp_current_sync_v1');
+        if (rawSync) {
+          var syncObj = JSON.parse(rawSync);
+          syncObj.readFrom = '';
+          global.localStorage.setItem('__1_itp_current_sync_v1', JSON.stringify(syncObj));
+        }
+      }
+    } catch (e) {}
   }
 
   function updateInternal(tableName, idRaw, data, allowUpsert) {
@@ -844,11 +1020,15 @@
       throw missErr;
     }
     var updated = Object.assign({}, rows[idx], payload, {
-      modifiedon: new Date().toISOString()
+      modifiedon: new Date().toISOString(),
+      __modified: true
     });
     updated[pk] = id;
     rows[idx] = updated;
     setTableRows(canon, rows);
+    if (canon === 'craa5___1_l_log') {
+      syncLogToCheckoff(updated);
+    }
     recordOp('update', canon, 'id=' + id);
     return decorateRow(canon, updated);
   }
@@ -1237,26 +1417,30 @@
     update: updateInternal,
     delete: deleteInternal,
     resetToSeed: function () {
+      var rw = getRootWin();
+      var seed = (rw.__APEX_DEMO_SEED__ || global.__APEX_DEMO_SEED__ || { tables: {}, currentUser: {} });
       try {
         if (global.localStorage) {
           var keys = [];
           for (var i = 0; i < global.localStorage.length; i++) {
             var k = global.localStorage.key(i);
-            if (k && (k.indexOf(STORAGE_PREFIX) === 0 || k.indexOf('__1_') === 0 || k.indexOf('ss_') === 0 || k.indexOf('ganttly') === 0 || k.indexOf('mss_') === 0 || k.indexOf('apex_') === 0 || k.indexOf('midwest_') === 0)) {
+            if (k && (k.indexOf(STORAGE_PREFIX) === 0 || k.indexOf('__1_') === 0 || k.indexOf('ss_') === 0 || k.indexOf('ganttly') === 0 || k.indexOf('mss_') === 0 || k.indexOf('apex_') === 0 || k.indexOf('midwest_') === 0 || k.indexOf('sd_') === 0)) {
               keys.push(k);
             }
           }
           keys.forEach(function (k) { global.localStorage.removeItem(k); });
+          global.localStorage.setItem(META_KEY, JSON.stringify({ day: seed.demoDay || '', version: seed.seedVersion || 'v2' }));
           global.localStorage.setItem('__1_ss_lang_v1', 'en');
           global.localStorage.setItem('__1_hub_lang', 'en');
           global.localStorage.setItem('__1_mss-log-read-sheet', '0');
         }
         if (global.sessionStorage) {
+          var clockOff = global.sessionStorage.getItem('__APEX_DEMO_CLOCK_OFFSET__');
           global.sessionStorage.clear();
+          if (clockOff !== null) global.sessionStorage.setItem('__APEX_DEMO_CLOCK_OFFSET__', clockOff);
           global.sessionStorage.setItem('__1_itp_full_access_v1', 'true');
         }
       } catch (e) {}
-      var rw = getRootWin();
       if (rw.__APEX_DEMO_DB__) delete rw.__APEX_DEMO_DB__;
       ensureDb();
       notifyListeners('*');

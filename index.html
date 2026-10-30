@@ -6,8 +6,8 @@
   <meta name="robots" content="noindex,nofollow" />
   <link rel="icon" href="data:," />
   <title>Apex Foods - Sanitation Hub Public Demo (Scrambled Sandbox)</title>
-  <script src="demo_seed_data.js"></script>
-  <script src="mock_dataverse_engine.js"></script>
+  <script src="demo_seed_data.js?v=3"></script>
+  <script src="mock_dataverse_engine.js?v=3"></script>
   <style>
     * { box-sizing: border-box; }
     html, body {
@@ -16,22 +16,23 @@
       width: 100%;
       height: 100%;
       font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-      background: #0F172A;
-      color: #F8FAFC;
+      background: #F1F5F9;
+      color: #0F172A;
       display: flex;
       flex-direction: column;
       overflow: hidden;
     }
     .demo-topbar {
-      background: linear-gradient(90deg, #0B3C73 0%, #0F172A 100%);
-      border-bottom: 2px solid #FFB81C;
-      padding: 7px 12px;
+      background: #00468B;
+      border-bottom: 3px solid #FFB81C;
+      padding: 8px 14px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 10px;
       z-index: 100;
+      box-shadow: 0 2px 6px rgba(0, 43, 92, 0.18);
     }
     .demo-brand {
       display: flex;
@@ -40,101 +41,107 @@
     }
     .demo-badge {
       background: #FFB81C;
-      color: #0F172A;
+      color: #00468B;
       font-size: 10px;
       font-weight: 900;
-      padding: 3px 8px;
+      padding: 3px 9px;
       border-radius: 999px;
       letter-spacing: 0.05em;
       text-transform: uppercase;
     }
     .demo-title {
-      font-size: 14px;
+      font-size: 14.5px;
       font-weight: 800;
       color: #FFFFFF;
+      letter-spacing: -0.01em;
     }
     .demo-sub {
       font-size: 11px;
-      color: #93C5FD;
+      color: #DBEAFE;
     }
     .demo-nav {
       display: flex;
       flex-wrap: wrap;
-      gap: 4px;
+      gap: 5px;
     }
     .demo-tab {
-      background: rgba(255, 255, 255, 0.08);
-      color: #E2E8F0;
-      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.12);
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.24);
       border-radius: 6px;
-      padding: 5px 10px;
+      padding: 5px 11px;
       font-size: 11.5px;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.15s ease;
     }
     .demo-tab:hover {
-      background: rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.22);
+      border-color: rgba(255, 255, 255, 0.45);
     }
     .demo-tab.active {
-      background: #006ECD;
-      color: #FFFFFF;
+      background: #FFB81C;
+      color: #00468B;
       border-color: #FFB81C;
-      box-shadow: 0 2px 8px rgba(0, 110, 205, 0.45);
+      font-weight: 800;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     }
     .demo-statsbar {
-      background: #1E293B;
-      border-bottom: 1px solid #334155;
-      padding: 4px 12px;
+      background: #FFFFFF;
+      border-bottom: 1px solid #CBD5E1;
+      padding: 5px 14px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      font-size: 11px;
+      font-size: 11.5px;
     }
     .demo-pills {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
     .demo-pill {
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      color: #CBD5E1;
+      color: #475569;
+      font-weight: 600;
     }
     .demo-pill strong {
-      color: #38BDF8;
+      color: #00468B;
       font-family: monospace;
-      font-size: 11.5px;
+      font-size: 12px;
+      font-weight: 800;
     }
     .demo-open-callout {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(245, 158, 11, 0.15);
-      border: 1px solid rgba(245, 158, 11, 0.45);
-      color: #FDE68A;
-      padding: 2px 8px;
-      border-radius: 5px;
+      background: #FEF2F2;
+      border: 1px solid #FECACA;
+      color: #991B1B;
+      padding: 2px 9px;
+      border-radius: 6px;
       font-size: 11px;
-      font-weight: 600;
-    }
-    .demo-open-callout code {
-      color: #FFFFFF;
-      background: rgba(15, 23, 42, 0.65);
-      padding: 1px 5px;
-      border-radius: 3px;
-      font-family: monospace;
       font-weight: 700;
     }
+    .demo-open-callout code {
+      color: #00468B;
+      background: #EFF6FF;
+      border: 1px solid #BFDBFE;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-weight: 800;
+    }
     .demo-btn {
-      background: #334155;
-      color: #F8FAFC;
-      border: 1px solid #475569;
-      border-radius: 5px;
+      background: #F8FAFC;
+      color: #0F172A;
+      border: 1px solid #CBD5E1;
+      border-radius: 6px;
       padding: 4px 10px;
       font-size: 11px;
       font-weight: 700;
@@ -145,24 +152,24 @@
       transition: all 0.15s ease;
     }
     .demo-btn:hover {
-      background: #475569;
+      background: #E2E8F0;
+      border-color: #94A3B8;
     }
     .demo-btn.btn-tour {
-      background: #006ECD;
+      background: #0072CE;
       color: #FFFFFF;
-      border-color: #FFB81C;
-      box-shadow: 0 0 10px rgba(255, 184, 28, 0.35);
+      border-color: #00468B;
+      box-shadow: 0 1px 4px rgba(0, 70, 139, 0.25);
     }
     .demo-btn.btn-tour:hover {
-      background: #0284C7;
-      box-shadow: 0 0 14px rgba(255, 184, 28, 0.55);
+      background: #00468B;
     }
     .demo-frame-wrap {
       flex: 1;
       width: 100%;
       height: 100%;
       position: relative;
-      background: #F8FAFC;
+      background: #F1F5F9;
     }
     iframe#demo-app-frame {
       width: 100%;
@@ -171,18 +178,17 @@
       display: block;
     }
 
-    /* Guided Tour Popout Card */
+    /* Guided Tour Popout Card - Hub Corporate Light Theme */
     .tour-popout {
       position: absolute;
       right: 18px;
       bottom: 18px;
-      width: 450px;
+      width: 455px;
       max-width: calc(100vw - 36px);
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid #38BDF8;
+      background: #FFFFFF;
+      border: 2px solid #00468B;
       border-radius: 12px;
-      box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.75), 0 0 15px rgba(56, 189, 248, 0.25);
-      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 36px -6px rgba(15, 23, 42, 0.28), 0 4px 12px rgba(0, 70, 139, 0.14);
       z-index: 1000;
       display: flex;
       flex-direction: column;
@@ -191,8 +197,8 @@
     }
     .tour-popout.minimized {
       width: auto;
-      max-width: 380px;
-      border-color: #FFB81C;
+      max-width: 390px;
+      border-color: #00468B;
     }
     .tour-popout.minimized .tour-body,
     .tour-popout.minimized .tour-footer,
@@ -200,12 +206,12 @@
       display: none;
     }
     .tour-header {
-      background: linear-gradient(90deg, #1E293B 0%, #0F172A 100%);
+      background: #00468B;
+      border-bottom: 2px solid #FFB81C;
       padding: 10px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid #334155;
       gap: 8px;
       cursor: pointer;
     }
@@ -216,10 +222,10 @@
     }
     .tour-badge {
       background: #FFB81C;
-      color: #0F172A;
+      color: #00468B;
       font-size: 9.5px;
       font-weight: 900;
-      padding: 2px 6px;
+      padding: 2px 7px;
       border-radius: 4px;
       letter-spacing: 0.05em;
       text-transform: uppercase;
@@ -227,7 +233,7 @@
     .tour-title {
       font-size: 13px;
       font-weight: 800;
-      color: #F8FAFC;
+      color: #FFFFFF;
     }
     .tour-header-controls {
       display: flex;
@@ -237,7 +243,7 @@
     .tour-icon-btn {
       background: transparent;
       border: 0;
-      color: #94A3B8;
+      color: #DBEAFE;
       cursor: pointer;
       padding: 4px;
       border-radius: 4px;
@@ -246,19 +252,19 @@
       justify-content: center;
     }
     .tour-icon-btn:hover {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.16);
       color: #FFFFFF;
     }
     .tour-stepper {
-      background: #1E293B;
+      background: #F8FAFC;
       padding: 6px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      border-bottom: 1px solid #334155;
+      border-bottom: 1px solid #E2E8F0;
       font-size: 11px;
-      color: #94A3B8;
+      color: #475569;
     }
     .tour-dots {
       display: flex;
@@ -267,26 +273,34 @@
     }
     .tour-dot {
       width: 22px;
-      height: 5px;
+      height: 6px;
       border-radius: 3px;
-      background: #334155;
+      background: #CBD5E1;
       cursor: pointer;
       transition: all 0.2s ease;
     }
     .tour-dot.active {
-      background: #38BDF8;
+      background: #00468B;
       width: 32px;
     }
     .tour-dot.done {
-      background: #0284C7;
+      background: #0072CE;
     }
     .tour-timer {
       font-family: monospace;
-      color: #FDE68A;
+      color: #00468B;
+      font-weight: 700;
       font-size: 10.5px;
       display: flex;
       align-items: center;
       gap: 4px;
+    }
+    .tour-timer .tour-icon-btn {
+      color: #00468B;
+    }
+    .tour-timer .tour-icon-btn:hover {
+      background: #E2E8F0;
+      color: #002B5C;
     }
     .tour-body {
       padding: 14px;
@@ -296,48 +310,50 @@
       line-height: 1.5;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
+      background: #FFFFFF;
     }
     .tour-sec-title {
       font-size: 10.5px;
       font-weight: 900;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      color: #38BDF8;
+      color: #00468B;
       margin-bottom: 4px;
       display: flex;
       align-items: center;
       gap: 5px;
     }
     .tour-box {
-      background: rgba(30, 41, 59, 0.6);
-      border: 1px solid rgba(51, 65, 85, 0.8);
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
       border-radius: 8px;
       padding: 9px 11px;
     }
     .tour-box.action-box {
-      background: rgba(2, 132, 199, 0.12);
-      border-color: rgba(56, 189, 248, 0.4);
+      background: #EFF6FF;
+      border-color: #93C5FD;
     }
     .tour-box p {
       margin: 0;
-      color: #E2E8F0;
+      color: #1E293B;
     }
     .tour-box ul {
       margin: 4px 0 0 16px;
       padding: 0;
-      color: #CBD5E1;
+      color: #334155;
     }
     .tour-box li {
       margin-bottom: 3px;
     }
     .tour-highlight {
-      color: #FFB81C;
-      font-weight: 700;
+      color: #00468B;
+      font-weight: 800;
     }
     .tour-code {
-      background: rgba(15, 23, 42, 0.8);
-      color: #38BDF8;
+      background: #EFF6FF;
+      color: #00468B;
+      border: 1px solid #BFDBFE;
       padding: 1px 5px;
       border-radius: 4px;
       font-family: monospace;
@@ -345,9 +361,9 @@
       font-size: 11px;
     }
     .tour-footer {
-      background: #1E293B;
+      background: #F8FAFC;
       padding: 10px 14px;
-      border-top: 1px solid #334155;
+      border-top: 1px solid #E2E8F0;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -364,9 +380,9 @@
       gap: 6px;
     }
     .tour-action-btn {
-      background: #0284C7;
+      background: #0072CE;
       color: #FFFFFF;
-      border: 1px solid #38BDF8;
+      border: 1px solid #00468B;
       border-radius: 6px;
       padding: 5px 11px;
       font-size: 11.5px;
@@ -378,23 +394,25 @@
       transition: all 0.15s ease;
     }
     .tour-action-btn:hover {
-      background: #0369A1;
+      background: #00468B;
     }
     .tour-action-btn.primary {
       background: #FFB81C;
-      color: #0F172A;
-      border-color: #F59E0B;
+      color: #00468B;
+      border-color: #D97706;
+      font-weight: 800;
     }
     .tour-action-btn.primary:hover {
       background: #F59E0B;
     }
     .tour-action-btn.secondary {
-      background: #334155;
-      border-color: #475569;
-      color: #E2E8F0;
+      background: #FFFFFF;
+      border-color: #CBD5E1;
+      color: #334155;
     }
     .tour-action-btn.secondary:hover {
-      background: #475569;
+      background: #F1F5F9;
+      border-color: #94A3B8;
     }
   </style>
 </head>
@@ -412,7 +430,7 @@
       <button type="button" class="demo-tab" data-app="ganttly">2. Team Overview (Ganttly)</button>
       <button type="button" class="demo-tab" data-app="shiftstart">3. Team Builder (Shift Start)</button>
       <button type="button" class="demo-tab" data-app="mss">4. SAP Log Input</button>
-      <button type="button" class="demo-tab" data-app="director">5. Sanitation Director (Modeler)</button>
+      <button type="button" class="demo-tab" data-app="director">5. Sanitation Director</button>
       <button type="button" class="demo-tab" data-app="bolo">6. Pathogen BOLO</button>
       <button type="button" class="demo-tab" data-app="manager">7. Managers Hub</button>
       <button type="button" class="demo-tab" data-app="prodsched">8. Production Scheduler</button>
@@ -675,16 +693,16 @@
           id: 'step_director',
           app: 'director',
           badge: 'Step 6 of 7 - Executive Modeling',
-          title: 'Sanitation Director (Run Modeler)',
-          desc: 'High-level financial and labor modeling for plant managers and corporate directors. Features the Run Week Modeler, Projected Load Graph, and Current Reality Graph.',
-          connection: 'Simulates production run adjustments to forecast required cleaning hours, tech headcounts, and overtime costs based on actual plant asset standards -- without altering active floor boards.',
-          actionTitle: 'Projected Load vs Current Reality',
-          actionDesc: 'Click Projected Load Graph to view day-by-day sanitation labor requirements across all production lines.',
-          actionBtnLabel: 'View Projected Load Graph',
+          title: 'Sanitation Director (v1.00005 Controller)',
+          desc: 'Controller-grade financial and labor modeling for plant managers and directors. Includes all 7 tabs: Executive Brief, Current Reality, Cost & Labor Engine, Weekly Schedule Sim, 26-Week Roadmap, Pay & Comp, and Assumptions & Data.',
+          connection: 'Simulates production schedules, 4x10 vs 7-day shift structures, and wage/overtime sensitivity against actual plant asset standards without altering active floor boards.',
+          actionTitle: 'Explore Weekly Schedule Sim & Cost Engine',
+          actionDesc: 'Click Weekly Schedule Sim to model line run windows and see real-time sanitation headcounts and cost impacts.',
+          actionBtnLabel: 'Open Weekly Schedule Sim',
           onAction: function() {
             try {
               var doc = frame.contentDocument || frame.contentWindow.document;
-              var btn = Array.from(doc.querySelectorAll('button')).find(function(b) { return /Projected Load Graph/i.test(b.innerText || ''); });
+              var btn = Array.from(doc.querySelectorAll('button')).find(function(b) { return /Weekly Schedule Sim|Cost & Labor Engine/i.test(b.innerText || ''); });
               if (btn) btn.click();
             } catch (e) {}
           }
@@ -693,15 +711,14 @@
           id: 'step_bolo_ecosystem',
           app: 'bolo',
           badge: 'Step 7 of 7 - Unified Quality Ecosystem',
-          title: 'Pathogen BOLO & Quality Safeguards',
-          desc: 'Tracks microbiological swab tests, environmental monitoring zones (Zone 1-4), and visual line mapping to prevent contamination and enforce pre-op holds.',
+          title: 'Pathogen BOLO & 2-Week Production Scheduler',
+          desc: 'Tracks 2+ months of daily microbiological swab results (420+ swabs across 60 sites in Zones 1-4) alongside 2 full weeks of multi-run schedules in Production Scheduler.',
           connection: 'Together with Managers Hub (audit trails) and Production Scheduler (line coordination), all 8 applications function as a single synchronized sanitation operating system.',
-          actionTitle: 'Reset & Re-Explore',
-          actionDesc: 'The tour is complete! You can click Reset Demo Data anytime to re-arm the two open items and freely test any part of the system.',
-          actionBtnLabel: 'Back to MSS Calendar',
+          actionTitle: 'Inspect 2-Week Production Scheduler',
+          actionDesc: 'Click below to jump to Production Scheduler and explore 14 days of multi-run schedules, allergen washes, and clean windows across all 10 lines.',
+          actionBtnLabel: 'Open Production Scheduler',
           onAction: function() {
-            switchApp('calendar');
-            setTourStep(0);
+            switchApp('prodsched');
           }
         }
       ];
@@ -754,8 +771,8 @@
             '<p>' + s.connection + '</p>' +
           '</div>' +
           '<div class="tour-box action-box">' +
-            '<div class="tour-sec-title" style="color:#FDE68A;">' +
-              '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="#FDE68A"></polygon></svg>' +
+            '<div class="tour-sec-title" style="color:#00468B;">' +
+              '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#00468B" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="#FFB81C"></polygon></svg>' +
               s.actionTitle +
             '</div>' +
             '<p>' + s.actionDesc + '</p>' +

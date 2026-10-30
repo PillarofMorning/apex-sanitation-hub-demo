@@ -1,26 +1,52 @@
 (function (global) {
   var STORAGE_PREFIX = '__APEX_DEMO_TABLE_V1__';
-  var META_KEY = '__APEX_DEMO_META_V2__';
+  var META_KEY = '__APEX_DEMO_META_V3__';
 
   // Canonical table registry
   var TABLE_ALIASES = {
     'craa5___1_a_assets': 'craa5___1_a_assets',
     'craa5___1_a_assetses': 'craa5___1_a_assets',
+    'craa5_aa_assets': 'craa5___1_a_assets',
+    'craa5_aa_assetses': 'craa5___1_a_assets',
+    'craa5_a_assets': 'craa5___1_a_assets',
+    'craa5_a_assetses': 'craa5___1_a_assets',
     'craa5___1_a_employee': 'craa5___1_a_employee',
     'craa5___1_a_employees': 'craa5___1_a_employee',
     'craa5___1_e_employee': 'craa5___1_a_employee',
     'craa5___1_e_employees': 'craa5___1_a_employee',
     'craa5___1_e_employeeses': 'craa5___1_a_employee',
+    'craa5__aa_employee': 'craa5___1_a_employee',
+    'craa5__aa_employees': 'craa5___1_a_employee',
+    'craa5_e_employee': 'craa5___1_a_employee',
+    'craa5_e_employees': 'craa5___1_a_employee',
     'craa5___1_a_mss_area': 'craa5___1_a_mss_area',
     'craa5___1_a_mss_areas': 'craa5___1_a_mss_area',
+    'craa5_aa_mss_area': 'craa5___1_a_mss_area',
+    'craa5_aa_mss_areas': 'craa5___1_a_mss_area',
+    'craa5_a_mss_area': 'craa5___1_a_mss_area',
+    'craa5_a_mss_areas': 'craa5___1_a_mss_area',
     'craa5___1_a_workshift': 'craa5___1_a_workshift',
     'craa5___1_a_workshifts': 'craa5___1_a_workshift',
+    'craa5_workshift': 'craa5___1_a_workshift',
+    'craa5_workshifts': 'craa5___1_a_workshift',
+    'craa5_s_workshift': 'craa5___1_a_workshift',
+    'craa5_s_workshifts': 'craa5___1_a_workshift',
     'craa5___1_a_leadershipteam': 'craa5___1_a_leadershipteam',
     'craa5___1_a_leadershipteams': 'craa5___1_a_leadershipteam',
+    'craa5__aa_leadershipteam': 'craa5___1_a_leadershipteam',
+    'craa5__aa_leadershipteams': 'craa5___1_a_leadershipteam',
     'craa5___1_a_role': 'craa5___1_a_role',
     'craa5___1_a_roles': 'craa5___1_a_role',
     'craa5___1_e_hubconfig': 'craa5___1_e_hubconfig',
     'craa5___1_e_hubconfigs': 'craa5___1_e_hubconfig',
+    'craa5__e_hubconfig': 'craa5___1_e_hubconfig',
+    'craa5__e_hubconfigs': 'craa5___1_e_hubconfig',
+    'craa5_e_hubconfig': 'craa5___1_e_hubconfig',
+    'craa5_e_hubconfigs': 'craa5___1_e_hubconfig',
+    'craa5_directorsetpoint': 'craa5___1_e_directorsetpoint',
+    'craa5_directorsetpoints': 'craa5___1_e_directorsetpoint',
+    'craa5___1_e_directorsetpoint': 'craa5___1_e_directorsetpoint',
+    'craa5___1_e_directorsetpoints': 'craa5___1_e_directorsetpoint',
     'craa5___1_e_laborrate': 'craa5___1_e_laborrate',
     'craa5___1_e_laborrates': 'craa5___1_e_laborrate',
     'craa5___1_e_shifttask': 'craa5___1_e_shifttask',
@@ -33,6 +59,9 @@
     'craa5___1_g_passoffs': 'craa5___1_g_passoff',
     'craa5___1_g_obstacle': 'craa5___1_g_obstacle',
     'craa5___1_g_obstacles': 'craa5___1_g_obstacle',
+    'craa5_g_obstacle': 'craa5___1_g_obstacle',
+    'craa5_g_obstacles': 'craa5___1_g_obstacle',
+    'craa5_obstacles': 'craa5___1_g_obstacle',
     'craa5___1_g_note': 'craa5___1_g_note',
     'craa5___1_g_notes': 'craa5___1_g_note',
     'craa5___1_g_personnelnote': 'craa5___1_g_note',
@@ -41,6 +70,10 @@
     'craa5___1_g_mapses': 'craa5___1_g_maps',
     'craa5___1_l_log': 'craa5___1_l_log',
     'craa5___1_l_logs': 'craa5___1_l_log',
+    'craa5_l_log': 'craa5___1_l_log',
+    'craa5_l_logs': 'craa5___1_l_log',
+    'craa5__log_': 'craa5___1_l_log',
+    'craa5__log_s': 'craa5___1_l_log',
     'craa5___1_m_employeenote': 'craa5___1_m_employeenote',
     'craa5___1_m_employeenotes': 'craa5___1_m_employeenote',
     'craa5___1_m_quicktask': 'craa5___1_m_quicktask',
@@ -49,24 +82,48 @@
     'craa5___1_m_supervisortodos': 'craa5___1_m_supervisortodo',
     'craa5___1_m_timelosslog': 'craa5___1_m_timelosslog',
     'craa5___1_m_timelosslogs': 'craa5___1_m_timelosslog',
+    'craa5_m_timelosslog': 'craa5___1_m_timelosslog',
+    'craa5_m_timelosslogs': 'craa5___1_m_timelosslog',
+    'craa5_timelosslog': 'craa5___1_m_timelosslog',
+    'craa5_timelosslogs': 'craa5___1_m_timelosslog',
     'craa5___1_p_changeoverrule': 'craa5___1_p_changeoverrule',
     'craa5___1_p_changeoverrules': 'craa5___1_p_changeoverrule',
     'craa5___1_p_cleanplan': 'craa5___1_p_cleanplan',
     'craa5___1_p_cleanplans': 'craa5___1_p_cleanplan',
+    'craa5_p_cleanplan': 'craa5___1_p_cleanplan',
+    'craa5_p_cleanplans': 'craa5___1_p_cleanplan',
+    'craa5_cleanplan': 'craa5___1_p_cleanplan',
+    'craa5_cleanplans': 'craa5___1_p_cleanplan',
     'craa5___1_p_linepriority': 'craa5___1_p_linepriority',
     'craa5___1_p_linepriorities': 'craa5___1_p_linepriority',
     'craa5___1_p_plan': 'craa5___1_p_plan',
     'craa5___1_p_plans': 'craa5___1_p_plan',
     'craa5___1_p_prodschedule': 'craa5___1_p_prodschedule',
     'craa5___1_p_prodschedules': 'craa5___1_p_prodschedule',
+    'craa5_p_prodschedule': 'craa5___1_p_prodschedule',
+    'craa5_p_prodschedules': 'craa5___1_p_prodschedule',
+    'craa5__aa_prd_schd': 'craa5___1_p_prodschedule',
+    'craa5__aa_prd_schds': 'craa5___1_p_prodschedule',
     'craa5___1_p_skumaster': 'craa5___1_p_skumaster',
     'craa5___1_p_skumasters': 'craa5___1_p_skumaster',
     'craa5___1_s_cleancheckoff': 'craa5___1_s_cleancheckoff',
     'craa5___1_s_cleancheckoffs': 'craa5___1_s_cleancheckoff',
+    'craa5___1_g_checkoff': 'craa5___1_s_cleancheckoff',
+    'craa5___1_g_checkoffs': 'craa5___1_s_cleancheckoff',
+    'craa5_g_checkoff': 'craa5___1_s_cleancheckoff',
+    'craa5_g_checkoffs': 'craa5___1_s_cleancheckoff',
     'craa5___1_s_shiftarchive': 'craa5___1_s_shiftarchive',
     'craa5___1_s_shiftarchives': 'craa5___1_s_shiftarchive',
+    'craa5_s_shiftarchive': 'craa5___1_s_shiftarchive',
+    'craa5_s_shiftarchives': 'craa5___1_s_shiftarchive',
+    'craa5_shiftarchive': 'craa5___1_s_shiftarchive',
+    'craa5_shiftarchives': 'craa5___1_s_shiftarchive',
     'craa5___1_s_shiftboard': 'craa5___1_s_shiftboard',
     'craa5___1_s_shiftboards': 'craa5___1_s_shiftboard',
+    'craa5_s_shiftboard': 'craa5___1_s_shiftboard',
+    'craa5_s_shiftboards': 'craa5___1_s_shiftboard',
+    'craa5_shiftboard': 'craa5___1_s_shiftboard',
+    'craa5_shiftboards': 'craa5___1_s_shiftboard',
     'craa5___1_s_shiftlog': 'craa5___1_s_shiftlog',
     'craa5___1_s_shiftlogs': 'craa5___1_s_shiftlog',
     'craa5___1_s_shiftplan': 'craa5___1_s_shiftplan',
@@ -75,6 +132,8 @@
     'craa5___1_s_shiftpresets': 'craa5___1_s_shiftpreset',
     'craa5___1_s_taskassignment': 'craa5___1_s_taskassignment',
     'craa5___1_s_taskassignments': 'craa5___1_s_taskassignment',
+    'craa5_taskassignment': 'craa5___1_s_taskassignment',
+    'craa5_taskassignments': 'craa5___1_s_taskassignment',
     'craa5___1_s_updatepreset': 'craa5___1_s_updatepreset',
     'craa5___1_s_updatepresets': 'craa5___1_s_updatepreset',
     'craa5___1_s_saporder': 'craa5___1_s_saporder',
@@ -206,21 +265,33 @@
   function clearStaleStorageIfNeeded(seed) {
     try {
       if (!global.localStorage) return;
-      var wantMeta = JSON.stringify({ day: seed.demoDay || '', version: seed.seedVersion || 'v2' });
+      var wantMeta = JSON.stringify({ day: seed.demoDay || '', version: seed.seedVersion || 'v3' });
       var curMeta = global.localStorage.getItem(META_KEY);
       if (curMeta !== wantMeta) {
         var keys = [];
         for (var i = 0; i < global.localStorage.length; i++) {
           var k = global.localStorage.key(i);
-          if (k && (k.indexOf(STORAGE_PREFIX) === 0 || k.indexOf('__APEX_DEMO_META') === 0 || k.indexOf('__1_') === 0 || k.indexOf('ss_') === 0 || k.indexOf('ganttly') === 0 || k.indexOf('mss_') === 0)) {
+          if (k && (k.indexOf(STORAGE_PREFIX) === 0 || k.indexOf('__APEX_DEMO_META') === 0 || k.indexOf('__1_') === 0 || k.indexOf('ss_') === 0 || k.indexOf('ganttly') === 0 || k.indexOf('mss_') === 0 || k.indexOf('sd_') === 0 || k.indexOf('hub_') === 0)) {
             keys.push(k);
           }
         }
         keys.forEach(function (k) { global.localStorage.removeItem(k); });
+        try {
+          if (global.indexedDB && typeof global.indexedDB.deleteDatabase === 'function') {
+            global.indexedDB.deleteDatabase('__1_stl_pathogen_bolo_idb_v2');
+            global.indexedDB.deleteDatabase('stl_pathogen_bolo_idb_v2');
+          }
+        } catch (eIdb) {}
         global.localStorage.setItem(META_KEY, wantMeta);
         global.localStorage.setItem('__1_ss_lang_v1', 'en');
         global.localStorage.setItem('__1_hub_lang', 'en');
         global.localStorage.setItem('__1_mss-log-read-sheet', '0');
+        global.localStorage.setItem('hub_std_unlocked_v1', '1');
+        global.localStorage.setItem('hub_active_ms_user_v1', JSON.stringify({
+          name: 'Marcus Vance',
+          email: 'marcus.vance@apexfoods.demo',
+          microsoftId: 'a0000001-0000-4000-8000-000000000001'
+        }));
       }
     } catch (e) {}
   }
@@ -333,6 +404,19 @@
       if (canon === 'craa5___1_a_employee') {
         out.craa5___1_a_employeeid = idVal;
         out.craa5___1_e_employeeid = idVal;
+        out.craa5__aa_employeeid = idVal;
+      }
+      if (canon === 'craa5___1_a_assets') {
+        out.craa5_aa_assetsid = idVal;
+      }
+      if (canon === 'craa5___1_e_hubconfig') {
+        out.craa5__e_hubconfigid = idVal;
+      }
+      if (canon === 'craa5___1_s_shiftarchive') {
+        out.craa5_shiftarchiveid = idVal;
+      }
+      if (canon === 'craa5___1_s_shiftboard') {
+        out.craa5_shiftboardid = idVal;
       }
       if (canon === 'craa5___1_b_swabresult') {
         out.craa5___1_b_swabresultid = idVal;
@@ -1424,15 +1508,27 @@
           var keys = [];
           for (var i = 0; i < global.localStorage.length; i++) {
             var k = global.localStorage.key(i);
-            if (k && (k.indexOf(STORAGE_PREFIX) === 0 || k.indexOf('__1_') === 0 || k.indexOf('ss_') === 0 || k.indexOf('ganttly') === 0 || k.indexOf('mss_') === 0 || k.indexOf('apex_') === 0 || k.indexOf('midwest_') === 0 || k.indexOf('sd_') === 0)) {
+            if (k && (k.indexOf(STORAGE_PREFIX) === 0 || k.indexOf('__1_') === 0 || k.indexOf('ss_') === 0 || k.indexOf('ganttly') === 0 || k.indexOf('mss_') === 0 || k.indexOf('apex_') === 0 || k.indexOf('midwest_') === 0 || k.indexOf('sd_') === 0 || k.indexOf('hub_') === 0)) {
               keys.push(k);
             }
           }
           keys.forEach(function (k) { global.localStorage.removeItem(k); });
-          global.localStorage.setItem(META_KEY, JSON.stringify({ day: seed.demoDay || '', version: seed.seedVersion || 'v2' }));
+          try {
+            if (global.indexedDB && typeof global.indexedDB.deleteDatabase === 'function') {
+              global.indexedDB.deleteDatabase('__1_stl_pathogen_bolo_idb_v2');
+              global.indexedDB.deleteDatabase('stl_pathogen_bolo_idb_v2');
+            }
+          } catch (eIdb) {}
+          global.localStorage.setItem(META_KEY, JSON.stringify({ day: seed.demoDay || '', version: seed.seedVersion || 'v3' }));
           global.localStorage.setItem('__1_ss_lang_v1', 'en');
           global.localStorage.setItem('__1_hub_lang', 'en');
           global.localStorage.setItem('__1_mss-log-read-sheet', '0');
+          global.localStorage.setItem('hub_std_unlocked_v1', '1');
+          global.localStorage.setItem('hub_active_ms_user_v1', JSON.stringify({
+            name: 'Marcus Vance',
+            email: 'marcus.vance@apexfoods.demo',
+            microsoftId: 'a0000001-0000-4000-8000-000000000001'
+          }));
         }
         if (global.sessionStorage) {
           var clockOff = global.sessionStorage.getItem('__APEX_DEMO_CLOCK_OFFSET__');
@@ -1454,6 +1550,7 @@
         checkoffs: (db.tables['craa5___1_s_cleancheckoff'] || []).length,
         logs: (db.tables['craa5___1_l_log'] || []).length,
         swabs: (db.tables['craa5___1_b_swabresult'] || []).length,
+        prodschedules: (db.tables['craa5___1_p_prodschedule'] || []).length,
         employees: (db.tables['craa5___1_a_employee'] || []).length,
         assets: (db.tables['craa5___1_a_assets'] || []).length,
         areas: (db.tables['craa5___1_a_mss_area'] || []).length,

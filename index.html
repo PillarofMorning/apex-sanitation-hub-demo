@@ -1466,12 +1466,12 @@
         var isPowerPages = /\.powerappsportals\.com$/i.test(window.location.hostname || '');
         var extra = (appKey === 'people') ? '&tab=employeequery' : '';
         if (isWebResource) {
-          return '/WebResources/craa5_MidwestPlant_hub_app.html?app=' + encodeURIComponent(appKey) + extra + '&v=4';
+          return '/WebResources/craa5_MidwestPlant_hub_app.html?app=' + encodeURIComponent(appKey) + extra + '&v=5';
         }
         if (isPowerPages) {
-          return '/?app=' + encodeURIComponent(appKey) + extra + '&v=4';
+          return '/?app=' + encodeURIComponent(appKey) + extra + '&v=5';
         }
-        return 'app.html?app=' + encodeURIComponent(appKey) + extra + '&v=4';
+        return 'app.html?app=' + encodeURIComponent(appKey) + extra + '&v=5';
       }
 
       function broadcastToFrames(msgObj) {

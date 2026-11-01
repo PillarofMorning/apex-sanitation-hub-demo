@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="data:," />
   <title>Midwest Plant Sanitation Hub - 5-Portal Enterprise Architecture</title>
-  <script src="demo_seed_data.js?v=5"></script>
-  <script src="mock_dataverse_engine.js?v=5"></script>
+  <script src="demo_seed_data.js?v=8"></script>
+  <script src="mock_dataverse_engine.js?v=8"></script>
   <style>
     * { box-sizing: border-box; }
     html, body {
@@ -123,125 +123,471 @@
       display: inline-block;
     }
 
-    /* Role-Segregated Single-Row Navigation */
-    .hub-nav {
-      display: flex;
-      flex-wrap: nowrap;
+    /* Collapsible Left Sidebar & Return to Home Navigation */
+    .hub-sb-toggle-top {
+      height: 30px;
+      padding: 0 9px;
+      border-radius: 7px;
+      background: rgba(15, 23, 42, 0.55);
+      color: #F8FAFC;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      display: inline-flex;
       align-items: center;
-      gap: 4px;
-      min-width: 0;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    .hub-nav::-webkit-scrollbar { display: none; }
-    .hub-group-lbl {
-      font-size: 9px;
+      gap: 6px;
+      font-size: 11px;
       font-weight: 800;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: #93C5FD;
-      padding: 0 4px 0 2px;
-      white-space: nowrap;
-      user-select: none;
-    }
-    .hub-group-sep {
-      width: 1px;
-      height: 20px;
-      background: rgba(255, 255, 255, 0.24);
-      margin: 0 4px;
+      cursor: pointer;
+      transition: all 0.14s ease;
       flex-shrink: 0;
     }
-    .hub-tab {
-      position: relative;
-      background: rgba(255, 255, 255, 0.10);
-      color: #E2E8F0;
+    .hub-sb-toggle-top:hover {
+      background: rgba(255, 184, 28, 0.22);
+      border-color: #FFB81C;
+      color: #FDE68A;
+    }
+    .hub-home-top-btn {
+      height: 30px;
+      padding: 0 11px;
+      border-radius: 7px;
+      background: linear-gradient(135deg, #FFB81C 0%, #F59E0B 100%);
+      color: #002B55;
+      border: 1.5px solid #FEF08A;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.28);
+      transition: all 0.15s ease;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+    .hub-home-top-btn:hover {
+      transform: translateY(-1px);
+      background: #FCD34D;
+      box-shadow: 0 4px 12px rgba(255, 184, 28, 0.45);
+    }
+    .hub-context-crumb {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(15, 23, 42, 0.42);
       border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 7px;
+      padding: 3px 10px;
+      font-size: 11px;
+      color: #E2E8F0;
+      white-space: nowrap;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .hub-crumb-portal {
+      color: #FBBF24;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .hub-crumb-portal:hover {
+      text-decoration: underline;
+    }
+    .hub-crumb-sep {
+      color: #64748B;
+      font-weight: 900;
+    }
+    .hub-crumb-app {
+      color: #FFFFFF;
+      font-weight: 800;
+    }
+
+    /* Main Workspace Flex Container (Collapsible Sidebar + Multi-Iframe Deck) */
+    .hub-body-wrap {
+      flex: 1;
+      min-height: 0;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      overflow: hidden;
+      position: relative;
+    }
+    .hub-sidebar {
+      width: 264px;
+      min-width: 264px;
+      height: 100%;
+      background: linear-gradient(180deg, #001A36 0%, #091326 58%, #060B16 100%);
+      border-right: 1px solid rgba(255, 184, 28, 0.32);
+      display: flex;
+      flex-direction: column;
+      z-index: 80;
+      user-select: none;
+      overflow: hidden;
+      box-shadow: 3px 0 14px rgba(0, 0, 0, 0.35);
+    }
+    .hub-sidebar.collapsed {
+      width: 58px;
+      min-width: 58px;
+    }
+    .sb-top {
+      padding: 10px 9px 8px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      flex-shrink: 0;
+    }
+    .sb-home-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #FFB81C 0%, #F59E0B 100%);
+      color: #002B55;
+      border: 1.5px solid #FEF08A;
+      border-radius: 9px;
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.32);
+      transition: all 0.15s ease;
+      text-align: left;
+    }
+    .sb-home-btn:hover {
+      background: #FCD34D;
+      transform: translateY(-1px);
+    }
+    .hub-sidebar.collapsed .sb-home-btn {
+      justify-content: center;
+      padding: 8px 4px;
+    }
+    .sb-home-icon {
+      width: 22px;
+      height: 22px;
       border-radius: 6px;
-      padding: 4.5px 9px;
+      background: rgba(0, 43, 85, 0.16);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .sb-home-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #002B55;
+      line-height: 1.15;
+      display: block;
+    }
+    .sb-home-sub {
+      font-size: 9.5px;
+      font-weight: 800;
+      color: #1E3A8A;
+      display: block;
+      margin-top: 1px;
+    }
+    .sb-search-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .hub-sidebar.collapsed .sb-search-wrap {
+      display: none;
+    }
+    .sb-search-input {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.78);
+      border: 1px solid rgba(148, 163, 184, 0.28);
+      border-radius: 7px;
+      padding: 5.5px 24px 5.5px 26px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #F8FAFC;
+      outline: none;
+    }
+    .sb-search-input::placeholder {
+      color: #94A3B8;
+    }
+    .sb-search-input:focus {
+      border-color: #FFB81C;
+      background: #0F172A;
+    }
+    .sb-search-icon {
+      position: absolute;
+      left: 8px;
+      color: #94A3B8;
+      pointer-events: none;
+      display: inline-flex;
+    }
+    .sb-search-clear {
+      position: absolute;
+      right: 6px;
+      background: transparent;
+      border: none;
+      color: #94A3B8;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      display: none;
+      padding: 0 3px;
+    }
+    .sb-scroll {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 8px 8px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      scrollbar-width: thin;
+      scrollbar-color: #334155 transparent;
+    }
+    .sb-scroll::-webkit-scrollbar { width: 5px; }
+    .sb-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 99px; }
+    .sb-section {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .sb-sec-head {
+      font-size: 9.5px;
+      font-weight: 900;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #93C5FD;
+      padding: 3px 6px 2px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      white-space: nowrap;
+    }
+    .hub-sidebar.collapsed .sb-sec-head {
+      justify-content: center;
+      font-size: 8.5px;
+      padding: 2px 0;
+      color: #64748B;
+    }
+    .hub-sidebar.collapsed .sb-text-hide {
+      display: none !important;
+    }
+    .sb-portal-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .sb-portal-btn {
+      background: rgba(30, 41, 59, 0.55);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      border-radius: 7px;
+      padding: 5.5px 8px;
+      color: #CBD5E1;
       font-size: 11px;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.12s ease;
-      display: inline-flex;
+      display: flex;
       align-items: center;
-      gap: 4.5px;
+      gap: 8px;
+      text-align: left;
+      transition: all 0.13s ease;
       white-space: nowrap;
-      flex-shrink: 0;
     }
-    .hub-tab:hover {
-      background: rgba(255, 255, 255, 0.22);
+    .sb-portal-btn:hover {
+      background: rgba(51, 65, 85, 0.78);
       color: #FFFFFF;
+      border-color: rgba(255, 184, 28, 0.45);
     }
-    .hub-tab.active {
-      background: #FFFFFF;
-      color: #002B55;
+    .sb-portal-btn.active {
+      background: linear-gradient(90deg, rgba(255, 184, 28, 0.22) 0%, rgba(30, 58, 138, 0.55) 100%);
+      color: #FFFFFF;
       border-color: #FFB81C;
       font-weight: 800;
-      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.22);
     }
-    .hub-tab-dot {
-      width: 5.5px;
-      height: 5.5px;
-      border-radius: 999px;
-      background: #38BDF8;
-      display: none;
+    .hub-sidebar.collapsed .sb-portal-btn {
+      justify-content: center;
+      padding: 6px 2px;
     }
-    .hub-tab.mounted .hub-tab-dot {
-      display: inline-block;
-    }
-    .hub-tab.stale .hub-tab-dot {
-      display: inline-block;
-      background: #F59E0B;
-      box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.35);
-    }
-
-    /* More Tools Dropdown */
-    .hub-more-wrap {
-      position: relative;
+    .sb-p-tag {
+      width: 24px;
+      height: 20px;
+      border-radius: 5px;
+      font-size: 9.5px;
+      font-weight: 900;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       flex-shrink: 0;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid currentColor;
     }
-    .hub-more-menu {
-      position: fixed;
-      top: 46px;
-      right: 220px;
-      width: 265px;
-      max-height: 82vh;
-      overflow-y: auto;
-      background: #FFFFFF;
-      border: 1px solid #CBD5E1;
-      border-radius: 10px;
-      box-shadow: 0 16px 36px rgba(15, 23, 42, 0.32);
-      padding: 6px;
-      display: none;
-      flex-direction: column;
-      gap: 3px;
-      z-index: 260;
-    }
-    .hub-more-menu.open {
-      display: flex;
-    }
-    .hub-more-item {
-      background: transparent;
-      border: 1px solid transparent;
-      border-radius: 6px;
-      padding: 6px 10px;
-      text-align: left;
+    .sb-nav-item {
+      position: relative;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-left: 3px solid transparent;
+      border-radius: 7px;
+      padding: 6.5px 8px;
+      color: #E2E8F0;
       font-size: 11.5px;
       font-weight: 700;
-      color: #1E293B;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 7px;
+      text-align: left;
+      transition: all 0.12s ease;
+      white-space: nowrap;
     }
-    .hub-more-item:hover {
-      background: #F1F5F9;
-      color: #00468B;
+    .sb-nav-item:hover {
+      background: rgba(255, 255, 255, 0.13);
+      color: #FFFFFF;
+      border-color: rgba(255, 255, 255, 0.22);
     }
-    .hub-more-item.active {
-      background: #EFF6FF;
-      border-color: #93C5FD;
-      color: #00468B;
+    .sb-nav-item.active {
+      background: #FFFFFF;
+      color: #002B55;
+      border-color: #FFB81C;
+      border-left: 4px solid #FFB81C;
+      font-weight: 900;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.28);
+    }
+    .hub-sidebar.collapsed .sb-nav-item {
+      justify-content: center;
+      padding: 7px 2px;
+    }
+    .sb-item-left {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+      overflow: hidden;
+    }
+    .sb-item-badge {
+      width: 24px;
+      height: 20px;
+      border-radius: 5px;
+      background: rgba(15, 23, 42, 0.55);
+      color: #93C5FD;
+      font-size: 9.5px;
+      font-weight: 900;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .sb-nav-item.active .sb-item-badge {
+      background: #002B55;
+      color: #FFB81C;
+    }
+    .sb-item-lbl {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .hub-tab-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #38BDF8;
+      display: none;
+      flex-shrink: 0;
+    }
+    .sb-nav-item.mounted .hub-tab-dot {
+      display: inline-block;
+    }
+    .sb-nav-item.stale .hub-tab-dot {
+      display: inline-block;
+      background: #F59E0B;
+      box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.35);
+    }
+    .sb-cat-head {
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      border-radius: 6px;
+      padding: 5px 8px;
+      color: #93C5FD;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 2px;
+    }
+    .sb-cat-head:hover {
+      background: rgba(30, 41, 59, 0.85);
+      color: #FDE68A;
+    }
+    .hub-sidebar.collapsed .sb-cat-head {
+      display: none;
+    }
+    .sb-cat-body {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5px;
+      padding-left: 2px;
+    }
+    .sb-cat-body.closed {
+      display: none;
+    }
+    .hub-sidebar.collapsed .sb-cat-body.closed {
+      display: flex;
+    }
+    .sb-footer {
+      padding: 8px;
+      border-top: 1px solid rgba(148, 163, 184, 0.18);
+      background: rgba(6, 11, 22, 0.92);
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+    .sb-foot-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+    }
+    .hub-sidebar.collapsed .sb-foot-row {
+      grid-template-columns: 1fr;
+    }
+    .sb-foot-btn {
+      background: rgba(30, 41, 59, 0.72);
+      color: #E2E8F0;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      border-radius: 6px;
+      padding: 5px 7px;
+      font-size: 10.5px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      white-space: nowrap;
+      transition: all 0.13s ease;
+    }
+    .sb-foot-btn:hover {
+      background: rgba(51, 65, 85, 0.92);
+      border-color: #FFB81C;
+      color: #FDE68A;
+    }
+    .sb-collapse-rail-btn {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.85);
+      color: #93C5FD;
+      border: 1px solid rgba(148, 163, 184, 0.24);
+      border-radius: 6px;
+      padding: 5px 8px;
+      font-size: 10.5px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .sb-collapse-rail-btn:hover {
+      background: #1E293B;
+      color: #FFB81C;
+      border-color: #FFB81C;
     }
 
     /* Right Controls */
@@ -934,17 +1280,24 @@
   <!-- Single-Row 48px Corporate Navigation Bar -->
   <div class="hub-topbar">
     <div class="hub-brand">
+      <button id="sidebar-toggle-btn" class="hub-sb-toggle-top" onclick="toggleSidebarCollapse()" title="Collapse or Expand Left Navigation Sidebar">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+        <span id="sidebar-toggle-top-lbl">Sidebar</span>
+      </button>
       <button id="brand-logo-btn" class="hub-emblem" onclick="toggleLogoDetailMode()" title="Apex Foods Brand Logo - Click to toggle Further Detail &amp; Live Dataverse Telemetry">
         <span>Apex Foods</span>
       </button>
-      <span class="hub-title" id="hub-brand-title">Midwest Plant Hub</span>
-      <button class="hub-portal-pill" onclick="toggleSplashOverlay(true)" title="Open 5-Portal Role-Segregated Splash Selector">
-        <span id="active-portal-badge">5 Portals</span>
+      <button id="return-home-top-btn" class="hub-home-top-btn" onclick="toggleSplashOverlay(true)" title="Return to Home (5-Portal Role-Segregated Splash Screen)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9.5z"/></svg>
+        <span id="return-home-top-lbl">Return to Home</span>
       </button>
+      <div class="hub-context-crumb" title="Active Role Portal &amp; Module">
+        <span class="hub-crumb-portal" id="active-portal-badge" onclick="toggleSplashOverlay(true)">Portal 4: Senior Leadership</span>
+        <span class="hub-crumb-sep">/</span>
+        <span class="hub-crumb-app" id="active-module-crumb">11. Managers Hub</span>
+      </div>
       <span id="prov-badge" class="hub-prov-badge" title="Verified OrganizationId: 446372c2-cd0d-f111-8c79-000d3a357709">LIVE</span>
     </div>
-
-    <div class="hub-nav" id="primary-nav"></div>
 
     <div class="hub-actions">
       <button id="split-stage-btn" class="hub-pill-btn" onclick="togglePodiumSplitStage()" title="Live Side-by-Side Stage: Portal 1 Podium Tablet + Portal 2 Inspector Queue">
@@ -1009,25 +1362,68 @@
     </div>
   </div>
 
-  <!-- Keep-Alive Multi-Iframe Deck + Side-by-Side Podium Split Stage -->
-  <div id="app-deck" class="hub-deck">
-    <div id="split-stage" class="hub-split-stage">
-      <div class="podium-bezel">
-        <div class="podium-bezel-top">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <span class="podium-cam-dot"></span>
-            <span id="split-left-title">PORTAL 1 - PLANT FLOOR PODIUM TABLET (BADGE SCAN)</span>
-          </div>
-          <span style="color:#94A3B8;font-size:10px;">90% Mobile / Tablet</span>
+  <!-- Main Workspace Flex Row: Collapsible Left Sidebar + Keep-Alive Multi-Iframe Deck -->
+  <div class="hub-body-wrap">
+    <aside id="hub-sidebar" class="hub-sidebar">
+      <div class="sb-top">
+        <button class="sb-home-btn" onclick="toggleSplashOverlay(true)" title="Return to Home (5-Portal Role-Segregated Splash Screen)">
+          <span class="sb-home-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#002B55" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9.5z"/></svg>
+          </span>
+          <span class="sb-text-hide">
+            <span class="sb-home-title" id="sb-home-title-lbl">Return to Home</span>
+            <span class="sb-home-sub" id="sb-home-sub-lbl">5-Portal Command Hub</span>
+          </span>
+        </button>
+        <div class="sb-search-wrap">
+          <span class="sb-search-icon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </span>
+          <input id="sidebar-search-input" class="sb-search-input" type="text" placeholder="Filter all 18 modules..." autocomplete="off" oninput="onSidebarFilterInput(this.value)" />
+          <button id="sidebar-search-clear" class="sb-search-clear" onclick="clearSidebarFilter()" title="Clear filter">x</button>
         </div>
-        <iframe id="split-frame-employee" style="flex:1;width:100%;border:0;border-radius:16px;background:#FFFFFF;" title="Portal 1 Podium Tablet"></iframe>
       </div>
-      <div class="inspector-stage-pane">
-        <div class="inspector-stage-top">
-          <span id="split-right-title">PORTAL 2 - FSQ / SANITATION INSPECTOR LIVE QUEUE &amp; 6M FISHBONE CAPA STUDIO</span>
-          <button onclick="togglePodiumSplitStage()" style="background:#FFB81C;color:#002B55;border:none;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:900;cursor:pointer;">Exit Split View</button>
+
+      <div class="sb-scroll" id="sidebar-scroll-content"></div>
+
+      <div class="sb-footer">
+        <div class="sb-foot-row">
+          <button class="sb-foot-btn" onclick="togglePodiumSplitStage()" title="Launch Side-by-Side Podium Split View (Portal 1 + Portal 2)">
+            <span>Split</span>
+            <span class="sb-text-hide">Stage</span>
+          </button>
+          <button class="sb-foot-btn" onclick="openDrawer('copilot')" title="Open Copilot Executive Assistant">
+            <span>AI</span>
+            <span class="sb-text-hide">Copilot</span>
+          </button>
         </div>
-        <iframe id="split-frame-inspect" style="flex:1;width:100%;border:0;background:#F8FAFC;" title="Portal 2 Inspector Hub"></iframe>
+        <button class="sb-collapse-rail-btn" onclick="toggleSidebarCollapse()" title="Collapse or Expand Sidebar">
+          <span id="sb-collapse-icon">&lt;&lt;</span>
+          <span class="sb-text-hide" id="sb-collapse-lbl">Collapse Sidebar</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Keep-Alive Multi-Iframe Deck + Side-by-Side Podium Split Stage -->
+    <div id="app-deck" class="hub-deck">
+      <div id="split-stage" class="hub-split-stage">
+        <div class="podium-bezel">
+          <div class="podium-bezel-top">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="podium-cam-dot"></span>
+              <span id="split-left-title">PORTAL 1 - PLANT FLOOR PODIUM TABLET (BADGE SCAN)</span>
+            </div>
+            <span style="color:#94A3B8;font-size:10px;">90% Mobile / Tablet</span>
+          </div>
+          <iframe id="split-frame-employee" style="flex:1;width:100%;border:0;border-radius:16px;background:#FFFFFF;" title="Portal 1 Podium Tablet"></iframe>
+        </div>
+        <div class="inspector-stage-pane">
+          <div class="inspector-stage-top">
+            <span id="split-right-title">PORTAL 2 - FSQ / SANITATION INSPECTOR LIVE QUEUE &amp; 6M FISHBONE CAPA STUDIO</span>
+            <button onclick="togglePodiumSplitStage()" style="background:#FFB81C;color:#002B55;border:none;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:900;cursor:pointer;">Exit Split View</button>
+          </div>
+          <iframe id="split-frame-inspect" style="flex:1;width:100%;border:0;background:#F8FAFC;" title="Portal 2 Inspector Hub"></iframe>
+        </div>
       </div>
     </div>
   </div>
@@ -1529,6 +1925,9 @@
         if (stageEl) stageEl.classList.toggle('active', splitStageActive);
         if (btnEl) btnEl.classList.toggle('active', splitStageActive);
         if (splitStageActive) {
+          if (!sidebarCollapsed && typeof window.toggleSidebarCollapse === 'function') {
+            window.toggleSidebarCollapse(true);
+          }
           if (empFrame && !empFrame.src) empFrame.src = getAppFrameUrl('employee');
           if (insFrame && !insFrame.src) insFrame.src = getAppFrameUrl('inspect');
         }
@@ -1597,50 +1996,246 @@
         }).join('');
       }
 
+      var APP_SHORT_BADGES = {
+        employee:   'EMP',
+        inspect:    'CAPA',
+        supervisor: 'SUP',
+        people:     'EVAL',
+        calendar:   'MSS',
+        ganttly:    'GNT',
+        shiftstart: 'BLD',
+        mss:        'SAP',
+        director:   'DIR',
+        bolo:       'BOLO',
+        manager:    'MGR',
+        prodsched:  'PRD',
+        pbed:       'PBED',
+        training:   'TRN',
+        ordering:   'ORD',
+        mapsubmit:  'MAP',
+        devcenter:  'DEV',
+        ecosystem:  '43TB'
+      };
+
+      var SIDEBAR_CATEGORIES = [
+        {
+          id: 'cat_floor',
+          titleEn: 'Floor & Shift Operations',
+          titleEs: 'Operaciones de Piso y Turno',
+          keys: ['employee', 'ganttly', 'shiftstart', 'mss']
+        },
+        {
+          id: 'cat_fsq',
+          titleEn: 'FSQ, BOLO & Master Sanitation',
+          titleEs: 'FSQ, Patogenos BOLO y MSS',
+          keys: ['inspect', 'bolo', 'calendar', 'ordering']
+        },
+        {
+          id: 'cat_lead',
+          titleEn: 'Leadership, People & Scheduling',
+          titleEs: 'Liderazgo, Personal y Horarios',
+          keys: ['manager', 'director', 'supervisor', 'people', 'prodsched', 'pbed', 'training', 'mapsubmit']
+        },
+        {
+          id: 'cat_dev',
+          titleEn: 'Developer & 43-Table Ecosystem',
+          titleEs: 'Desarrollador y Ecosistema 43 Tablas',
+          keys: ['devcenter', 'ecosystem']
+        }
+      ];
+
+      var sidebarCollapsed = false;
+      try {
+        var savedSb = localStorage.getItem('__1_hub_sidebar_collapsed_v1');
+        if (savedSb === '1') sidebarCollapsed = true;
+        else if (savedSb === null && window.innerWidth && window.innerWidth < 1280) sidebarCollapsed = true;
+      } catch (e) {}
+      var sidebarFilterQuery = '';
+      var collapsedCategories = {};
+
+      function applySidebarCollapseDom() {
+        var sb = document.getElementById('hub-sidebar');
+        var ic = document.getElementById('sb-collapse-icon');
+        var lbl = document.getElementById('sb-collapse-lbl');
+        var topLbl = document.getElementById('sidebar-toggle-top-lbl');
+        var isEs = (globalLang === 'es');
+        if (sb) sb.classList.toggle('collapsed', sidebarCollapsed);
+        if (ic) ic.textContent = sidebarCollapsed ? '>>' : '<<';
+        if (lbl) lbl.textContent = sidebarCollapsed
+          ? (isEs ? 'Expandir' : 'Expand')
+          : (isEs ? 'Contraer Barra' : 'Collapse Sidebar');
+        if (topLbl) topLbl.textContent = sidebarCollapsed
+          ? (isEs ? 'Menu >>' : 'Menu >>')
+          : (isEs ? 'Barra' : 'Sidebar');
+      }
+
+      window.toggleSidebarCollapse = function (forceState) {
+        sidebarCollapsed = (typeof forceState === 'boolean') ? forceState : !sidebarCollapsed;
+        try {
+          localStorage.setItem('__1_hub_sidebar_collapsed_v1', sidebarCollapsed ? '1' : '0');
+        } catch (e) {}
+        applySidebarCollapseDom();
+      };
+
+      window.toggleSidebarCategory = function (catId) {
+        collapsedCategories[catId] = !collapsedCategories[catId];
+        renderPortalNavBar();
+      };
+
+      window.onSidebarFilterInput = function (val) {
+        sidebarFilterQuery = String(val || '').trim().toLowerCase();
+        var clrBtn = document.getElementById('sidebar-search-clear');
+        if (clrBtn) clrBtn.style.display = sidebarFilterQuery ? 'inline-block' : 'none';
+        renderPortalNavBar();
+      };
+
+      window.clearSidebarFilter = function () {
+        sidebarFilterQuery = '';
+        var inp = document.getElementById('sidebar-search-input');
+        var clrBtn = document.getElementById('sidebar-search-clear');
+        if (inp) inp.value = '';
+        if (clrBtn) clrBtn.style.display = 'none';
+        renderPortalNavBar();
+      };
+
+      function buildSidebarAppBtnHtml(appKey, customLabel, allowHoverWarm) {
+        var lbl = customLabel || APP_LABELS[appKey] || appKey;
+        var shortTag = APP_SHORT_BADGES[appKey] || appKey.slice(0, 3).toUpperCase();
+        var isAct = (appKey === activeAppKey);
+        var isMnt = Boolean(mountedFrames[appKey]);
+        var staleInfo = engine ? engine.getFrameStaleInfo(appKey) : { isStale: false };
+        var isStale = Boolean(staleInfo && staleInfo.isStale);
+        var warmAttr = (allowHoverWarm && !sidebarCollapsed)
+          ? 'onmouseenter="hoverWarm(\'' + appKey + '\')" '
+          : 'onmousedown="hoverWarm(\'' + appKey + '\')" ';
+        return (
+          '<button class="sb-nav-item' + (isAct ? ' active' : '') + (isMnt ? ' mounted' : '') + (isStale ? ' stale' : '') + '" ' +
+            'data-app="' + appKey + '" title="' + lbl.replace(/"/g, '&quot;') + '" ' +
+            warmAttr + 'onclick="switchApp(\'' + appKey + '\')">' +
+            '<span class="sb-item-left">' +
+              '<span class="sb-item-badge">' + shortTag + '</span>' +
+              '<span class="sb-item-lbl sb-text-hide">' + lbl + '</span>' +
+            '</span>' +
+            '<span class="hub-tab-dot"></span>' +
+          '</button>'
+        );
+      }
+
       function renderPortalNavBar() {
         var isEs = (globalLang === 'es');
         var pDef = PORTAL_DEFS.find(function (p) { return p.id === activePortalId; }) || PORTAL_DEFS[3];
+
         var badgeEl = document.getElementById('active-portal-badge');
         if (badgeEl) {
-          badgeEl.textContent = pDef.shortBadge + ' (Switch)';
+          badgeEl.textContent = pDef.shortBadge;
+        }
+        var crumbAppEl = document.getElementById('active-module-crumb');
+        if (crumbAppEl) {
+          crumbAppEl.textContent = APP_LABELS[activeAppKey] || activeAppKey;
+        }
+        var retTopLbl = document.getElementById('return-home-top-lbl');
+        if (retTopLbl) {
+          retTopLbl.textContent = isEs ? 'Volver al Inicio' : 'Return to Home';
+        }
+        var sbHomeTitle = document.getElementById('sb-home-title-lbl');
+        if (sbHomeTitle) {
+          sbHomeTitle.textContent = isEs ? 'Volver al Inicio' : 'Return to Home';
+        }
+        var sbHomeSub = document.getElementById('sb-home-sub-lbl');
+        if (sbHomeSub) {
+          sbHomeSub.textContent = isEs ? 'Pantalla de 5 Portales' : '5-Portal Command Splash';
+        }
+        var searchInp = document.getElementById('sidebar-search-input');
+        if (searchInp) {
+          searchInp.placeholder = isEs ? 'Filtrar los 18 modulos...' : 'Filter all 18 modules...';
+        }
+        applySidebarCollapseDom();
+
+        var sbScroll = document.getElementById('sidebar-scroll-content');
+        if (!sbScroll) return;
+
+        var q = sidebarFilterQuery;
+
+        // If user is typing a filter query, flatten and display matching modules across all 18 apps + 5 portals
+        if (q) {
+          var matchingApps = Object.keys(APP_LABELS).filter(function (k) {
+            var s = (APP_LABELS[k] || '') + ' ' + (APP_SHORT_BADGES[k] || '') + ' ' + k;
+            return s.toLowerCase().indexOf(q) !== -1;
+          });
+          var flatHtml = matchingApps.map(function (k) {
+            return buildSidebarAppBtnHtml(k, APP_LABELS[k], false);
+          }).join('');
+          sbScroll.innerHTML =
+            '<div class="sb-section">' +
+              '<div class="sb-sec-head">' +
+                '<span class="sb-text-hide">' + (isEs ? 'Resultados (' + matchingApps.length + ')' : 'Matching Modules (' + matchingApps.length + ')') + '</span>' +
+                '<span>' + matchingApps.length + '</span>' +
+              '</div>' +
+              '<div class="sb-portal-grid">' + (flatHtml || '<div style="padding:8px;font-size:11px;color:#94A3B8;">No matching modules</div>') + '</div>' +
+            '</div>';
+          return;
         }
 
-        var navEl = document.getElementById('primary-nav');
-        if (!navEl) return;
+        // 1. Role-Segregated 5-Portal Accordion (Active portal expands inline with its primary modules!)
+        var primaryKeysMap = {};
+        pDef.primaryTabs.forEach(function (t) { primaryKeysMap[t.key] = true; });
 
-        var primaryKeys = pDef.primaryTabs.map(function (t) { return t.key; });
-        var tabsHtml = pDef.primaryTabs.map(function (tb) {
-          var lbl = isEs ? tb.labelEs : tb.labelEn;
-          var isAct = (tb.key === activeAppKey);
-          var isMnt = Boolean(mountedFrames[tb.key]);
+        var portalsAccordionHtml = PORTAL_DEFS.map(function (p, idx) {
+          var isActPortal = (p.id === activePortalId);
+          var pTitle = isEs ? p.titleEs : p.titleEn;
+          var pTag = 'P' + (idx + 1);
+          var childTabsHtml = '';
+          if (isActPortal) {
+            childTabsHtml =
+              '<div class="sb-cat-body" style="margin:3px 0 6px 6px;padding-left:6px;border-left:2px solid rgba(255,184,28,0.45);">' +
+                p.primaryTabs.map(function (tb) {
+                  var lbl = isEs ? tb.labelEs : tb.labelEn;
+                  return buildSidebarAppBtnHtml(tb.key, lbl, true);
+                }).join('') +
+              '</div>';
+          }
           return (
-            '<button class="hub-tab' + (isAct ? ' active' : '') + (isMnt ? ' mounted' : '') + '" ' +
-              'data-app="' + tb.key + '" onmouseenter="hoverWarm(\'' + tb.key + '\')" onclick="switchApp(\'' + tb.key + '\')">' +
-              '<span class="hub-tab-dot"></span>' + lbl +
-            '</button>'
+            '<div>' +
+              '<button class="sb-portal-btn' + (isActPortal ? ' active' : '') + '" ' +
+                'style="width:100%;justify-content:space-between;" ' +
+                'title="' + pTitle.replace(/"/g, '&quot;') + '" ' +
+                'onclick="selectPortalScope(\'' + p.id + '\')">' +
+                '<span style="display:flex;align-items:center;gap:8px;min-width:0;overflow:hidden;">' +
+                  '<span class="sb-p-tag" style="color:' + p.badgeColor + ';">' + pTag + '</span>' +
+                  '<span class="sb-item-lbl sb-text-hide">' + pTitle + '</span>' +
+                '</span>' +
+                '<span class="sb-text-hide" style="font-size:10px;color:' + (isActPortal ? '#FBBF24' : '#64748B') + ';">' + (isActPortal ? 'v' : '>') + '</span>' +
+              '</button>' +
+              childTabsHtml +
+            '</div>'
           );
         }).join('');
 
-        // Build "All Modules" dropdown for remaining apps so leadership or cross-checking is 1 click away
+        // 2. Remaining Modules (not in Active Portal's primary tabs) so every single module is 1 click away without duplication
         var otherKeys = Object.keys(APP_LABELS).filter(function (k) {
-          return primaryKeys.indexOf(k) === -1;
+          return !primaryKeysMap[k];
         });
-
-        var moreItemsHtml = otherKeys.map(function (k) {
-          var isAct = (k === activeAppKey);
-          return (
-            '<button class="hub-more-item' + (isAct ? ' active' : '') + '" data-app="' + k + '" onmouseenter="hoverWarm(\'' + k + '\')" onclick="switchApp(\'' + k + '\')">' +
-              '<span>' + APP_LABELS[k] + '</span><span>Open</span>' +
-            '</button>'
-          );
+        var isOtherClosed = Boolean(collapsedCategories['other_modules']);
+        var otherItemsHtml = otherKeys.map(function (k) {
+          return buildSidebarAppBtnHtml(k, APP_LABELS[k], false);
         }).join('');
 
-        navEl.innerHTML = tabsHtml +
-          '<div class="hub-more-wrap">' +
-            '<button id="more-tools-btn" class="hub-tab" onclick="toggleMoreMenu(event)">' +
-              '<span class="hub-tab-dot"></span>' + (isEs ? 'Mas Modulos (' + otherKeys.length + ')' : 'All Modules (' + otherKeys.length + ')') +
-            '</button>' +
-            '<div id="more-tools-menu" class="hub-more-menu">' + moreItemsHtml + '</div>' +
+        sbScroll.innerHTML =
+          '<div class="sb-section">' +
+            '<div class="sb-sec-head">' +
+              '<span class="sb-text-hide">' + (isEs ? 'Portales por Rol (1-5)' : 'Role Portals (1-5)') + '</span>' +
+              '<span>1-5</span>' +
+            '</div>' +
+            '<div class="sb-portal-grid">' + portalsAccordionHtml + '</div>' +
+          '</div>' +
+          '<div class="sb-section">' +
+            '<div class="sb-cat-head" onclick="toggleSidebarCategory(\'other_modules\')">' +
+              '<span>' + (isEs ? 'Otros Modulos (' + otherKeys.length + ')' : 'More Modules (' + otherKeys.length + ')') + '</span>' +
+              '<span>' + (isOtherClosed ? '+' : '-') + '</span>' +
+            '</div>' +
+            '<div class="sb-cat-body' + (isOtherClosed ? ' closed' : '') + '">' +
+              otherItemsHtml +
+            '</div>' +
           '</div>';
       }
 
@@ -1738,6 +2333,10 @@
       };
 
       function updateNavHighlight() {
+        var crumbAppEl = document.getElementById('active-module-crumb');
+        if (crumbAppEl) {
+          crumbAppEl.textContent = APP_LABELS[activeAppKey] || activeAppKey;
+        }
         var buttons = document.querySelectorAll('[data-app]');
         for (var i = 0; i < buttons.length; i++) {
           var btn = buttons[i];
@@ -2089,6 +2688,7 @@
         if (e.key === 'Escape') {
           window.closeCmdPalette();
           window.closeDrawers();
+          window.toggleSplashOverlay(false);
           return;
         }
         var k = String(e.key || '').toLowerCase();

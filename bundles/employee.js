@@ -1,12 +1,5 @@
 (function() {
-var React = window.React;
-var {
-  useState,
-  useEffect,
-  useMemo,
-  useRef,
-  useCallback
-} = React;
+var React = window.React; var { useState, useEffect, useMemo, useRef, useCallback } = React;
 
 // ============================================================================
 // PORTAL 1: LEAD + EMPLOYEE MOBILE & PODIUM TABLET HUB
@@ -60,7 +53,7 @@ function safeJsonParse(raw, fallback) {
     return fallback;
   }
 }
-var __MAIN_COMP__ = function EmployeePodiumHub() {
+window.__PORTAL_APP_COMPONENT__ = window.__DEMO_APP_COMPONENT__ = function EmployeePodiumHub() {
   const [lang, setLang] = useState(() => {
     try {
       return localStorage.getItem('__1_ss_lang_v1') === 'es' ? 'es' : 'en';
@@ -175,17 +168,14 @@ var __MAIN_COMP__ = function EmployeePodiumHub() {
           _statecode: row.statecode
         } : null;
       }).filter(Boolean);
-      const byReqId = new Map();
-      for (const item of rows) {
-        const key = String(item.requestId || '');
-        if (!key) continue;
-        const prev = byReqId.get(key);
-        const curTs = String(item.result?.at || item._modifiedon || item.requestedAt || '');
-        const prevTs = prev ? String(prev.result?.at || prev._modifiedon || prev.requestedAt || '') : '';
-        if (!prev || curTs >= prevTs) byReqId.set(key, item);
-      }
-      const deduped = Array.from(byReqId.values());
-      deduped.sort((a, b) => String(b.requestedAt || '').localeCompare(String(a.requestedAt || '')));
+      rows.sort((a, b) => String(b.result?.verifiedAt || b._modifiedon || b.requestedAt || '').localeCompare(String(a.result?.verifiedAt || a._modifiedon || a.requestedAt || '')));
+      const seenReq = new Set();
+      const deduped = rows.filter(item => {
+        const k = String(item.requestId || '');
+        if (!k || seenReq.has(k)) return false;
+        seenReq.add(k);
+        return true;
+      });
       setPreInspectRequests(deduped);
     } catch {}
   }, []);
@@ -337,6 +327,55 @@ var __MAIN_COMP__ = function EmployeePodiumHub() {
         }];
       }
       setSupervisorGoals(loadedGoals);
+
+      // 6. Recent Shift High Fives
+      try {
+        const hfRes = await fetch('/api/data/v9.2/craa5___1_g_notes?$top=30&$orderby=createdon desc');
+        let loadedHf = [];
+        if (hfRes.ok) {
+          const hfJson = await hfRes.json();
+          loadedHf = (hfJson.value || []).filter(n => String(n.craa5_kind || '').toLowerCase() === 'highfive' || String(n.craa5_severity || '').toLowerCase() === 'positive').map((n, idx) => ({
+            id: String(n.craa5_notekey || n.craa5___1_g_noteid || `hf-${idx}`),
+            to: String(n.craa5_employee || 'Teammate'),
+            from: String(n.craa5_givenby || 'Crew Lead'),
+            tag: String(n.craa5_tag || 'Teamwork'),
+            note: String(n.craa5_note || 'Outstanding detail scrub and Pre-Op readiness!'),
+            area: String(n.craa5_area || 'breading'),
+            at: n.craa5_notedat ? new Date(n.craa5_notedat).toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit'
+            }) : '10:45 AM'
+          }));
+        }
+        if (loadedHf.length === 0) {
+          loadedHf = [{
+            id: 'hf-seed-1',
+            to: 'Vance, Marcus T',
+            from: 'Mendez, Carlos',
+            tag: 'Inspection Ready',
+            note: 'Zero ATP re-swabs on Line 2 Wire Belt and Batter Applicator teardown - passed FSQ Pre-Op on first walk.',
+            area: 'breading',
+            at: '11:20 AM'
+          }, {
+            id: 'hf-seed-2',
+            to: 'Delgado, Elena R',
+            from: 'Mercer, Jordan K',
+            tag: 'Teamwork',
+            note: 'Jumped in to help finish Bakery Spiral 1 foam & detail scrub 25 minutes ahead of turnaround window.',
+            area: 'spiral 1',
+            at: '09:50 AM'
+          }, {
+            id: 'hf-seed-3',
+            to: 'Kowalski, Devon P',
+            from: 'Mendez, Carlos',
+            tag: 'Safety First',
+            note: 'Caught a worn LOTO hasp on IBL4 Mixer 1 before washdown and coordinated immediate maintenance swap.',
+            area: 'ibl4',
+            at: '08:15 AM'
+          }];
+        }
+        setHfSentList(loadedHf);
+      } catch {}
       await loadPreInspectRequests();
     } catch {}
   }, [loadPreInspectRequests]);
@@ -639,16 +678,20 @@ var __MAIN_COMP__ = function EmployeePodiumHub() {
   };
 
   // Submit High Five
-  const handleSendHighFive = async () => {
+  const handleSendHighFive = async (overrideNote, overrideTag) => {
     const recip = employees.find(e => e.id === hfRecipientId) || employees[1] || DEMO_EMP;
-    if (!hfNote.trim()) return;
+    const noteText = typeof overrideNote === 'string' && overrideNote.trim() ? overrideNote.trim() : hfNote.trim();
+    const tagText = typeof overrideTag === 'string' && overrideTag.trim() ? overrideTag.trim() : hfTag;
+    if (!noteText) return;
     const nowIso = new Date().toISOString();
     const key = `pn|${cleanGuid(recip.id)}|${Date.now().toString(36)}`;
     const sent = {
       id: key,
       to: recip.name,
-      tag: hfTag,
-      note: hfNote.trim(),
+      from: activeEmployee.name,
+      tag: tagText,
+      note: noteText,
+      area: activeEmployee.area || 'breading',
       at: new Date().toLocaleTimeString([], {
         hour: '2-digit',
         minute: '2-digit'
@@ -667,7 +710,7 @@ var __MAIN_COMP__ = function EmployeePodiumHub() {
           craa5_employeeguid: cleanGuid(recip.id),
           craa5_employee: recip.name,
           craa5_kind: 'highfive',
-          craa5_tag: hfTag,
+          craa5_tag: tagText,
           craa5_note: sent.note,
           craa5_severity: 'positive',
           craa5_area: activeEmployee.area || 'breading',
@@ -680,6 +723,22 @@ var __MAIN_COMP__ = function EmployeePodiumHub() {
       });
     } catch {}
   };
+  useEffect(() => {
+    window.__PORTAL_APP_COMMANDS__ = {
+      openTab: cardId => setActiveCard(cardId || null),
+      setLang: l => setLang(l === 'es' ? 'es' : 'en'),
+      unlockPodium: badgeCode => handleBadgeVerify(badgeCode || 'DEMO-101', 'VP Tour Scan'),
+      lockPodium: () => setPodiumLocked(true),
+      sendDemoHighFive: () => {
+        setActiveCard('highfive');
+        handleSendHighFive('Outstanding Pre-Op detail scrub on Breading Line 2 Wire Belt and zero ATP re-swabs - thank you for backing up the crew!', 'Inspection Ready');
+      },
+      callDemoPreInspect: () => {
+        setActiveCard('preinspect');
+        handleCallPreInspection('breading', 'Breading Machine 1 & Wire Belt (VP Tour Live Call)');
+      }
+    };
+  });
   const doneTasksCount = useMemo(() => myTasks.filter(t => t.status === 'done').length, [myTasks]);
   const totalTasksCount = Math.max(1, myTasks.length);
   const areaCompletionPct = Math.round(doneTasksCount / totalTasksCount * 100);
@@ -2090,7 +2149,8 @@ var __MAIN_COMP__ = function EmployeePodiumHub() {
     }
   }), /*#__PURE__*/React.createElement("button", {
     type: "button",
-    onClick: handleSendHighFive,
+    "data-testid": "btn-send-highfive",
+    onClick: () => handleSendHighFive(),
     style: {
       height: 48,
       padding: '0 22px',
@@ -2104,12 +2164,84 @@ var __MAIN_COMP__ = function EmployeePodiumHub() {
     }
   }, tr('Send High Five', 'Enviar High Five'))), hfSentList.length > 0 && /*#__PURE__*/React.createElement("div", {
     style: {
-      marginTop: 10,
-      fontSize: 12,
-      fontWeight: 800,
-      color: '#047857'
+      marginTop: 14
     }
-  }, tr('High Five sent to', 'High Five enviado a'), " ", hfSentList[0].to, " (", hfSentList[0].tag, ")!")), activeCard === 'profile' && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", {
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      fontWeight: 900,
+      color: '#00468B',
+      textTransform: 'uppercase',
+      letterSpacing: '0.06em',
+      marginBottom: 8
+    }
+  }, tr('Recent Shift High Fives & Peer Recognition Feed', 'Reconocimientos Recientes del Turno'), " (", hfSentList.length, ")"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'grid',
+      gap: 8
+    }
+  }, hfSentList.slice(0, 5).map((item, idx) => /*#__PURE__*/React.createElement("div", {
+    key: item.id || idx,
+    style: {
+      padding: '10px 14px',
+      borderRadius: 12,
+      background: idx === 0 ? '#ECFDF5' : '#F8FAFC',
+      border: idx === 0 ? '1.5px solid #10B981' : '1px solid #CBD5E1',
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 4
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      fontWeight: 900,
+      color: '#0F172A'
+    }
+  }, "To: ", /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: '#00468B'
+    }
+  }, item.to), item.from ? /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontWeight: 700,
+      color: '#64748B'
+    }
+  }, " - From: ", item.from) : null), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: 6
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      background: '#059669',
+      color: '#FFFFFF',
+      padding: '2px 10px',
+      borderRadius: 999,
+      fontSize: 11,
+      fontWeight: 900
+    }
+  }, item.tag), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      fontWeight: 800,
+      color: '#64748B'
+    }
+  }, item.at))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      fontWeight: 600,
+      color: '#1E293B'
+    }
+  }, "\"", item.note, "\"")))))), activeCard === 'profile' && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", {
     style: {
       fontSize: 18,
       fontWeight: 900,
@@ -2190,7 +2322,5 @@ var __MAIN_COMP__ = function EmployeePodiumHub() {
       fontWeight: 900
     }
   }, sk.level)))))))));
-};
-window.__PORTAL_APP_COMPONENT__ = __MAIN_COMP__;
-window.__DEMO_APP_COMPONENT__ = __MAIN_COMP__;
+}
 })();

@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="data:," />
   <title>Midwest Plant Sanitation Hub - 5-Portal Enterprise Architecture</title>
-  <script src="demo_seed_data.js?v=8"></script>
-  <script src="mock_dataverse_engine.js?v=8"></script>
+  <script src="demo_seed_data.js?v=11"></script>
+  <script src="mock_dataverse_engine.js?v=11"></script>
   <style>
     * { box-sizing: border-box; }
     html, body {
@@ -1274,6 +1274,259 @@
     .hub-toast.show {
       display: block;
     }
+
+    /* Stateless Podium Kiosk Mode (#mode=podium) */
+    body.hub-podium-kiosk .hub-topbar,
+    body.hub-podium-kiosk .hub-statsbar,
+    body.hub-podium-kiosk .hub-sidebar {
+      display: none !important;
+    }
+    body.hub-podium-kiosk .hub-body-wrap {
+      height: 100vh !important;
+    }
+
+    /* Expansive 10-Stop VP Presentation Guided Tour Controller */
+    .vp-tour-launch-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 30px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #FFB81C 0%, #F59E0B 100%);
+      color: #002B55;
+      border: 1.5px solid #FDE68A;
+      font-size: 11.5px;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(255, 184, 28, 0.35);
+      transition: transform 0.14s ease, box-shadow 0.14s ease;
+      white-space: nowrap;
+    }
+    .vp-tour-launch-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(255, 184, 28, 0.5);
+    }
+    .vp-tour-card {
+      position: fixed;
+      bottom: 18px;
+      right: 18px;
+      width: 520px;
+      max-width: calc(100vw - 28px);
+      background: linear-gradient(165deg, rgba(0, 27, 58, 0.97) 0%, rgba(15, 23, 42, 0.98) 100%);
+      color: #F8FAFC;
+      border: 2px solid #FFB81C;
+      border-radius: 16px;
+      box-shadow: 0 22px 55px rgba(0, 0, 0, 0.65);
+      z-index: 350;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      backdrop-filter: blur(12px);
+    }
+    .vp-tour-card.open {
+      display: flex;
+    }
+    .vp-tour-card.dock-left {
+      right: auto;
+      left: 68px;
+    }
+    .vp-tour-card.minimized .vp-tour-body,
+    .vp-tour-card.minimized .vp-tour-steps-strip,
+    .vp-tour-card.minimized .vp-tour-footer {
+      display: none;
+    }
+    .vp-tour-card.minimized {
+      width: 340px;
+    }
+    .vp-tour-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 10px 14px;
+      background: linear-gradient(90deg, #002B55 0%, #00468B 100%);
+      border-bottom: 1px solid rgba(255, 184, 28, 0.35);
+    }
+    .vp-tour-eyebrow {
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #FFB81C;
+    }
+    .vp-tour-step-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(255, 184, 28, 0.18);
+      border: 1px solid #FFB81C;
+      color: #FDE68A;
+      font-size: 10.5px;
+      font-weight: 900;
+      margin-left: 6px;
+    }
+    .vp-tour-head-btns {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .vp-tour-icon-btn {
+      background: rgba(255, 255, 255, 0.1);
+      color: #E2E8F0;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 10.5px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .vp-tour-icon-btn:hover {
+      background: rgba(255, 184, 28, 0.25);
+      color: #FFFFFF;
+      border-color: #FFB81C;
+    }
+    .vp-tour-steps-strip {
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      padding: 7px 12px;
+      background: rgba(2, 6, 23, 0.65);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+      scrollbar-width: thin;
+    }
+    .vp-tour-step-pill {
+      flex-shrink: 0;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 800;
+      background: rgba(30, 41, 59, 0.85);
+      color: #94A3B8;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      cursor: pointer;
+      transition: all 0.12s ease;
+    }
+    .vp-tour-step-pill:hover {
+      color: #FFFFFF;
+      border-color: #93C5FD;
+    }
+    .vp-tour-step-pill.active {
+      background: #FFB81C;
+      color: #002B55;
+      border-color: #FDE68A;
+      font-weight: 900;
+    }
+    .vp-tour-body {
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+    .vp-tour-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .vp-tour-title {
+      font-size: 15px;
+      font-weight: 900;
+      color: #FFFFFF;
+      margin: 0;
+      line-height: 1.25;
+    }
+    .vp-tour-portal-tag {
+      font-size: 10px;
+      font-weight: 900;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: rgba(56, 189, 248, 0.16);
+      color: #7DD3FC;
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      text-transform: uppercase;
+    }
+    .vp-tour-desc {
+      font-size: 12px;
+      line-height: 1.5;
+      color: #CBD5E1;
+      margin: 0;
+    }
+    .vp-tour-desc strong {
+      color: #FDE68A;
+    }
+    .vp-tour-sub-label {
+      font-size: 10px;
+      font-weight: 900;
+      color: #93C5FD;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .vp-tour-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .vp-tour-act-btn {
+      padding: 5px 10px;
+      border-radius: 8px;
+      background: rgba(0, 114, 206, 0.25);
+      color: #E0F2FE;
+      border: 1px solid rgba(56, 189, 248, 0.45);
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.12s ease;
+    }
+    .vp-tour-act-btn:hover {
+      background: #0072CE;
+      color: #FFFFFF;
+      border-color: #7DD3FC;
+    }
+    .vp-tour-act-btn.primary-act {
+      background: rgba(16, 185, 129, 0.24);
+      color: #A7F3D0;
+      border-color: #34D399;
+    }
+    .vp-tour-act-btn.primary-act:hover {
+      background: #059669;
+      color: #FFFFFF;
+    }
+    .vp-tour-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 9px 14px;
+      background: rgba(2, 6, 23, 0.8);
+      border-top: 1px solid rgba(148, 163, 184, 0.2);
+    }
+    .vp-tour-nav-btn {
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 11.5px;
+      font-weight: 900;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: rgba(30, 41, 59, 0.9);
+      color: #F8FAFC;
+    }
+    .vp-tour-nav-btn:hover {
+      border-color: #93C5FD;
+      background: #1E293B;
+    }
+    .vp-tour-nav-btn.next-primary {
+      background: linear-gradient(135deg, #FFB81C 0%, #F59E0B 100%);
+      color: #002B55;
+      border-color: #FDE68A;
+    }
+    .vp-tour-nav-btn.autoplay-on {
+      background: #059669;
+      color: #FFFFFF;
+      border-color: #34D399;
+    }
   </style>
 </head>
 <body>
@@ -1300,6 +1553,9 @@
     </div>
 
     <div class="hub-actions">
+      <button id="top-tour-btn" class="vp-tour-launch-btn" onclick="startVpPresentationTour(0)" title="Launch Expansive 10-Stop VP of Ops &amp; VP of Quality Guided Tour">
+        <span id="top-tour-lbl">VP Guided Tour</span>
+      </button>
       <button id="split-stage-btn" class="hub-pill-btn" onclick="togglePodiumSplitStage()" title="Live Side-by-Side Stage: Portal 1 Podium Tablet + Portal 2 Inspector Queue">
         <span id="split-stage-lbl">Podium Split</span>
       </button>
@@ -1387,6 +1643,10 @@
       <div class="sb-scroll" id="sidebar-scroll-content"></div>
 
       <div class="sb-footer">
+        <button id="sb-tour-btn" class="sb-foot-btn" style="width:100%;margin-bottom:5px;background:linear-gradient(135deg,#FFB81C 0%,#F59E0B 100%);color:#002B55;border-color:#FDE68A;font-weight:900;" onclick="startVpPresentationTour(0)" title="Start Expansive 10-Stop VP Presentation Guided Tour">
+          <span>Tour</span>
+          <span class="sb-text-hide" id="sb-tour-lbl">VP Guided Tour (10)</span>
+        </button>
         <div class="sb-foot-row">
           <button class="sb-foot-btn" onclick="togglePodiumSplitStage()" title="Launch Side-by-Side Podium Split View (Portal 1 + Portal 2)">
             <span>Split</span>
@@ -1447,6 +1707,9 @@
         </div>
       </div>
       <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+        <button id="sp-tour-btn" class="vp-tour-launch-btn" style="height:34px;padding:0 16px;font-size:12.5px;" onclick="startVpPresentationTour(0)">
+          <span id="sp-tour-lbl">Start VP Presentation Tour (10 Stops)</span>
+        </button>
         <button class="hub-copilot-btn" style="padding:7px 14px;font-size:12px;" onclick="toggleSplashOverlay(false);togglePodiumSplitStage(true);">
           <span id="sp-split-btn">Live Demo: Podium Split View (Portal 1 + 2)</span>
         </button>
@@ -1695,6 +1958,41 @@
     </div>
   </div>
 
+  <!-- Expansive 10-Stop VP Presentation Guided Tour Floating Dockable Card -->
+  <div id="vp-tour-card" class="vp-tour-card" role="dialog" aria-label="VP Presentation Guided Tour">
+    <div class="vp-tour-head">
+      <div style="display:flex;align-items:center;min-width:0;">
+        <span class="vp-tour-eyebrow" id="vp-tour-eyebrow">VP PRESENTATION GUIDED TOUR</span>
+        <span class="vp-tour-step-badge" id="vp-tour-step-badge">Stop 1 of 10</span>
+      </div>
+      <div class="vp-tour-head-btns">
+        <button class="vp-tour-icon-btn" onclick="toggleVpTourDock()" title="Dock Tour Card Left or Right" id="vp-tour-dock-btn">Dock Left</button>
+        <button class="vp-tour-icon-btn" onclick="toggleVpTourMinimize()" title="Minimize or Expand Tour Card" id="vp-tour-min-btn">Minimize</button>
+        <button class="vp-tour-icon-btn" onclick="closeVpPresentationTour()" title="Close Guided Tour">Close</button>
+      </div>
+    </div>
+    <div class="vp-tour-steps-strip" id="vp-tour-steps-strip"></div>
+    <div class="vp-tour-body">
+      <div class="vp-tour-title-row">
+        <h3 class="vp-tour-title" id="vp-tour-title">1. 5-Portal Executive Splash &amp; Logo Detail Gate</h3>
+        <span class="vp-tour-portal-tag" id="vp-tour-portal-tag">5-Portal Hub</span>
+      </div>
+      <p class="vp-tour-desc" id="vp-tour-desc"></p>
+      <div class="vp-tour-sub-label" id="vp-tour-sub-label">Interactive Live Actions on This Screen:</div>
+      <div class="vp-tour-actions" id="vp-tour-actions"></div>
+    </div>
+    <div class="vp-tour-footer">
+      <div style="display:flex;align-items:center;gap:6px;">
+        <button class="vp-tour-nav-btn" id="vp-tour-prev-btn" onclick="stepVpPresentationTour(-1)">&lt; Previous</button>
+        <button class="vp-tour-nav-btn" id="vp-tour-auto-btn" onclick="toggleVpTourAutoPlay()">Auto-Play (8s)</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <button class="vp-tour-nav-btn" id="vp-tour-reset-btn" onclick="resetDemoStateFromTour()" title="Reset demo database to clean initial state">Reset Demo</button>
+        <button class="vp-tour-nav-btn next-primary" id="vp-tour-next-btn" onclick="stepVpPresentationTour(1)">Next Stop &gt;</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Notification -->
   <div id="hub-toast" class="hub-toast"></div>
 
@@ -1702,7 +2000,7 @@
     (function () {
       var engine = window.__MidwestPlant_SPEED_ENGINE__;
       var deckEl = document.getElementById('app-deck');
-      var MAX_KEEP_ALIVE_FRAMES = 12;
+      var MAX_KEEP_ALIVE_FRAMES = 20;
 
       var globalLang = 'en';
       try {
@@ -2297,10 +2595,35 @@
         }, 140);
       };
 
+      var vpTourOpen = false;
+      var vpTourIndex = 0;
+      var vpTourAutoTimer = null;
+      var vpTourDockLeft = false;
+      var vpTourMinimized = false;
+
       function syncUrlHash(appKey) {
         try {
           var hashParams = new URLSearchParams(String(window.location.hash || '').replace(/^#/, ''));
-          hashParams.set('tab', appKey);
+          var splashEl = document.getElementById('splash-overlay');
+          var isSplashOpen = splashEl && splashEl.classList.contains('open');
+          if (isSplashOpen && !vpTourOpen) {
+            hashParams.set('portal', 'home');
+          } else {
+            hashParams.set('portal', activePortalId || 'portal4');
+          }
+          if (appKey || activeAppKey) {
+            hashParams.set('tab', appKey || activeAppKey);
+          }
+          if (splitStageActive) {
+            hashParams.set('split', '1');
+          } else {
+            hashParams.delete('split');
+          }
+          if (vpTourOpen) {
+            hashParams.set('tour', String(vpTourIndex + 1));
+          } else {
+            hashParams.delete('tour');
+          }
           window.history.replaceState(null, '', '#' + hashParams.toString());
         } catch (e) {}
       }
@@ -2964,25 +3287,845 @@
         });
       }
 
+      // ======================================================================
+      // EXPANSIVE 10-STOP VP PRESENTATION GUIDED TOUR ENGINE
+      // ======================================================================
+      function withReadyFrame(appKey, callback) {
+        var entry = mountedFrames[appKey] || ensureFrameMounted(appKey);
+        if (!entry || !entry.iframe) return;
+        var attempts = 0;
+        function check() {
+          attempts++;
+          try {
+            var win = entry.iframe.contentWindow;
+            var doc = entry.iframe.contentDocument || (win && win.document);
+            var root = doc && doc.getElementById('root');
+            if (win && doc && root && root.children && root.children.length > 0) {
+              callback(win, doc);
+              return;
+            }
+          } catch (e) {}
+          if (attempts < 40) {
+            setTimeout(check, 140);
+          }
+        }
+        check();
+      }
+
+      function withReadySplitFrame(frameId, callback) {
+        var ifr = document.getElementById(frameId);
+        if (!ifr) return;
+        var attempts = 0;
+        function check() {
+          attempts++;
+          try {
+            var win = ifr.contentWindow;
+            var doc = ifr.contentDocument || (win && win.document);
+            var root = doc && doc.getElementById('root');
+            if (win && doc && root && root.children && root.children.length > 0) {
+              callback(win, doc);
+              return;
+            }
+          } catch (e) {}
+          if (attempts < 40) {
+            setTimeout(check, 140);
+          }
+        }
+        check();
+      }
+
+      function clickInFrameDoc(doc, selectorOrText) {
+        if (!doc || !selectorOrText) return false;
+        var el = null;
+        if (selectorOrText.charAt(0) === '[' || selectorOrText.charAt(0) === '#' || selectorOrText.charAt(0) === '.') {
+          try { el = doc.querySelector(selectorOrText); } catch (e) {}
+        }
+        if (!el) {
+          var targetLower = String(selectorOrText).toLowerCase().trim();
+          var btns = doc.querySelectorAll('button, [role="tab"], [role="button"]');
+          for (var i = 0; i < btns.length; i++) {
+            var txt = String(btns[i].textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
+            if (txt === targetLower) {
+              el = btns[i];
+              break;
+            }
+          }
+          if (!el) {
+            for (var j = 0; j < btns.length; j++) {
+              var txtSub = String(btns[j].textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
+              if (txtSub.indexOf(targetLower) !== -1) {
+                el = btns[j];
+                break;
+              }
+            }
+          }
+        }
+        if (el) {
+          try {
+            el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            var prevOutline = el.style.outline;
+            el.style.outline = '3px solid #FFB81C';
+            setTimeout(function () {
+              try { el.style.outline = prevOutline; } catch (e) {}
+            }, 1400);
+            el.click();
+            return true;
+          } catch (e) {}
+        }
+        return false;
+      }
+
+      var VP_TOUR_STOPS = [
+        {
+          shortTitle: '1. 5-Portal Hub & Logo Gate',
+          portalTag: '5-Portal Architecture',
+          title: 'Stop 1: 5-Portal Role-Segregated Splash & Brand Logo Gate',
+          descHtml: 'Welcome to the <strong>5-Portal Enterprise Command Hub</strong>. Operations are segregated by plant role: <strong>Portal 1</strong> (90% Mobile &amp; Podium Tablet), <strong>Portal 2</strong> (FSQ Inspectors, BOLO &amp; 6M Fishbone CAPA), <strong>Portal 3</strong> (Supervisor &amp; Lead Team Building), <strong>Portal 4</strong> (Senior Leadership &amp; Copilot), and <strong>Portal 5</strong> (43-Table Developer Console). All diagnostic clutter is hidden behind the top-left <strong>Brand Logo</strong>.',
+          onEnter: function () {
+            window.closeDrawers();
+            if (splitStageActive) window.togglePodiumSplitStage(false);
+            window.toggleSplashOverlay(true);
+          },
+          actions: [
+            {
+              label: '1. Toggle Brand Logo "Further Detail" Gate',
+              primary: true,
+              run: function () { window.toggleLogoDetailMode(); }
+            },
+            {
+              label: '2. Switch Global Language (EN / ES)',
+              run: function () { window.toggleGlobalLanguage(); }
+            },
+            {
+              label: '3. Preview Portal 4 Workspace',
+              run: function () { window.selectPortalScope('portal4', 'manager'); }
+            },
+            {
+              label: '4. Return to 5-Portal Splash',
+              run: function () { window.toggleSplashOverlay(true); }
+            }
+          ]
+        },
+        {
+          shortTitle: '2. High Fives & Badge Scan',
+          portalTag: 'Portal 1: Floor Hub',
+          title: 'Stop 2: How High Fives Are Given & Podium Badge Scanning',
+          descHtml: 'In <strong>Portal 1 (Lead + Employee Hub)</strong>, floor technicians scan their badge at a Podium Kiosk (<code>APX-101</code> / <code>DEMO-101</code>) to unlock 8 gloved-hand cards. Opening <strong>Card #7 (Send a Peer High Five)</strong> lets any lead or tech recognize a teammate with a category badge (<em>Inspection Ready, Teamwork, Safety First</em>), writing directly to <code>craa5___1_g_notes</code> and feeding Supervisor &amp; Manager recognition rollups.',
+          onEnter: function () {
+            window.selectPortalScope('portal1', 'employee');
+            withReadyFrame('employee', function (win) {
+              if (win.__PORTAL_APP_COMMANDS__) {
+                if (win.__PORTAL_APP_COMMANDS__.unlockPodium) win.__PORTAL_APP_COMMANDS__.unlockPodium('DEMO-101');
+                if (win.__PORTAL_APP_COMMANDS__.openTab) win.__PORTAL_APP_COMMANDS__.openTab('highfive');
+              }
+            });
+          },
+          actions: [
+            {
+              label: '1. Send Live Demo High Five Now',
+              primary: true,
+              run: function () {
+                withReadyFrame('employee', function (win) {
+                  if (win.__PORTAL_APP_COMMANDS__) {
+                    if (win.__PORTAL_APP_COMMANDS__.unlockPodium) win.__PORTAL_APP_COMMANDS__.unlockPodium('DEMO-101');
+                    if (win.__PORTAL_APP_COMMANDS__.sendDemoHighFive) win.__PORTAL_APP_COMMANDS__.sendDemoHighFive();
+                  }
+                });
+                showToast('Live High Five posted to craa5___1_g_notes and added to Shift Recognition Feed!');
+              }
+            },
+            {
+              label: '2. Preview Podium Badge Lock Screen',
+              run: function () {
+                withReadyFrame('employee', function (win) {
+                  if (win.__PORTAL_APP_COMMANDS__ && win.__PORTAL_APP_COMMANDS__.lockPodium) {
+                    win.__PORTAL_APP_COMMANDS__.lockPodium();
+                  }
+                });
+              }
+            },
+            {
+              label: '3. Scan Badge & Open High Fives',
+              run: function () {
+                withReadyFrame('employee', function (win) {
+                  if (win.__PORTAL_APP_COMMANDS__) {
+                    if (win.__PORTAL_APP_COMMANDS__.unlockPodium) win.__PORTAL_APP_COMMANDS__.unlockPodium('DEMO-101');
+                    if (win.__PORTAL_APP_COMMANDS__.openTab) win.__PORTAL_APP_COMMANDS__.openTab('highfive');
+                  }
+                });
+              }
+            },
+            {
+              label: '4. Open My Shift Tasks & Area Clock',
+              run: function () {
+                withReadyFrame('employee', function (win) {
+                  if (win.__PORTAL_APP_COMMANDS__) {
+                    if (win.__PORTAL_APP_COMMANDS__.unlockPodium) win.__PORTAL_APP_COMMANDS__.unlockPodium('DEMO-101');
+                    if (win.__PORTAL_APP_COMMANDS__.openTab) win.__PORTAL_APP_COMMANDS__.openTab('tasks');
+                  }
+                });
+              }
+            }
+          ]
+        },
+        {
+          shortTitle: '3. 40/60 Podium Split',
+          portalTag: 'Portal 1 + Portal 2 Live',
+          title: 'Stop 3: 40/60 Podium Split Stage - Floor Pre-Inspection Call to FSQ Queue',
+          descHtml: 'Watch the real-time floor-to-FSQ loop side-by-side: the left 40% is the <strong>Plant Floor Podium Tablet (Portal 1)</strong> and the right 60% is the <strong>FSQ Inspector Queue (Portal 2)</strong>. When a lead taps <strong>Call FSQ Inspector for Pre-Op</strong> on the podium, it broadcasts over <code>BroadcastChannel</code> and appears in the Inspector Queue in &lt;100ms.',
+          onEnter: function () {
+            window.toggleSplashOverlay(false);
+            window.closeDrawers();
+            window.togglePodiumSplitStage(true);
+            withReadySplitFrame('split-frame-employee', function (win) {
+              if (win.__PORTAL_APP_COMMANDS__) {
+                if (win.__PORTAL_APP_COMMANDS__.unlockPodium) win.__PORTAL_APP_COMMANDS__.unlockPodium('DEMO-101');
+                if (win.__PORTAL_APP_COMMANDS__.openTab) win.__PORTAL_APP_COMMANDS__.openTab('preinspect');
+              }
+            });
+            withReadySplitFrame('split-frame-inspect', function (win) {
+              if (win.__PORTAL_APP_COMMANDS__ && win.__PORTAL_APP_COMMANDS__.openTab) {
+                win.__PORTAL_APP_COMMANDS__.openTab('inspect');
+              }
+            });
+          },
+          actions: [
+            {
+              label: '1. Fire Live Pre-Inspection Call (Left -> Right)',
+              primary: true,
+              run: function () {
+                withReadySplitFrame('split-frame-employee', function (win) {
+                  if (win.__PORTAL_APP_COMMANDS__) {
+                    if (win.__PORTAL_APP_COMMANDS__.unlockPodium) win.__PORTAL_APP_COMMANDS__.unlockPodium('DEMO-101');
+                    if (win.__PORTAL_APP_COMMANDS__.callDemoPreInspect) win.__PORTAL_APP_COMMANDS__.callDemoPreInspect();
+                  }
+                });
+                showToast('Dispatched Pre-Inspection Call from Podium Tablet to FSQ Inspector Queue!');
+              }
+            },
+            {
+              label: '2. Open High Fives on Left Podium',
+              run: function () {
+                withReadySplitFrame('split-frame-employee', function (win) {
+                  if (win.__PORTAL_APP_COMMANDS__) {
+                    if (win.__PORTAL_APP_COMMANDS__.unlockPodium) win.__PORTAL_APP_COMMANDS__.unlockPodium('DEMO-101');
+                    if (win.__PORTAL_APP_COMMANDS__.openTab) win.__PORTAL_APP_COMMANDS__.openTab('highfive');
+                  }
+                });
+              }
+            },
+            {
+              label: '3. Open 6M Fishbone on Right Inspector Pane',
+              run: function () {
+                withReadySplitFrame('split-frame-inspect', function (win) {
+                  if (win.__PORTAL_APP_COMMANDS__ && win.__PORTAL_APP_COMMANDS__.openTab) {
+                    win.__PORTAL_APP_COMMANDS__.openTab('capa');
+                  }
+                });
+              }
+            }
+          ]
+        },
+        {
+          shortTitle: '4. 6M Fishbone CAPA',
+          portalTag: 'Portal 2: FSQ & CAPA',
+          title: 'Stop 4: Interactive 6M Ishikawa Fishbone, 5-Why & RCA CAPA Studio',
+          descHtml: 'In <strong>Portal 2 (FSQ Inspector Hub)</strong>, quality leads conduct interactive <strong>6M Ishikawa Fishbone</strong> (<em>People, Methods, Equipment, Materials, Measurement, Environment</em>), <strong>5-Why</strong>, and <strong>Corrective / Preventive Action (RCA)</strong> investigations linked to Pathogen BOLO hits (e.g., <code>CAPA-2026-104</code> Breading Wire Belt &amp; <code>CAPA-2026-103</code> WJ1 Nozzle Manifold), plus the audited <strong>Leadership-in-Training Badge Gate</strong>.',
+          onEnter: function () {
+            window.selectPortalScope('portal2', 'inspect');
+            withReadyFrame('inspect', function (win) {
+              if (win.__PORTAL_APP_COMMANDS__ && win.__PORTAL_APP_COMMANDS__.openTab) {
+                win.__PORTAL_APP_COMMANDS__.openTab('capa');
+              }
+            });
+          },
+          actions: [
+            {
+              label: '1. Open 6M Fishbone & 5-Why CAPA Studio',
+              primary: true,
+              run: function () {
+                withReadyFrame('inspect', function (win) {
+                  if (win.__PORTAL_APP_COMMANDS__ && win.__PORTAL_APP_COMMANDS__.openTab) {
+                    win.__PORTAL_APP_COMMANDS__.openTab('capa');
+                  }
+                });
+              }
+            },
+            {
+              label: '2. Open Pre-Op Equipment Verification Queue',
+              run: function () {
+                withReadyFrame('inspect', function (win) {
+                  if (win.__PORTAL_APP_COMMANDS__ && win.__PORTAL_APP_COMMANDS__.openTab) {
+                    win.__PORTAL_APP_COMMANDS__.openTab('inspect');
+                  }
+                });
+              }
+            },
+            {
+              label: '3. Open Leadership-in-Training Badge Gate',
+              run: function () {
+                withReadyFrame('inspect', function (win) {
+                  if (win.__PORTAL_APP_COMMANDS__ && win.__PORTAL_APP_COMMANDS__.openTab) {
+                    win.__PORTAL_APP_COMMANDS__.openTab('elevation');
+                  }
+                });
+              }
+            }
+          ]
+        },
+        {
+          shortTitle: '5. Team Build: Shift Builder',
+          portalTag: 'Portal 3: Supervisor',
+          title: 'Stop 5: How Teams Are Built (Part A) - Shift Builder & 630m Labor Utilization',
+          descHtml: 'See how Supervisors &amp; Leads build the shift crew in <strong>Shift Builder (<code>shiftstart.js</code>)</strong>:<br/>- <strong>Step 1 (Attendance):</strong> Verify active Crew D roster &amp; auto-fill vacancies.<br/>- <strong>Steps 2-4 (Rooms &amp; Areas):</strong> Staff Bakery &amp; Creme areas against <strong>Sanitation Director Required Headcount</strong> (<code>director: needs X, crew plan Y</code>) and training matrix skill levels.<br/>- <strong>Step 5 (Equipment &amp; Finish):</strong> Assigns MSS equipment to each tech and displays <strong>Per-Employee Shift Capacity Utilization</strong> (assigned minutes vs. <code>630m / 10.5h</code> shift capacity).',
+          onEnter: function () {
+            window.selectPortalScope('portal3', 'shiftstart');
+          },
+          actions: [
+            {
+              label: '1. Step 1: Attendance & Auto-Fill Roster',
+              run: function () {
+                withReadyFrame('shiftstart', function (win, doc) {
+                  clickInFrameDoc(doc, '1 Attendance');
+                });
+              }
+            },
+            {
+              label: '2. Step 2: Bakery Room Team Build',
+              run: function () {
+                withReadyFrame('shiftstart', function (win, doc) {
+                  clickInFrameDoc(doc, '2 Bakery');
+                });
+              }
+            },
+            {
+              label: '3. Step 3: Creme Room Team Build',
+              run: function () {
+                withReadyFrame('shiftstart', function (win, doc) {
+                  clickInFrameDoc(doc, '3 Creme');
+                });
+              }
+            },
+            {
+              label: '4. Step 5: Equipment & 630m Capacity Utilization',
+              primary: true,
+              run: function () {
+                withReadyFrame('shiftstart', function (win, doc) {
+                  clickInFrameDoc(doc, '5 Equipment');
+                });
+              }
+            }
+          ]
+        },
+        {
+          shortTitle: '6. Team Build: 6-9-12-3 & Evals',
+          portalTag: 'Portal 3: Supervisor',
+          title: 'Stop 6: How Teams Are Built (Part B) - 6-9-12-3 Team Builds & Employee Evals',
+          descHtml: 'In <strong>Supervisor Hub (<code>supervisor.js</code>)</strong>, leads organize the crew into <strong>6-9-12-3 Quarter Team Builds</strong> with hierarchical <code>1-Room / 2-Area / 3-Subcategory</code> goals and photo verification. In <strong>Employee Evals &amp; Roster (<code>people.js</code>)</strong>, supervisors log formal Pros/Cons, 1-5 Star Performance Evaluations, and toggle <code>In Training = Yes</code> for badge elevation.',
+          onEnter: function () {
+            window.selectPortalScope('portal3', 'supervisor');
+            withReadyFrame('supervisor', function (win, doc) {
+              clickInFrameDoc(doc, '6-9-12-3');
+            });
+          },
+          actions: [
+            {
+              label: '1. Open 6-9-12-3 Quarter Team Builds',
+              primary: true,
+              run: function () {
+                window.switchApp('supervisor');
+                withReadyFrame('supervisor', function (win, doc) {
+                  clickInFrameDoc(doc, '6-9-12-3');
+                });
+              }
+            },
+            {
+              label: '2. Supervisor To-Do & Floor Escalations',
+              run: function () {
+                window.switchApp('supervisor');
+                withReadyFrame('supervisor', function (win, doc) {
+                  clickInFrameDoc(doc, 'To-Do');
+                });
+              }
+            },
+            {
+              label: '3. Clean Plan & Shift Passdown',
+              run: function () {
+                window.switchApp('supervisor');
+                withReadyFrame('supervisor', function (win, doc) {
+                  clickInFrameDoc(doc, 'Clean Plan');
+                });
+              }
+            },
+            {
+              label: '4. Open Employee Pros/Cons & 1-5 Star Evals',
+              run: function () {
+                window.switchApp('people');
+              }
+            }
+          ]
+        },
+        {
+          shortTitle: '7. Utilizations: Prod Sched',
+          portalTag: 'Portal 4: Senior Leadership',
+          title: 'Stop 7: Where Utilizations Exist (Part A) - Production Scheduler & Director',
+          descHtml: 'On the <strong>Production Scheduler (<code>prodsched.js</code>)</strong>, leadership tracks three core utilizations across 2 weeks:<br/>1. <strong>Line &amp; Run Pacing Utilization (Schedule):</strong> Live Redzone Case Attainment % (<code>actualCases / plannedCases</code>) &amp; Support Area Offsets (<code>-45m Mix</code>, <code>+30m Pack</code>).<br/>2. <strong>Equipment + Allergen Minutes Utilization (Cleaning Times):</strong> Base equipment wash minutes + allergen changeover matrix.<br/>3. <strong>Wash Window &amp; Crew Utilization (Clean Plan &amp; Shifts):</strong> Required heads vs. scheduled crew.',
+          onEnter: function () {
+            window.selectPortalScope('portal4', 'prodsched');
+          },
+          actions: [
+            {
+              label: '1. Schedule: 2-Week Gantt & Run Pacing %',
+              primary: true,
+              run: function () {
+                window.switchApp('prodsched');
+                withReadyFrame('prodsched', function (win, doc) {
+                  clickInFrameDoc(doc, 'Schedule');
+                });
+              }
+            },
+            {
+              label: '2. Cleaning Times: Equipment + Allergen Mins',
+              run: function () {
+                window.switchApp('prodsched');
+                withReadyFrame('prodsched', function (win, doc) {
+                  clickInFrameDoc(doc, 'Cleaning Times');
+                });
+              }
+            },
+            {
+              label: '3. Clean Plan: Wash Window Utilization',
+              run: function () {
+                window.switchApp('prodsched');
+                withReadyFrame('prodsched', function (win, doc) {
+                  clickInFrameDoc(doc, 'Clean Plan');
+                });
+              }
+            },
+            {
+              label: '4. Shifts: Crew Capacity vs Demand',
+              run: function () {
+                window.switchApp('prodsched');
+                withReadyFrame('prodsched', function (win, doc) {
+                  clickInFrameDoc(doc, 'Shifts');
+                });
+              }
+            },
+            {
+              label: '5. Open Sanitation Director v1.00007',
+              run: function () {
+                window.switchApp('director');
+              }
+            }
+          ]
+        },
+        {
+          shortTitle: '8. Utilizations: PBED & Ganttly',
+          portalTag: 'Portal 3 & 4: Turnaround',
+          title: 'Stop 8: Where Utilizations Exist (Part B) - PBED Turnaround & Live Ganttly',
+          descHtml: 'In <strong>PBED - Period-Based Equipment Down (<code>pbed.js</code>)</strong> and <strong>Live Ganttly (<code>ganttly.js</code>)</strong>, utilizations are tracked at the turnaround and lane level:<br/>- <strong>PBED Plan (<code>plan</code>):</strong> Line Stop-to-Restart window utilization across sequential steps (<code>0 Drains -> 1 PIC -> 2 Frontline -> 3 Sanitize -> 4 Pre-Op</code>).<br/>- <strong>PBED Crew (<code>crew</code>):</strong> Technician headcount &amp; skill utilization by line.<br/>- <strong>PBED Execute &amp; Ganttly:</strong> Live milestone pacing vs. target turnaround clock.',
+          onEnter: function () {
+            window.selectPortalScope('portal3', 'pbed');
+          },
+          actions: [
+            {
+              label: '1. PBED Plan: Window & Step Utilization',
+              primary: true,
+              run: function () {
+                window.switchApp('pbed');
+                withReadyFrame('pbed', function (win, doc) {
+                  clickInFrameDoc(doc, '[data-testtab="plan"]');
+                });
+              }
+            },
+            {
+              label: '2. PBED Crew: Labor & Skill Utilization',
+              run: function () {
+                window.switchApp('pbed');
+                withReadyFrame('pbed', function (win, doc) {
+                  clickInFrameDoc(doc, '[data-testtab="crew"]');
+                });
+              }
+            },
+            {
+              label: '3. PBED Execute: Live Turnaround Pacing',
+              run: function () {
+                window.switchApp('pbed');
+                withReadyFrame('pbed', function (win, doc) {
+                  clickInFrameDoc(doc, '[data-testtab="execute"]');
+                });
+              }
+            },
+            {
+              label: '4. PBED Work Orders & Hold Locks',
+              run: function () {
+                window.switchApp('pbed');
+                withReadyFrame('pbed', function (win, doc) {
+                  clickInFrameDoc(doc, '[data-testtab="workorders"]');
+                });
+              }
+            },
+            {
+              label: '5. Open Live Ganttly Floor Clocks',
+              run: function () {
+                window.switchApp('ganttly');
+              }
+            }
+          ]
+        },
+        {
+          shortTitle: '9. MSS Navigation (PIC/PEC)',
+          portalTag: 'Portal 2 & 4: MSS',
+          title: 'Stop 9: How the MSS Is Navigated - 94% PIC, 88% PEC & Overdue Filtering',
+          descHtml: 'The <strong>Master Sanitation Schedule (<code>calendar.js</code>)</strong> opens collapsed to top-level parent Rooms (<code>BAKERY</code>, <code>CREME</code>) for instant executive clarity. It tracks <strong>PIC Clean Completion (94% - above 90% target)</strong> and <strong>PEC Clean Completion (88% - amber alert below 90%)</strong>. Clicking <strong>Overdue PIC Completion</strong>, <strong>All Overdue</strong>, or searching any equipment filters the entire MSS and auto-expands matching rooms.',
+          onEnter: function () {
+            window.selectPortalScope('portal4', 'calendar');
+          },
+          actions: [
+            {
+              label: '1. Filter: Overdue PIC Completion (9)',
+              primary: true,
+              run: function () {
+                window.switchApp('calendar');
+                withReadyFrame('calendar', function (win, doc) {
+                  clickInFrameDoc(doc, '[data-testid="btn-overdue-pic"]');
+                });
+              }
+            },
+            {
+              label: '2. Filter: PEC Clean Completion (88%)',
+              run: function () {
+                window.switchApp('calendar');
+                withReadyFrame('calendar', function (win, doc) {
+                  clickInFrameDoc(doc, '[data-testid="kpi-pec-completion"]');
+                });
+              }
+            },
+            {
+              label: '3. Filter: All Overdue Assets (12)',
+              run: function () {
+                window.switchApp('calendar');
+                withReadyFrame('calendar', function (win, doc) {
+                  clickInFrameDoc(doc, '[data-testid="btn-overdue-all"]');
+                });
+              }
+            },
+            {
+              label: '4. Clear Filter & Collapse to Parent Rooms',
+              run: function () {
+                window.switchApp('calendar');
+                withReadyFrame('calendar', function (win, doc) {
+                  clickInFrameDoc(doc, '[data-testid="btn-collapse-rooms"]');
+                });
+              }
+            },
+            {
+              label: '5. Expand All Rooms & Frequencies',
+              run: function () {
+                window.switchApp('calendar');
+                withReadyFrame('calendar', function (win, doc) {
+                  clickInFrameDoc(doc, '[data-testid="btn-expand-all"]');
+                });
+              }
+            }
+          ]
+        },
+        {
+          shortTitle: '10. BOLO, Copilot & Dev',
+          portalTag: 'Portal 4 & 5: Executive',
+          title: 'Stop 10: Pathogen BOLO Surveillance, Grounded Copilot & 43-Table Dev Console',
+          descHtml: 'Our final stop showcases <strong>Pathogen BOLO (<code>bolo.js</code>)</strong> with 8 weeks of scrambled swab surveillance across 60 sites (&gt;1% positive/hold verifications, repeat-site vector alerts, and a 12-room interactive Facility Map), the <strong>Grounded Copilot Administrative Assistant</strong> (1-click VP of Ops &amp; VP of Quality briefs), and <strong>Portal 5 Developer Console</strong> (43 Dataverse tables, OData runner, and PAC CLI).',
+          onEnter: function () {
+            window.selectPortalScope('portal4', 'bolo');
+          },
+          actions: [
+            {
+              label: '1. BOLO: Last Week / This Week Triage',
+              primary: true,
+              run: function () {
+                window.closeDrawers();
+                window.switchApp('bolo');
+                withReadyFrame('bolo', function (win, doc) {
+                  clickInFrameDoc(doc, '1. Last Week / This Week');
+                });
+              }
+            },
+            {
+              label: '2. BOLO: Key Metrics & YoY Graphs',
+              run: function () {
+                window.closeDrawers();
+                window.switchApp('bolo');
+                withReadyFrame('bolo', function (win, doc) {
+                  clickInFrameDoc(doc, '2. Key Metrics');
+                });
+              }
+            },
+            {
+              label: '3. BOLO: 12-Room Interactive Swab Map',
+              run: function () {
+                window.closeDrawers();
+                window.switchApp('bolo');
+                withReadyFrame('bolo', function (win, doc) {
+                  clickInFrameDoc(doc, '3. Swab Map');
+                });
+              }
+            },
+            {
+              label: '4. Open Copilot & Generate VP Quality Brief',
+              run: function () {
+                window.openDrawer('copilot');
+                window.askCopilotPrompt('vp_qual');
+              }
+            },
+            {
+              label: '5. Launch Portal 5: 43-Table Dev Console',
+              run: function () {
+                window.closeDrawers();
+                window.selectPortalScope('portal5', 'devcenter');
+              }
+            }
+          ]
+        }
+      ];
+
+      function renderVpTourCard() {
+        var card = document.getElementById('vp-tour-card');
+        if (!card) return;
+        card.classList.toggle('open', vpTourOpen);
+        card.classList.toggle('dock-left', vpTourDockLeft);
+        card.classList.toggle('minimized', vpTourMinimized);
+        if (!vpTourOpen) return;
+
+        var stop = VP_TOUR_STOPS[vpTourIndex] || VP_TOUR_STOPS[0];
+        var badgeEl = document.getElementById('vp-tour-step-badge');
+        if (badgeEl) badgeEl.textContent = 'Stop ' + (vpTourIndex + 1) + ' of ' + VP_TOUR_STOPS.length;
+
+        var dockBtn = document.getElementById('vp-tour-dock-btn');
+        if (dockBtn) dockBtn.textContent = vpTourDockLeft ? 'Dock Right' : 'Dock Left';
+
+        var minBtn = document.getElementById('vp-tour-min-btn');
+        if (minBtn) minBtn.textContent = vpTourMinimized ? 'Expand' : 'Minimize';
+
+        var stripEl = document.getElementById('vp-tour-steps-strip');
+        if (stripEl) {
+          stripEl.innerHTML = VP_TOUR_STOPS.map(function (st, idx) {
+            return '<button type="button" class="vp-tour-step-pill' + (idx === vpTourIndex ? ' active' : '') + '" onclick="goToVpTourStop(' + idx + ')">' +
+              st.shortTitle +
+            '</button>';
+          }).join('');
+        }
+
+        var titleEl = document.getElementById('vp-tour-title');
+        if (titleEl) titleEl.textContent = stop.title;
+
+        var pTagEl = document.getElementById('vp-tour-portal-tag');
+        if (pTagEl) pTagEl.textContent = stop.portalTag;
+
+        var descEl = document.getElementById('vp-tour-desc');
+        if (descEl) descEl.innerHTML = stop.descHtml;
+
+        var actsEl = document.getElementById('vp-tour-actions');
+        if (actsEl) {
+          actsEl.innerHTML = '';
+          (stop.actions || []).forEach(function (act, aIdx) {
+            var b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'vp-tour-act-btn' + (act.primary ? ' primary-act' : '');
+            b.setAttribute('data-tour-action', String(aIdx));
+            b.textContent = act.label;
+            b.onclick = function () {
+              if (typeof act.run === 'function') act.run();
+            };
+            actsEl.appendChild(b);
+          });
+        }
+
+        var prevBtn = document.getElementById('vp-tour-prev-btn');
+        if (prevBtn) prevBtn.disabled = (vpTourIndex <= 0);
+
+        var nextBtn = document.getElementById('vp-tour-next-btn');
+        if (nextBtn) {
+          nextBtn.textContent = (vpTourIndex >= VP_TOUR_STOPS.length - 1) ? 'Finish Tour' : 'Next Stop >';
+        }
+
+        var autoBtn = document.getElementById('vp-tour-auto-btn');
+        if (autoBtn) {
+          autoBtn.classList.toggle('autoplay-on', Boolean(vpTourAutoTimer));
+          autoBtn.textContent = vpTourAutoTimer ? 'Pause Auto-Play' : 'Auto-Play (8s)';
+        }
+      }
+
+      window.goToVpTourStop = function (index) {
+        if (index < 0) index = 0;
+        if (index >= VP_TOUR_STOPS.length) {
+          window.closeVpPresentationTour();
+          return;
+        }
+        vpTourOpen = true;
+        vpTourIndex = index;
+        var stop = VP_TOUR_STOPS[vpTourIndex];
+        if (stop && typeof stop.onEnter === 'function') {
+          stop.onEnter();
+        }
+        renderVpTourCard();
+        syncUrlHash(activeAppKey);
+      };
+
+      window.startVpPresentationTour = function (startIdx) {
+        var idx = (typeof startIdx === 'number' && !isNaN(startIdx)) ? startIdx : 0;
+        vpTourMinimized = false;
+        window.goToVpTourStop(idx);
+      };
+
+      window.stepVpPresentationTour = function (delta) {
+        var nextIdx = vpTourIndex + (Number(delta) || 1);
+        if (nextIdx >= VP_TOUR_STOPS.length) {
+          window.closeVpPresentationTour();
+          showToast('Completed 10-Stop VP Presentation Guided Tour!');
+          return;
+        }
+        if (nextIdx < 0) nextIdx = 0;
+        window.goToVpTourStop(nextIdx);
+      };
+
+      window.toggleVpTourAutoPlay = function () {
+        if (vpTourAutoTimer) {
+          clearInterval(vpTourAutoTimer);
+          vpTourAutoTimer = null;
+          renderVpTourCard();
+          return;
+        }
+        vpTourAutoTimer = setInterval(function () {
+          if (!vpTourOpen) {
+            clearInterval(vpTourAutoTimer);
+            vpTourAutoTimer = null;
+            return;
+          }
+          if (vpTourIndex >= VP_TOUR_STOPS.length - 1) {
+            clearInterval(vpTourAutoTimer);
+            vpTourAutoTimer = null;
+            renderVpTourCard();
+            return;
+          }
+          window.stepVpPresentationTour(1);
+        }, 8000);
+        renderVpTourCard();
+      };
+
+      window.toggleVpTourDock = function () {
+        vpTourDockLeft = !vpTourDockLeft;
+        renderVpTourCard();
+      };
+
+      window.toggleVpTourMinimize = function () {
+        vpTourMinimized = !vpTourMinimized;
+        renderVpTourCard();
+      };
+
+      window.closeVpPresentationTour = function () {
+        vpTourOpen = false;
+        if (vpTourAutoTimer) {
+          clearInterval(vpTourAutoTimer);
+          vpTourAutoTimer = null;
+        }
+        renderVpTourCard();
+        syncUrlHash(activeAppKey);
+      };
+
+      window.resetDemoStateFromTour = function () {
+        try {
+          if (engine && typeof engine.resetToSeed === 'function') {
+            engine.resetToSeed();
+          } else {
+            localStorage.removeItem('__APEX_DEMO_META_V3__');
+            localStorage.removeItem('__APEX_PUBLIC_DEMO_DB_V1__');
+            window.location.reload();
+            return;
+          }
+          refreshAllMountedApps();
+          showToast('Demo database reset to clean initial presentation state!');
+        } catch (e) {}
+      };
+
+      // ======================================================================
+      // DIRECT URL KIOSK & PORTAL BOOKMARK ROUTER (#portal=, #tab=, #mode=podium, #split=1, #tour=1)
+      // ======================================================================
+      function applyUrlRouteFromHashOrQuery(isInitialLoad) {
+        var hashStr = String(window.location.hash || '').replace(/^#/, '');
+        var hashParams = new URLSearchParams(hashStr);
+        var urlParams = new URLSearchParams(window.location.search);
+
+        var portalParam = (hashParams.get('portal') || urlParams.get('portal') || '').toLowerCase().trim();
+        var explicitTab = (hashParams.get('tab') || urlParams.get('tab') || '').toLowerCase().trim();
+        var modeParam = (hashParams.get('mode') || urlParams.get('mode') || '').toLowerCase().trim();
+        var splitParam = hashParams.get('split') || urlParams.get('split');
+        var tourParam = hashParams.get('tour') || urlParams.get('tour');
+
+        // 1. Stateless Podium Kiosk Mode (#mode=podium)
+        if (modeParam === 'podium') {
+          document.body.classList.add('hub-podium-kiosk');
+          activePortalId = 'portal1';
+          window.toggleSplashOverlay(false);
+          window.switchApp(explicitTab || 'employee');
+          return;
+        } else {
+          document.body.classList.remove('hub-podium-kiosk');
+        }
+
+        // 2. Direct Home Splash Bookmark (#portal=home)
+        if (portalParam === 'home') {
+          if (isInitialLoad) {
+            var defTab = explicitTab || (engine && engine.getUserPreferences().defaultApp) || 'manager';
+            window.switchApp(defTab);
+          }
+          window.toggleSplashOverlay(true);
+          syncUrlHash(activeAppKey);
+          return;
+        }
+
+        // 3. Direct Portal Scope (#portal=portal1..portal5)
+        var matchedPortal = PORTAL_DEFS.find(function (p) { return p.id === portalParam; });
+        if (matchedPortal) {
+          window.selectPortalScope(matchedPortal.id, explicitTab || matchedPortal.defaultApp);
+        } else if (explicitTab && APP_LABELS[explicitTab]) {
+          window.toggleSplashOverlay(false);
+          window.switchApp(explicitTab);
+        } else if (isInitialLoad) {
+          var fallbackTab = (engine && engine.getUserPreferences().defaultApp) || 'manager';
+          if (urlParams.get('nosplash') !== '1' && !splitParam && !tourParam) {
+            window.switchApp(fallbackTab);
+            window.toggleSplashOverlay(true);
+          } else {
+            window.switchApp(fallbackTab);
+          }
+        }
+
+        // 4. Side-by-Side 40/60 Podium Split View (#split=1)
+        if (splitParam === '1' || splitParam === 'true') {
+          window.toggleSplashOverlay(false);
+          window.togglePodiumSplitStage(true);
+        }
+
+        // 5. Guided VP Presentation Tour (#tour=1..10)
+        if (tourParam) {
+          var stopNum = parseInt(tourParam, 10);
+          var startStopIdx = (!isNaN(stopNum) && stopNum >= 1 && stopNum <= VP_TOUR_STOPS.length) ? (stopNum - 1) : 0;
+          window.startVpPresentationTour(startStopIdx);
+        }
+      }
+
       // Initialize Splash Cards & Portal Navigation
       renderSplashCards();
       renderPortalNavBar();
-
-      var hashParams = new URLSearchParams(String(window.location.hash || '').replace(/^#/, ''));
-      var urlParams = new URLSearchParams(window.location.search);
-      var explicitTab = hashParams.get('tab') || urlParams.get('tab');
-      var startTab = explicitTab || (engine && engine.getUserPreferences().defaultApp) || 'manager';
-
-      // Show the 5-Portal Role-Segregated Splash Page on load when no explicit ?tab= or #tab= deep-link is specified
-      if (!explicitTab && urlParams.get('nosplash') !== '1') {
-        toggleSplashOverlay(true);
-      }
-
-      window.switchApp(startTab);
+      applyUrlRouteFromHashOrQuery(true);
       renderTelemetry();
 
-      // Background pre-warmer: warm core apps across all 5 portals
-      var WARM_QUEUE = ['employee', 'inspect', 'supervisor', 'calendar', 'ganttly', 'bolo', 'director'];
+      window.addEventListener('hashchange', function () {
+        applyUrlRouteFromHashOrQuery(false);
+      });
+
+      // Background pre-warmer: warm core apps across all 5 portals in tour order
+      var WARM_QUEUE = ['employee', 'inspect', 'shiftstart', 'supervisor', 'prodsched', 'pbed', 'calendar', 'bolo', 'ganttly', 'director'];
       var warmIdx = 0;
       function scheduleNextPrewarm() {
         if (warmIdx >= WARM_QUEUE.length) return;

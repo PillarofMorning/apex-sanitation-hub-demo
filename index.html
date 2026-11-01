@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="data:," />
   <title>Midwest Plant Sanitation Hub - 5-Portal Enterprise Architecture</title>
-  <script src="demo_seed_data.js?v=4"></script>
-  <script src="mock_dataverse_engine.js?v=4"></script>
+  <script src="demo_seed_data.js?v=5"></script>
+  <script src="mock_dataverse_engine.js?v=5"></script>
   <style>
     * { box-sizing: border-box; }
     html, body {
@@ -1155,10 +1155,10 @@
     </div>
   </div>
 
-  <!-- Portal 4: Customize Views Drawer -->
+  <!-- Portal 4: Senior Leadership - Customize Views Drawer -->
   <div id="drawer-views" class="hub-drawer">
     <div class="hub-drawer-head">
-      <span class="hub-drawer-title">Portal 4 - Customize Executive Views</span>
+      <span class="hub-drawer-title">Portal 4 - Senior Leadership Views</span>
       <button class="hub-drawer-close" onclick="closeDrawers()">Close</button>
     </div>
     <div class="hub-drawer-body">
@@ -1166,7 +1166,7 @@
         <div class="hub-card-title">1-Click Role &amp; Executive Layout Presets</div>
         <div style="display:grid;gap:8px;">
           <button class="hub-btn-primary" style="text-align:left;padding:10px 12px;" onclick="selectPortalScope('portal4')">
-            <strong>Senior Leadership Full Suite (Portal 4)</strong> - Managers Hub, Director, BOLO, MSS, Ganttly, Schedule, Inspect &amp; Evals
+            <strong>Portal 4 - Senior Leadership</strong> - Managers Hub, Director, BOLO, MSS, Ganttly, Schedule, Inspect &amp; Evals
           </button>
           <button class="hub-btn-primary" style="text-align:left;padding:10px 12px;background:#047857;" onclick="selectPortalScope('portal2')">
             <strong>VP of Quality &amp; FSQ Focus (Portal 2)</strong> - Inspect Equipment, 6M Fishbone CAPA Studio, Pathogen BOLO, MSS &amp; Ordering
@@ -1411,13 +1411,13 @@
         },
         {
           id: 'portal4',
-          shortBadge: 'Portal 4: Leadership',
-          badgeEn: 'PORTAL 4 - VP OF OPS, VP OF QUALITY & SR LEADERSHIP',
-          badgeEs: 'PORTAL 4 - VP DE OPERACIONES, VP DE CALIDAD Y LIDERAZGO',
+          shortBadge: 'Portal 4: Senior Leadership',
+          badgeEn: 'PORTAL 4 - SENIOR LEADERSHIP',
+          badgeEs: 'PORTAL 4 - LIDERAZGO SENIOR',
           badgeColor: '#FBBF24',
           featured: true,
-          titleEn: '4. Senior Leadership Hub',
-          titleEs: '4. Hub de Liderazgo Senior',
+          titleEn: '4. Senior Leadership',
+          titleEs: '4. Liderazgo Senior',
           descEn: 'Full executive access to all applications, Customize Views Studio, 1-Page Printable Executive Briefs, and the Microsoft Copilot-aligned Administrative Assistant Webchat grounded on live Dataverse tables.',
           descEs: 'Acceso ejecutivo completo a todas las aplicaciones, Personalizar Vistas, Resumenes Ejecutivos Imprimibles y Asistente Webchat estilo Microsoft Copilot conectado a Dataverse.',
           defaultApp: 'manager',
@@ -1431,8 +1431,8 @@
             { key: 'inspect',    labelEn: '7. CAPA & Inspect',      labelEs: '7. CAPA e Inspeccion' },
             { key: 'people',     labelEn: '8. Employee Evals',      labelEs: '8. Evaluaciones' }
           ],
-          btnLabelEn: 'Launch Portal 4 (Senior Leadership Hub)',
-          btnLabelEs: 'Abrir Portal 4 (Liderazgo Senior)',
+          btnLabelEn: 'Launch Portal 4 - Senior Leadership',
+          btnLabelEs: 'Abrir Portal 4 - Liderazgo Senior',
           btnBg: 'linear-gradient(135deg, #00468B 0%, #0072CE 100%)',
           btnColor: '#FFFFFF'
         },
@@ -2004,7 +2004,7 @@
           { label: 'Portal 2: FSQ / Sanitation Inspector & 6M Fishbone CAPA Hub', kbd: 'Portal 2', run: function () { window.selectPortalScope('portal2'); } },
           { label: 'Portal 3: Supervisor + Lead Portal (Training & Evals)', kbd: 'Portal 3', run: function () { window.selectPortalScope('portal3'); } },
           { label: 'Portal 3: Employee Roster, Pros/Cons & Evaluations Studio', kbd: 'Roster', run: function () { window.selectPortalScope('portal3', 'people'); } },
-          { label: 'Portal 4: Senior Leadership Hub & Copilot Assistant', kbd: 'Portal 4', run: function () { window.selectPortalScope('portal4'); } },
+          { label: 'Portal 4: Senior Leadership', kbd: 'Portal 4', run: function () { window.selectPortalScope('portal4'); } },
           { label: 'Portal 5: Developer Command Center (43 Tables, OData & PAC CLI)', kbd: 'Portal 5', run: function () { window.selectPortalScope('portal5'); } },
           { label: 'Copilot: Open Executive Copilot Administrative Assistant Webchat', kbd: 'Copilot', run: function () { window.openDrawer('copilot'); } },
           { label: 'Logo Gate: Toggle Apex Foods Logo "Further Detail" Mode', kbd: 'Logo Gate', run: function () { window.toggleLogoDetailMode(); } }

@@ -13,9 +13,9 @@
   <script id="tailwind-cdn" src="vendor/tailwind.js"></script>
   <script src="vendor/react.production.min.js"></script>
   <script src="vendor/react-dom.production.min.js"></script>
-  <script src="fluent_ui_shim.js?v=3"></script>
-  <script src="demo_seed_data.js?v=3"></script>
-  <script src="mock_dataverse_engine.js?v=3"></script>
+  <script src="fluent_ui_shim.js?v=4"></script>
+  <script src="demo_seed_data.js?v=4"></script>
+  <script src="mock_dataverse_engine.js?v=4"></script>
   <style>
     html, body, #root {
       margin: 0;
@@ -24,6 +24,19 @@
       height: 100%;
       font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
       background: #F1F5F9;
+      color: #0F172A;
+    }
+    html[data-hub-embedded="1"][data-hub-detail="0"] [data-hub-chrome="identity"],
+    html[data-hub-detail="0"] [data-hub-detail-only="1"] {
+      display: none !important;
+    }
+    #root header img, #root nav img {
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    html[data-hub-detail="1"] #root header img {
+      box-shadow: 0 0 0 2px #FFB81C;
+      border-radius: 6px;
     }
   </style>
 </head>
@@ -33,27 +46,99 @@
     (function () {
       var params = new URLSearchParams(window.location.search);
       var appKey = (params.get('app') || 'calendar').toLowerCase().replace(/[^a-z0-9]/g, '');
-      var validApps = ['calendar', 'ganttly', 'shiftstart', 'mss', 'director', 'bolo', 'manager', 'prodsched'];
+      var validApps = [
+        'calendar', 'ganttly', 'shiftstart', 'mss', 'director',
+        'bolo', 'manager', 'prodsched', 'pbed', 'training',
+        'ordering', 'mapsubmit', 'ecosystem',
+        'employee', 'inspect', 'supervisor', 'people', 'devcenter'
+      ];
       if (validApps.indexOf(appKey) === -1) appKey = 'calendar';
+      window.__PORTAL_APP_KEY__ = appKey;
+      document.documentElement.setAttribute('data-hub-detail', '0');
 
-      var s = document.createElement('script');
-      s.src = 'bundles/' + appKey + '.js?v=3';
-      s.onload = function () {
-        var Comp = window.__DEMO_APP_COMPONENT__;
+      if (window.self !== window.top) {
+        document.documentElement.setAttribute('data-hub-embedded', '1');
+      }
+
+      window.addEventListener('message', function (ev) {
+        var d = ev && ev.data;
+        if (!d || typeof d !== 'object') return;
+        if (d.type === 'hub:detail') {
+          var isOn = Boolean(d.on);
+          document.documentElement.setAttribute('data-hub-detail', isOn ? '1' : '0');
+          if (typeof window.__PORTAL_SET_DETAIL__ === 'function') {
+            try { window.__PORTAL_SET_DETAIL__(isOn); } catch (e) {}
+          }
+        } else if (d.type === 'hub:lang' && d.lang) {
+          try {
+            localStorage.setItem('__1_ss_lang_v1', d.lang);
+            localStorage.setItem('ss_lang_v1', d.lang);
+            localStorage.setItem('__1_hub_lang', d.lang);
+          } catch (e) {}
+        }
+      });
+
+      window.addEventListener('click', function (ev) {
+        var t = ev.target;
+        if (!t || !t.tagName) return;
+        if (t.tagName.toUpperCase() === 'IMG') {
+          var r = t.getBoundingClientRect();
+          if (r.top >= 0 && r.top <= 110 && r.width >= 28 && r.width <= 260) {
+            try {
+              if (window.parent && window.parent !== window) {
+                window.parent.postMessage({ type: 'hub:toggle-detail', sourceApp: appKey }, '*');
+              } else {
+                var cur = document.documentElement.getAttribute('data-hub-detail') === '1';
+                var next = !cur;
+                document.documentElement.setAttribute('data-hub-detail', next ? '1' : '0');
+                if (typeof window.__PORTAL_SET_DETAIL__ === 'function') window.__PORTAL_SET_DETAIL__(next);
+              }
+            } catch (e) {}
+          }
+        }
+      }, true);
+
+      var reactRoot = null;
+      var LoadedComponent = null;
+      var mountKeySeq = 1;
+
+      function renderApp() {
         var rootEl = document.getElementById('root');
-        if (!Comp) {
-          rootEl.innerHTML = '<div style="padding:24px;color:#C4161C;font-weight:bold;">Failed to load component for ' + appKey + '</div>';
-          return;
+        if (!LoadedComponent || !rootEl) return;
+        if (!reactRoot) {
+          reactRoot = ReactDOM.createRoot(rootEl);
         }
         var props = {
+          key: 'mount_' + mountKeySeq,
           dataApi: window.__APEX_DEMO_DATA_API__,
           context: window.__APEX_DEMO_CONTEXT__,
           webAPI: window.Xrm && window.Xrm.WebApi
         };
-        var root = ReactDOM.createRoot(rootEl);
-        root.render(React.createElement(Comp, props));
+        reactRoot.render(React.createElement(LoadedComponent, props));
+        try {
+          if (window.parent && window.parent !== window) {
+            window.parent.postMessage({ type: 'hub:app-mounted', appKey: appKey }, '*');
+          }
+        } catch (e) {}
+      }
+
+      window.__PORTAL_REMOUNT_APP__ = function () {
+        mountKeySeq++;
+        renderApp();
       };
-      s.onerror = function (err) {
+
+      var s = document.createElement('script');
+      s.src = 'bundles/' + appKey + '.js?v=4';
+      s.onload = function () {
+        LoadedComponent = window.__DEMO_APP_COMPONENT__ || window.__MIDWESTPLANT_APP_COMPONENT__ || window.__PORTAL_APP_COMPONENT__;
+        var rootEl = document.getElementById('root');
+        if (!LoadedComponent) {
+          rootEl.innerHTML = '<div style="padding:24px;color:#C4161C;font-weight:bold;">Failed to load component for ' + appKey + '</div>';
+          return;
+        }
+        renderApp();
+      };
+      s.onerror = function () {
         document.getElementById('root').innerHTML = '<div style="padding:24px;color:#C4161C;font-weight:bold;">Error loading bundle: ' + appKey + '</div>';
       };
       document.body.appendChild(s);

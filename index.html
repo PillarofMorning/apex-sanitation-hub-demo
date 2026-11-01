@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="noindex,nofollow" />
   <link rel="icon" href="data:," />
-  <title>Apex Foods - Sanitation Hub Public Demo (Scrambled Sandbox)</title>
-  <script src="demo_seed_data.js?v=3"></script>
-  <script src="mock_dataverse_engine.js?v=3"></script>
+  <title>Midwest Plant Sanitation Hub - 5-Portal Enterprise Architecture</title>
+  <script src="demo_seed_data.js?v=4"></script>
+  <script src="mock_dataverse_engine.js?v=4"></script>
   <style>
     * { box-sizing: border-box; }
     html, body {
@@ -15,854 +14,2392 @@
       padding: 0;
       width: 100%;
       height: 100%;
-      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-      background: #F1F5F9;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+      background: #070B14;
       color: #0F172A;
       display: flex;
       flex-direction: column;
       overflow: hidden;
-    }
-    .demo-topbar {
-      background: #00468B;
-      border-bottom: 3px solid #FFB81C;
-      padding: 8px 14px;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      z-index: 100;
-      box-shadow: 0 2px 6px rgba(0, 43, 92, 0.18);
-    }
-    .demo-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .demo-badge {
-      background: #FFB81C;
-      color: #00468B;
-      font-size: 10px;
-      font-weight: 900;
-      padding: 3px 9px;
-      border-radius: 999px;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-    .demo-title {
-      font-size: 14.5px;
-      font-weight: 800;
-      color: #FFFFFF;
-      letter-spacing: -0.01em;
-    }
-    .demo-sub {
-      font-size: 11px;
-      color: #DBEAFE;
-    }
-    .demo-nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-    }
-    .demo-tab {
-      background: rgba(255, 255, 255, 0.12);
-      color: #FFFFFF;
-      border: 1px solid rgba(255, 255, 255, 0.24);
-      border-radius: 6px;
-      padding: 5px 11px;
-      font-size: 11.5px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-    .demo-tab:hover {
-      background: rgba(255, 255, 255, 0.22);
-      border-color: rgba(255, 255, 255, 0.45);
-    }
-    .demo-tab.active {
-      background: #FFB81C;
-      color: #00468B;
-      border-color: #FFB81C;
-      font-weight: 800;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    }
-    .demo-statsbar {
-      background: #FFFFFF;
-      border-bottom: 1px solid #CBD5E1;
-      padding: 5px 14px;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      font-size: 11.5px;
-    }
-    .demo-pills {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 12px;
-    }
-    .demo-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      color: #475569;
-      font-weight: 600;
-    }
-    .demo-pill strong {
-      color: #00468B;
-      font-family: monospace;
-      font-size: 12px;
-      font-weight: 800;
-    }
-    .demo-open-callout {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: #FEF2F2;
-      border: 1px solid #FECACA;
-      color: #991B1B;
-      padding: 2px 9px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 700;
-    }
-    .demo-open-callout code {
-      color: #00468B;
-      background: #EFF6FF;
-      border: 1px solid #BFDBFE;
-      padding: 1px 5px;
-      border-radius: 4px;
-      font-family: monospace;
-      font-weight: 800;
-    }
-    .demo-btn {
-      background: #F8FAFC;
-      color: #0F172A;
-      border: 1px solid #CBD5E1;
-      border-radius: 6px;
-      padding: 4px 10px;
-      font-size: 11px;
-      font-weight: 700;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      transition: all 0.15s ease;
-    }
-    .demo-btn:hover {
-      background: #E2E8F0;
-      border-color: #94A3B8;
-    }
-    .demo-btn.btn-tour {
-      background: #0072CE;
-      color: #FFFFFF;
-      border-color: #00468B;
-      box-shadow: 0 1px 4px rgba(0, 70, 139, 0.25);
-    }
-    .demo-btn.btn-tour:hover {
-      background: #00468B;
-    }
-    .demo-frame-wrap {
-      flex: 1;
-      width: 100%;
-      height: 100%;
-      position: relative;
-      background: #F1F5F9;
-    }
-    iframe#demo-app-frame {
-      width: 100%;
-      height: 100%;
-      border: 0;
-      display: block;
     }
 
-    /* Guided Tour Popout Card - Hub Corporate Light Theme */
-    .tour-popout {
-      position: absolute;
-      right: 18px;
-      bottom: 18px;
-      width: 455px;
-      max-width: calc(100vw - 36px);
-      background: #FFFFFF;
-      border: 2px solid #00468B;
-      border-radius: 12px;
-      box-shadow: 0 18px 36px -6px rgba(15, 23, 42, 0.28), 0 4px 12px rgba(0, 70, 139, 0.14);
-      z-index: 1000;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .tour-popout.minimized {
-      width: auto;
-      max-width: 390px;
-      border-color: #00468B;
-    }
-    .tour-popout.minimized .tour-body,
-    .tour-popout.minimized .tour-footer,
-    .tour-popout.minimized .tour-stepper {
-      display: none;
-    }
-    .tour-header {
-      background: #00468B;
+    /* Single-Row 48px Crisp Apex Foods Navy Shell Header */
+    .hub-topbar {
+      background: linear-gradient(90deg, #001F3F 0%, #003366 55%, #00468B 100%);
       border-bottom: 2px solid #FFB81C;
-      padding: 10px 14px;
+      height: 48px;
+      min-height: 48px;
+      padding: 0 12px;
       display: flex;
+      flex-wrap: nowrap;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      cursor: pointer;
+      z-index: 120;
+      box-shadow: 0 2px 10px rgba(0, 20, 45, 0.32);
     }
-    .tour-header-left {
+    .hub-brand {
       display: flex;
       align-items: center;
       gap: 8px;
+      flex-shrink: 0;
     }
-    .tour-badge {
-      background: #FFB81C;
-      color: #00468B;
-      font-size: 9.5px;
+    /* Universal Apex Foods Logo Detail Gate Button */
+    .hub-emblem {
+      height: 30px;
+      padding: 0 9px;
+      border-radius: 7px;
+      background: linear-gradient(135deg, #FFB81C 0%, #F59E0B 100%);
+      color: #002B55;
       font-weight: 900;
-      padding: 2px 7px;
-      border-radius: 4px;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
+      font-size: 11.5px;
+      border: 2px solid transparent;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.16s ease;
+      user-select: none;
     }
-    .tour-title {
+    .hub-emblem:hover {
+      transform: scale(1.04);
+      background: #FCD34D;
+    }
+    body.hub-detail-mode .hub-emblem {
+      border-color: #FFFFFF;
+      box-shadow: 0 0 0 3px rgba(255, 184, 28, 0.55);
+    }
+    .hub-title {
       font-size: 13px;
       font-weight: 800;
       color: #FFFFFF;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
     }
-    .tour-header-controls {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .tour-icon-btn {
-      background: transparent;
-      border: 0;
-      color: #DBEAFE;
+    .hub-portal-pill {
+      background: rgba(255, 184, 28, 0.18);
+      color: #FDE68A;
+      border: 1px solid rgba(255, 184, 28, 0.55);
+      border-radius: 6px;
+      padding: 3.5px 9px;
+      font-size: 10.5px;
+      font-weight: 800;
       cursor: pointer;
-      padding: 4px;
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .tour-icon-btn:hover {
-      background: rgba(255, 255, 255, 0.16);
-      color: #FFFFFF;
-    }
-    .tour-stepper {
-      background: #F8FAFC;
-      padding: 6px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      border-bottom: 1px solid #E2E8F0;
-      font-size: 11px;
-      color: #475569;
-    }
-    .tour-dots {
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 5px;
+      white-space: nowrap;
+      transition: all 0.14s ease;
     }
-    .tour-dot {
-      width: 22px;
-      height: 6px;
-      border-radius: 3px;
-      background: #CBD5E1;
-      cursor: pointer;
-      transition: all 0.2s ease;
+    .hub-portal-pill:hover {
+      background: #FFB81C;
+      color: #002B55;
     }
-    .tour-dot.active {
-      background: #00468B;
-      width: 32px;
+    .hub-prov-badge {
+      font-size: 9.5px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      background: #10B981;
+      color: #052E16;
+      white-space: nowrap;
+      display: none;
     }
-    .tour-dot.done {
-      background: #0072CE;
+    body.hub-detail-mode .hub-prov-badge {
+      display: inline-block;
     }
-    .tour-timer {
-      font-family: monospace;
-      color: #00468B;
-      font-weight: 700;
-      font-size: 10.5px;
+    .hub-prov-badge.sim {
+      background: #FFB81C;
+      color: #0F172A;
+      display: inline-block;
+    }
+    .hub-prov-badge.err {
+      background: #E4002B;
+      color: #FFFFFF;
+      display: inline-block;
+    }
+
+    /* Role-Segregated Single-Row Navigation */
+    .hub-nav {
       display: flex;
+      flex-wrap: nowrap;
       align-items: center;
       gap: 4px;
+      min-width: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
     }
-    .tour-timer .tour-icon-btn {
-      color: #00468B;
-    }
-    .tour-timer .tour-icon-btn:hover {
-      background: #E2E8F0;
-      color: #002B5C;
-    }
-    .tour-body {
-      padding: 14px;
-      max-height: 380px;
-      overflow-y: auto;
-      font-size: 12px;
-      line-height: 1.5;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      background: #FFFFFF;
-    }
-    .tour-sec-title {
-      font-size: 10.5px;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #00468B;
-      margin-bottom: 4px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .tour-box {
-      background: #F8FAFC;
-      border: 1px solid #E2E8F0;
-      border-radius: 8px;
-      padding: 9px 11px;
-    }
-    .tour-box.action-box {
-      background: #EFF6FF;
-      border-color: #93C5FD;
-    }
-    .tour-box p {
-      margin: 0;
-      color: #1E293B;
-    }
-    .tour-box ul {
-      margin: 4px 0 0 16px;
-      padding: 0;
-      color: #334155;
-    }
-    .tour-box li {
-      margin-bottom: 3px;
-    }
-    .tour-highlight {
-      color: #00468B;
+    .hub-nav::-webkit-scrollbar { display: none; }
+    .hub-group-lbl {
+      font-size: 9px;
       font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #93C5FD;
+      padding: 0 4px 0 2px;
+      white-space: nowrap;
+      user-select: none;
     }
-    .tour-code {
-      background: #EFF6FF;
-      color: #00468B;
-      border: 1px solid #BFDBFE;
-      padding: 1px 5px;
-      border-radius: 4px;
-      font-family: monospace;
-      font-weight: 700;
+    .hub-group-sep {
+      width: 1px;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.24);
+      margin: 0 4px;
+      flex-shrink: 0;
+    }
+    .hub-tab {
+      position: relative;
+      background: rgba(255, 255, 255, 0.10);
+      color: #E2E8F0;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 6px;
+      padding: 4.5px 9px;
       font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.12s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4.5px;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
-    .tour-footer {
-      background: #F8FAFC;
-      padding: 10px 14px;
-      border-top: 1px solid #E2E8F0;
+    .hub-tab:hover {
+      background: rgba(255, 255, 255, 0.22);
+      color: #FFFFFF;
+    }
+    .hub-tab.active {
+      background: #FFFFFF;
+      color: #002B55;
+      border-color: #FFB81C;
+      font-weight: 800;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.22);
+    }
+    .hub-tab-dot {
+      width: 5.5px;
+      height: 5.5px;
+      border-radius: 999px;
+      background: #38BDF8;
+      display: none;
+    }
+    .hub-tab.mounted .hub-tab-dot {
+      display: inline-block;
+    }
+    .hub-tab.stale .hub-tab-dot {
+      display: inline-block;
+      background: #F59E0B;
+      box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.35);
+    }
+
+    /* More Tools Dropdown */
+    .hub-more-wrap {
+      position: relative;
+      flex-shrink: 0;
+    }
+    .hub-more-menu {
+      position: fixed;
+      top: 46px;
+      right: 220px;
+      width: 265px;
+      max-height: 82vh;
+      overflow-y: auto;
+      background: #FFFFFF;
+      border: 1px solid #CBD5E1;
+      border-radius: 10px;
+      box-shadow: 0 16px 36px rgba(15, 23, 42, 0.32);
+      padding: 6px;
+      display: none;
+      flex-direction: column;
+      gap: 3px;
+      z-index: 260;
+    }
+    .hub-more-menu.open {
+      display: flex;
+    }
+    .hub-more-item {
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      padding: 6px 10px;
+      text-align: left;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #1E293B;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
     }
-    .tour-footer-left {
+    .hub-more-item:hover {
+      background: #F1F5F9;
+      color: #00468B;
+    }
+    .hub-more-item.active {
+      background: #EFF6FF;
+      border-color: #93C5FD;
+      color: #00468B;
+    }
+
+    /* Right Controls */
+    .hub-actions {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
+      flex-shrink: 0;
     }
-    .tour-footer-right {
-      display: flex;
+    .hub-next-pill {
+      background: linear-gradient(90deg, #FFB81C 0%, #F59E0B 100%);
+      color: #002B55;
+      border: 1px solid #FDE68A;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 10.5px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
+      white-space: nowrap;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+      transition: transform 0.12s ease;
     }
-    .tour-action-btn {
-      background: #0072CE;
+    .hub-next-pill:hover {
+      transform: translateY(-1px);
+      background: #FCD34D;
+    }
+    .hub-copilot-btn {
+      background: linear-gradient(135deg, #0EA5E9 0%, #2563EB 100%);
       color: #FFFFFF;
-      border: 1px solid #00468B;
-      border-radius: 6px;
-      padding: 5px 11px;
-      font-size: 11.5px;
+      border: 1px solid #7DD3FC;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 10.5px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+      box-shadow: 0 1px 6px rgba(14, 165, 233, 0.35);
+    }
+    .hub-copilot-btn:hover {
+      background: linear-gradient(135deg, #0284C7 0%, #1D4ED8 100%);
+    }
+    .hub-pill-btn {
+      background: rgba(15, 23, 42, 0.38);
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 999px;
+      padding: 4px 9px;
+      font-size: 10.5px;
       font-weight: 700;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 5px;
-      transition: all 0.15s ease;
+      white-space: nowrap;
+      transition: all 0.14s ease;
     }
-    .tour-action-btn:hover {
-      background: #00468B;
+    .hub-pill-btn:hover, .hub-pill-btn.active {
+      background: rgba(15, 23, 42, 0.68);
+      border-color: #FFB81C;
     }
-    .tour-action-btn.primary {
+    /* Detail-only header controls hidden until Apex Foods Logo is clicked */
+    .hub-detail-only {
+      display: none !important;
+    }
+    body.hub-detail-mode .hub-detail-only {
+      display: inline-flex !important;
+    }
+    .hub-user-avatar {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
       background: #FFB81C;
-      color: #00468B;
-      border-color: #D97706;
+      color: #002B55;
+      font-weight: 900;
+      font-size: 9.5px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Sub-Header Live Telemetry Bar (Hidden by Default behind Apex Foods Logo Gate) */
+    .hub-statsbar {
+      background: #0F172A;
+      border-bottom: 1px solid #334155;
+      height: 28px;
+      min-height: 28px;
+      padding: 0 12px;
+      display: none;
+      flex-wrap: nowrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 10.5px;
+      color: #CBD5E1;
+      z-index: 90;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    body.hub-detail-mode .hub-statsbar {
+      display: flex;
+    }
+    .hub-statsbar::-webkit-scrollbar { display: none; }
+    .hub-stat-group {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
+    }
+    .hub-stat-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      color: #94A3B8;
+      font-weight: 600;
+    }
+    .hub-stat-item strong {
+      color: #38BDF8;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 11px;
       font-weight: 800;
     }
-    .tour-action-btn.primary:hover {
-      background: #F59E0B;
+    .hub-mini-btn {
+      background: #1E293B;
+      color: #F8FAFC;
+      border: 1px solid #475569;
+      border-radius: 4px;
+      padding: 2px 7px;
+      font-size: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
     }
-    .tour-action-btn.secondary {
+    .hub-mini-btn:hover {
+      background: #334155;
+      border-color: #FFB81C;
+      color: #FDE68A;
+    }
+
+    /* Simulation / Elevation Banner */
+    .hub-sim-banner {
+      background: linear-gradient(90deg, #B45309 0%, #D97706 50%, #B45309 100%);
+      color: #FFFFFF;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 800;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      border-bottom: 1px solid #FDE68A;
+      z-index: 95;
+    }
+    .hub-sim-banner.active {
+      display: flex;
+    }
+    .hub-sim-exit-btn {
       background: #FFFFFF;
-      border-color: #CBD5E1;
-      color: #334155;
+      color: #92400E;
+      border: none;
+      border-radius: 4px;
+      padding: 2px 9px;
+      font-size: 10.5px;
+      font-weight: 800;
+      cursor: pointer;
     }
-    .tour-action-btn.secondary:hover {
+
+    /* Non-Destructive Cross-App Update Bar */
+    .hub-update-bar {
+      background: #EFF6FF;
+      border-bottom: 1px solid #93C5FD;
+      color: #1E3A8A;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      z-index: 94;
+    }
+    .hub-update-bar.active {
+      display: flex;
+    }
+
+    /* Keep-Alive Multi-Iframe Deck + Podium Split View */
+    .hub-deck {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      height: 100%;
       background: #F1F5F9;
-      border-color: #94A3B8;
+      overflow: hidden;
+    }
+    .hub-app-frame {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #F1F5F9;
+      visibility: hidden;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .hub-app-frame.active {
+      visibility: visible;
+      pointer-events: auto;
+      z-index: 10;
+    }
+
+    /* Podium Split Stage (Portal 1 Tablet on Left 40% + Portal 2 Inspector on Right 60%) */
+    .hub-split-stage {
+      position: absolute;
+      inset: 0;
+      background: #0B1120;
+      display: none;
+      grid-template-columns: 440px 1fr;
+      gap: 14px;
+      padding: 12px;
+      z-index: 50;
+    }
+    .hub-split-stage.active {
+      display: grid;
+    }
+    .podium-bezel {
+      background: #1E293B;
+      border: 4px solid #334155;
+      border-radius: 26px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.55);
+      overflow: hidden;
+    }
+    .podium-bezel-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 12px 8px;
+      color: #F8FAFC;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .podium-cam-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #10B981;
+      box-shadow: 0 0 8px #10B981;
+    }
+    .inspector-stage-pane {
+      background: #0F172A;
+      border: 2px solid #FFB81C;
+      border-radius: 18px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+    }
+    .inspector-stage-top {
+      background: linear-gradient(90deg, #002B55 0%, #00468B 100%);
+      color: #FFFFFF;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 800;
+      border-bottom: 2px solid #FFB81C;
+    }
+
+    /* ========================================================================
+       EXECUTIVE 5-PORTAL ROLE-SEGREGATED SPLASH PAGE OVERLAY
+       ======================================================================== */
+    .splash-overlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 20% 15%, #0F294A 0%, #070B14 68%);
+      color: #F8FAFC;
+      z-index: 240;
+      display: none;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 24px 32px 48px;
+    }
+    .splash-overlay.open {
+      display: flex;
+    }
+    .splash-topbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      max-width: 1420px;
+      width: 100%;
+      margin: 0 auto 22px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .splash-hero {
+      max-width: 1420px;
+      width: 100%;
+      margin: 0 auto 22px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .splash-grid {
+      max-width: 1420px;
+      width: 100%;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(265px, 1fr));
+      gap: 16px;
+    }
+    .portal-card {
+      background: linear-gradient(180deg, rgba(30, 41, 59, 0.88) 0%, rgba(15, 23, 42, 0.96) 100%);
+      border: 1.5px solid rgba(148, 163, 184, 0.24);
+      border-radius: 18px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.18s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .portal-card:hover {
+      transform: translateY(-4px);
+      border-color: #FFB81C;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.48), 0 0 0 1px rgba(255, 184, 28, 0.35);
+    }
+    .portal-card.featured {
+      border-color: rgba(255, 184, 28, 0.65);
+      background: linear-gradient(180deg, rgba(15, 38, 74, 0.94) 0%, rgba(15, 23, 42, 0.98) 100%);
+    }
+    .portal-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10.5px;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+      width: fit-content;
+    }
+    .portal-card h2 {
+      margin: 0 0 6px;
+      font-size: 19px;
+      font-weight: 900;
+      color: #FFFFFF;
+      letter-spacing: -0.01em;
+    }
+    .portal-card p {
+      margin: 0 0 14px;
+      font-size: 12.5px;
+      color: #94A3B8;
+      line-height: 1.5;
+    }
+    .portal-chip-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+    .portal-chip {
+      background: rgba(255, 255, 255, 0.07);
+      color: #E2E8F0;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 7px;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.12s ease;
+    }
+    .portal-chip:hover {
+      background: #FFB81C;
+      color: #002B55;
+      border-color: #FFB81C;
+    }
+    .portal-launch-btn {
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: 10px;
+      border: none;
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+    }
+
+    /* Slide-Over Drawers (User Profile, Diagnostics, Customize Views & Copilot Assistant) */
+    .hub-drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      display: none;
+      z-index: 300;
+    }
+    .hub-drawer-backdrop.open {
+      display: block;
+    }
+    .hub-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 480px;
+      max-width: 94vw;
+      height: 100vh;
+      background: #FFFFFF;
+      border-left: 1px solid #CBD5E1;
+      box-shadow: -8px 0 28px rgba(15, 23, 42, 0.25);
+      display: none;
+      flex-direction: column;
+      z-index: 310;
+    }
+    .hub-drawer.open {
+      display: flex;
+    }
+    .hub-drawer-head {
+      background: #002B55;
+      color: #FFFFFF;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid #FFB81C;
+    }
+    .hub-drawer-title {
+      font-size: 15px;
+      font-weight: 800;
+    }
+    .hub-drawer-close {
+      background: rgba(255,255,255,0.15);
+      color: #FFFFFF;
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .hub-drawer-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .hub-card {
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+    .hub-card-title {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #00468B;
+      margin-bottom: 8px;
+    }
+    .hub-kv-grid {
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      gap: 6px 10px;
+      font-size: 12px;
+    }
+    .hub-kv-label {
+      color: #64748B;
+      font-weight: 600;
+    }
+    .hub-kv-val {
+      color: #0F172A;
+      font-weight: 700;
+      word-break: break-all;
+    }
+    .hub-select, .hub-input {
+      width: 100%;
+      padding: 7px 10px;
+      border: 1px solid #CBD5E1;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #0F172A;
+      background: #FFFFFF;
+    }
+    .hub-btn-primary {
+      background: #00468B;
+      color: #FFFFFF;
+      border: 1px solid #002B55;
+      border-radius: 6px;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .hub-btn-primary:hover {
+      background: #005BB5;
+    }
+    .hub-btn-danger {
+      background: #FEF2F2;
+      color: #B91C1C;
+      border: 1px solid #FECACA;
+      border-radius: 6px;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* Copilot Administrative Assistant Webchat Messages */
+    .copilot-msg {
+      border-radius: 12px;
+      padding: 11px 14px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .copilot-msg.bot {
+      background: #F1F5F9;
+      border: 1px solid #CBD5E1;
+      color: #0F172A;
+    }
+    .copilot-msg.user {
+      background: #00468B;
+      color: #FFFFFF;
+      align-self: flex-end;
+      max-width: 88%;
+    }
+    .copilot-prov-chip {
+      display: inline-block;
+      background: #DBEAFE;
+      color: #1E40AF;
+      border: 1px solid #93C5FD;
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-family: monospace;
+      font-size: 10px;
+      font-weight: 700;
+      margin-right: 4px;
+      margin-top: 4px;
+    }
+
+    /* Ctrl+K Quick Command Palette Modal */
+    .hub-cmd-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.50);
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 76px;
+      z-index: 350;
+    }
+    .hub-cmd-backdrop.open {
+      display: flex;
+    }
+    .hub-cmd-box {
+      width: 580px;
+      max-width: 92vw;
+      background: #FFFFFF;
+      border: 1px solid #CBD5E1;
+      border-radius: 10px;
+      box-shadow: 0 20px 45px rgba(15, 23, 42, 0.32);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .hub-cmd-input {
+      width: 100%;
+      border: 0;
+      border-bottom: 1px solid #E2E8F0;
+      padding: 13px 16px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #0F172A;
+      outline: none;
+    }
+    .hub-cmd-list {
+      max-height: 360px;
+      overflow-y: auto;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .hub-cmd-item {
+      background: transparent;
+      border: 0;
+      border-radius: 6px;
+      padding: 8px 12px;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #1E293B;
+    }
+    .hub-cmd-item:hover, .hub-cmd-item.selected {
+      background: #EFF6FF;
+      color: #00468B;
+    }
+    .hub-cmd-kbd {
+      font-family: Consolas, Monaco, monospace;
+      font-size: 10px;
+      font-weight: 700;
+      background: #F1F5F9;
+      color: #475569;
+      border: 1px solid #CBD5E1;
+      border-radius: 4px;
+      padding: 1px 6px;
+    }
+
+    /* Diagnostics Table */
+    .hub-diag-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+    .hub-diag-table th {
+      background: #E2E8F0;
+      color: #1E293B;
+      text-align: left;
+      padding: 5px 6px;
+      font-weight: 800;
+    }
+    .hub-diag-table td {
+      padding: 5px 6px;
+      border-bottom: 1px solid #E2E8F0;
+      color: #334155;
+      font-family: Consolas, Monaco, monospace;
+    }
+    .src-badge {
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 800;
+    }
+    .src-LIVE_NET { background: #DBEAFE; color: #1E40AF; }
+    .src-CACHE_MEM, .src-CACHE_IDB { background: #DCFCE7; color: #166534; }
+    .src-COALESCED { background: #FEF3C7; color: #92400E; }
+    .src-SIM_BLOCKED { background: #FEE2E2; color: #991B1B; }
+
+    /* Toast Alert */
+    .hub-toast {
+      position: fixed;
+      bottom: 18px;
+      right: 18px;
+      max-width: 440px;
+      background: #002B55;
+      color: #FFFFFF;
+      border: 2px solid #FFB81C;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 700;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+      display: none;
+      z-index: 400;
+    }
+    .hub-toast.show {
+      display: block;
     }
   </style>
 </head>
 <body>
-  <header class="demo-topbar">
-    <div class="demo-brand">
-      <span class="demo-badge">Public Demo Sandbox</span>
-      <div>
-        <div class="demo-title">Apex Foods - Midwest Plant 4 Sanitation Hub</div>
-        <div class="demo-sub">Spoofed Plant Dataset - Local In-Browser Dataverse Engine (Changes Persist Locally)</div>
-      </div>
-    </div>
-    <nav class="demo-nav" role="navigation" aria-label="Demo Apps">
-      <button type="button" class="demo-tab active" data-app="calendar">1. Master Sanitation (MSS)</button>
-      <button type="button" class="demo-tab" data-app="ganttly">2. Team Overview (Ganttly)</button>
-      <button type="button" class="demo-tab" data-app="shiftstart">3. Team Builder (Shift Start)</button>
-      <button type="button" class="demo-tab" data-app="mss">4. SAP Log Input</button>
-      <button type="button" class="demo-tab" data-app="director">5. Sanitation Director</button>
-      <button type="button" class="demo-tab" data-app="bolo">6. Pathogen BOLO</button>
-      <button type="button" class="demo-tab" data-app="manager">7. Managers Hub</button>
-      <button type="button" class="demo-tab" data-app="prodsched">8. Production Scheduler</button>
-    </nav>
-  </header>
-  <div class="demo-statsbar">
-    <div class="demo-pills" id="demo-stats-pills">
-      <span class="demo-pill">Supervisor: <strong>Marcus Vance (Crew D)</strong></span>
-      <span class="demo-open-callout">2 Open MSS Items: <code>ibl4 - caseout 74</code> (<code>SAP-D-386</code> / Devon Brooks) &amp; <code>hs - makeup 10</code> (<code>SAP-D-175</code> / Nadia Patel)</span>
-      <span class="demo-pill">Boards: <strong id="st-boards">0</strong></span>
-      <span class="demo-pill">Assignments: <strong id="st-tasks">0</strong></span>
-      <span class="demo-pill">Check-offs: <strong id="st-checkoffs">0</strong></span>
-      <span class="demo-pill">MSS Logs: <strong id="st-logs">0</strong></span>
-      <span class="demo-pill">Swabs: <strong id="st-swabs">0</strong></span>
-      <span class="demo-pill">Assets: <strong id="st-assets">0</strong></span>
-    </div>
-    <div style="display:flex;align-items:center;gap:6px;">
-      <button type="button" class="demo-btn btn-tour" id="btn-toggle-tour">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8" fill="currentColor"></polygon></svg>
-        Guided Tour (4-5 Min Walkthrough)
+  <!-- Single-Row 48px Corporate Navigation Bar -->
+  <div class="hub-topbar">
+    <div class="hub-brand">
+      <button id="brand-logo-btn" class="hub-emblem" onclick="toggleLogoDetailMode()" title="Apex Foods Brand Logo - Click to toggle Further Detail &amp; Live Dataverse Telemetry">
+        <span>Apex Foods</span>
       </button>
-      <button type="button" class="demo-btn" id="btn-reset-demo">Reset Demo Data</button>
+      <span class="hub-title" id="hub-brand-title">Midwest Plant Hub</span>
+      <button class="hub-portal-pill" onclick="toggleSplashOverlay(true)" title="Open 5-Portal Role-Segregated Splash Selector">
+        <span id="active-portal-badge">5 Portals</span>
+      </button>
+      <span id="prov-badge" class="hub-prov-badge" title="Verified OrganizationId: 446372c2-cd0d-f111-8c79-000d3a357709">LIVE</span>
+    </div>
+
+    <div class="hub-nav" id="primary-nav"></div>
+
+    <div class="hub-actions">
+      <button id="split-stage-btn" class="hub-pill-btn" onclick="togglePodiumSplitStage()" title="Live Side-by-Side Stage: Portal 1 Podium Tablet + Portal 2 Inspector Queue">
+        <span id="split-stage-lbl">Podium Split</span>
+      </button>
+      <button class="hub-copilot-btn" onclick="openDrawer('copilot')" title="Open Grounded Copilot Administrative Assistant Webchat &amp; Executive Briefs">
+        <span id="copilot-btn-lbl">Copilot Chat</span>
+      </button>
+      <button class="hub-pill-btn" onclick="openDrawer('views')" title="Customize Portal Views &amp; Executive Layouts">
+        <span id="views-btn-lbl">Views</span>
+      </button>
+      <button id="lang-toggle-btn" class="hub-pill-btn" onclick="toggleGlobalLanguage()" title="Switch Global Portal &amp; App Language (English / Espanol MX)">
+        <span id="lang-pill-lbl">EN / ES</span>
+      </button>
+      <button class="hub-pill-btn hub-detail-only" onclick="openCmdPalette()" title="Quick App &amp; Action Switcher (Ctrl+K)">
+        <span>Ctrl+K</span>
+      </button>
+      <button class="hub-pill-btn hub-detail-only" onclick="openDrawer('diag')" title="Open Live Speed Engine &amp; OData Request Diagnostics">
+        <span id="speed-pill-text">Engine: Live</span>
+      </button>
+      <button class="hub-pill-btn" onclick="openDrawer('profile')" title="Open User Profile, Active Login Persona &amp; Role Inspector">
+        <span class="hub-user-avatar" id="user-initials">TA</span>
+        <span id="user-pill-name">Marcus Vance</span>
+      </button>
     </div>
   </div>
-  <main class="demo-frame-wrap">
-    <iframe id="demo-app-frame" src="app.html?app=calendar" title="Demo Application Viewport"></iframe>
 
-    <!-- Guided Tour Popout -->
-    <aside id="tour-popout-card" class="tour-popout" role="dialog" aria-labelledby="tour-card-title">
-      <header class="tour-header" id="tour-drag-handle">
-        <div class="tour-header-left">
-          <span class="tour-badge" id="tour-step-badge">Step 1 of 7</span>
-          <div class="tour-title" id="tour-card-title">Master Sanitation Schedule (MSS)</div>
+  <!-- Sub-Header Live Dataverse Telemetry Bar (Revealed only when Apex Foods Logo Detail Gate is toggled ON) -->
+  <div class="hub-statsbar">
+    <div class="hub-stat-group">
+      <span class="hub-stat-item" style="color:#FBBF24;font-weight:800;">LOGO DETAIL MODE ACTIVE</span>
+      <span class="hub-stat-item">Assets: <strong id="cnt-assets">...</strong></span>
+      <span class="hub-stat-item">Areas: <strong id="cnt-areas">...</strong></span>
+      <span class="hub-stat-item">Roster: <strong id="cnt-employees">...</strong></span>
+      <span class="hub-stat-item">Checkoffs: <strong id="cnt-checkoffs">...</strong></span>
+      <span class="hub-stat-item">Shift Boards: <strong id="cnt-boards">...</strong></span>
+      <span class="hub-stat-item">Ganttly Assigns: <strong id="cnt-assigns">...</strong></span>
+      <span class="hub-stat-item">Prod Sched: <strong id="cnt-prod">...</strong></span>
+    </div>
+    <div class="hub-stat-group">
+      <span class="hub-stat-item">Live Net: <strong id="stat-net">0</strong></span>
+      <span class="hub-stat-item">Coalesced: <strong id="stat-coal">0</strong></span>
+      <span class="hub-stat-item">Cache Hits: <strong id="stat-cache">0</strong></span>
+      <button class="hub-mini-btn" onclick="switchApp('devcenter')">Portal 5: Dev Console</button>
+      <button class="hub-mini-btn" onclick="refreshActiveApp()">Refresh App</button>
+      <button class="hub-mini-btn" onclick="triggerManualProbe()">Verify Counts</button>
+    </div>
+  </div>
+
+  <!-- Persona / Elevation Banner -->
+  <div id="sim-banner" class="hub-sim-banner">
+    <span id="sim-banner-text">ACTIVE PERSONA VIEW</span>
+    <button class="hub-sim-exit-btn" onclick="exitSimulationMode()">Restore Default Login</button>
+  </div>
+
+  <!-- Non-Destructive Cross-App Update Bar -->
+  <div id="update-bar" class="hub-update-bar">
+    <span id="update-bar-text">Live Dataverse update detected in shared tables.</span>
+    <div style="display:flex;gap:8px;">
+      <button class="hub-btn-primary" style="padding:2px 9px;font-size:10.5px;" onclick="refreshActiveApp()">Refresh App Now</button>
+      <button class="hub-mini-btn" onclick="dismissUpdateBar()">Dismiss</button>
+    </div>
+  </div>
+
+  <!-- Keep-Alive Multi-Iframe Deck + Side-by-Side Podium Split Stage -->
+  <div id="app-deck" class="hub-deck">
+    <div id="split-stage" class="hub-split-stage">
+      <div class="podium-bezel">
+        <div class="podium-bezel-top">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="podium-cam-dot"></span>
+            <span id="split-left-title">PORTAL 1 - PLANT FLOOR PODIUM TABLET (BADGE SCAN)</span>
+          </div>
+          <span style="color:#94A3B8;font-size:10px;">90% Mobile / Tablet</span>
         </div>
-        <div class="tour-header-controls">
-          <button type="button" class="tour-icon-btn" id="tour-btn-minimize" title="Minimize / Expand Tour Window">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-          </button>
-          <button type="button" class="tour-icon-btn" id="tour-btn-close" title="Close Tour Window">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-          </button>
+        <iframe id="split-frame-employee" style="flex:1;width:100%;border:0;border-radius:16px;background:#FFFFFF;" title="Portal 1 Podium Tablet"></iframe>
+      </div>
+      <div class="inspector-stage-pane">
+        <div class="inspector-stage-top">
+          <span id="split-right-title">PORTAL 2 - FSQ / SANITATION INSPECTOR LIVE QUEUE &amp; 6M FISHBONE CAPA STUDIO</span>
+          <button onclick="togglePodiumSplitStage()" style="background:#FFB81C;color:#002B55;border:none;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:900;cursor:pointer;">Exit Split View</button>
         </div>
-      </header>
-      <div class="tour-stepper">
-        <div class="tour-dots" id="tour-dots-container"></div>
-        <div class="tour-timer">
-          <span id="tour-timer-label">Auto-Play: Off</span>
-          <button type="button" class="tour-icon-btn" id="tour-btn-timer-toggle" title="Toggle Auto-Play Walkthrough">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor"></polygon></svg>
+        <iframe id="split-frame-inspect" style="flex:1;width:100%;border:0;background:#F8FAFC;" title="Portal 2 Inspector Hub"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       EXECUTIVE 5-PORTAL ROLE-SEGREGATED SPLASH PAGE OVERLAY
+       ====================================================================== -->
+  <div id="splash-overlay" class="splash-overlay">
+    <div class="splash-topbar">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="hub-emblem" onclick="toggleLogoDetailMode()" title="Click Apex Foods Logo to toggle Further Detail Mode">
+          <span>Apex Foods</span>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:800;color:#FBBF24;letter-spacing:0.08em;text-transform:uppercase;" id="sp-eyebrow">
+            Midwest Plant SANITATION OPERATIONS &amp; FOOD SAFETY ARCHITECTURE
+          </div>
+          <div style="font-size:22px;font-weight:900;color:#FFFFFF;letter-spacing:-0.02em;" id="sp-main-title">
+            5-Portal Role-Segregated Enterprise Command Hub
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+        <button class="hub-copilot-btn" style="padding:7px 14px;font-size:12px;" onclick="toggleSplashOverlay(false);togglePodiumSplitStage(true);">
+          <span id="sp-split-btn">Live Demo: Podium Split View (Portal 1 + 2)</span>
+        </button>
+        <button class="hub-copilot-btn" style="padding:7px 14px;font-size:12px;background:linear-gradient(135deg,#059669 0%,#047857 100%);" onclick="toggleSplashOverlay(false);openDrawer('copilot');">
+          <span id="sp-copilot-btn">Open Copilot Executive Assistant</span>
+        </button>
+        <button class="hub-pill-btn" style="padding:7px 14px;font-size:12px;" onclick="toggleGlobalLanguage()">
+          <span id="sp-lang-btn">Language: EN / ES</span>
+        </button>
+        <button class="hub-pill-btn" style="padding:7px 14px;font-size:12px;background:#FFB81C;color:#002B55;border-color:#FFB81C;font-weight:900;" onclick="toggleSplashOverlay(false)">
+          <span id="sp-close-btn">Resume Active Workspace</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="splash-hero">
+      <div style="max-width:860px;">
+        <div style="font-size:13.5px;color:#CBD5E1;line-height:1.55;" id="sp-hero-desc">
+          Select a role-segregated portal below to scope navigation to that operational tier. Every further diagnostic detail is cleanly gated behind the <strong>Apex Foods logo</strong> in the top-left corner, keeping executive and plant-floor views pure and distraction-free.
+        </div>
+      </div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;">
+        <div style="background:rgba(15,23,42,0.85);border:1px solid rgba(255,184,28,0.4);border-radius:10px;padding:8px 14px;">
+          <div style="font-size:10px;font-weight:800;color:#94A3B8;text-transform:uppercase;">Dataverse Sandbox</div>
+          <div style="font-size:15px;font-weight:900;color:#34D399;">43 Tables Connected</div>
+        </div>
+        <div style="background:rgba(15,23,42,0.85);border:1px solid rgba(56,189,248,0.4);border-radius:10px;padding:8px 14px;">
+          <div style="font-size:10px;font-weight:800;color:#94A3B8;text-transform:uppercase;">Swab Verification</div>
+          <div style="font-size:15px;font-weight:900;color:#38BDF8;">60+ Days &amp; Vector CAPA</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="splash-grid" id="splash-cards-container"></div>
+  </div>
+
+  <!-- Ctrl+K Quick Command Palette Modal -->
+  <div id="cmd-backdrop" class="hub-cmd-backdrop" onclick="closeCmdPalette(event)">
+    <div class="hub-cmd-box" onclick="event.stopPropagation()">
+      <input id="cmd-input" class="hub-cmd-input" type="text" placeholder="Jump to any Portal (1-5), Midwest Plant app, or Copilot brief... (Esc to close)" autocomplete="off" />
+      <div id="cmd-list" class="hub-cmd-list"></div>
+    </div>
+  </div>
+
+  <!-- Slide-Over Drawer Backdrop -->
+  <div id="drawer-backdrop" class="hub-drawer-backdrop" onclick="closeDrawers()"></div>
+
+  <!-- User Profile & Active Login Persona Drawer -->
+  <div id="drawer-profile" class="hub-drawer">
+    <div class="hub-drawer-head">
+      <span class="hub-drawer-title">Active Login Persona &amp; Role Inspector</span>
+      <button class="hub-drawer-close" onclick="closeDrawers()">Close</button>
+    </div>
+    <div class="hub-drawer-body">
+      <div class="hub-card">
+        <div class="hub-card-title">Authenticated Entra / Dataverse Identity (WhoAmI)</div>
+        <div class="hub-kv-grid">
+          <div class="hub-kv-label">Full Name:</div>
+          <div class="hub-kv-val" id="prof-name">...</div>
+          <div class="hub-kv-label">Email / UPN:</div>
+          <div class="hub-kv-val" id="prof-email">...</div>
+          <div class="hub-kv-label">Title / Role:</div>
+          <div class="hub-kv-val" id="prof-title">...</div>
+          <div class="hub-kv-label">SystemUser ID:</div>
+          <div class="hub-kv-val" id="prof-uid">...</div>
+          <div class="hub-kv-label">Organization ID:</div>
+          <div class="hub-kv-val" id="prof-org">...</div>
+          <div class="hub-kv-label">Access Tier:</div>
+          <div class="hub-kv-val" id="prof-tier">...</div>
+        </div>
+      </div>
+
+      <div class="hub-card">
+        <div class="hub-card-title">Quick Executive &amp; Role Login Switcher</div>
+        <p style="margin:0 0 10px 0;font-size:11.5px;color:#475569;line-height:1.45;">
+          Switch active login persona to preview role-segregated portals and chat with the Copilot Administrative Assistant under that login context.
+        </p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;">
+          <button class="hub-btn-primary" onclick="switchExecutivePersona('VP_OPS')">VP of Operations</button>
+          <button class="hub-btn-primary" onclick="switchExecutivePersona('VP_QUAL')">VP of Quality &amp; FSQ</button>
+          <button class="hub-btn-primary" onclick="switchExecutivePersona('SUPERVISOR')">Sanitation Supervisor</button>
+          <button class="hub-btn-primary" onclick="switchExecutivePersona('INSPECTOR')">FSQ / CI Inspector</button>
+          <button class="hub-btn-primary" onclick="switchExecutivePersona('TECH')">Lead / Floor Tech</button>
+          <button class="hub-btn-primary" style="background:#0F172A;" onclick="exitSimulationMode()">Marcus Vance (Live)</button>
+        </div>
+        <label style="display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;color:#334155;margin-top:6px;">
+          <input type="checkbox" id="sim-readonly-lock" />
+          Enforce Read-Only Write Lock while viewing as switched persona
+        </label>
+      </div>
+
+      <div class="hub-card" id="sim-card">
+        <div class="hub-card-title">Switch to Specific Employee from Live Roster (<span id="roster-count-lbl">0</span> active)</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <select id="sim-emp-select" class="hub-select"></select>
+          <div style="display:flex;gap:8px;margin-top:4px;">
+            <button class="hub-btn-primary" onclick="applySelectedSimulation()">Switch to Selected Roster Login</button>
+            <button class="hub-btn-danger" onclick="exitSimulationMode()">Reset to My Live Identity</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Portal 4: Customize Views Drawer -->
+  <div id="drawer-views" class="hub-drawer">
+    <div class="hub-drawer-head">
+      <span class="hub-drawer-title">Portal 4 - Customize Executive Views</span>
+      <button class="hub-drawer-close" onclick="closeDrawers()">Close</button>
+    </div>
+    <div class="hub-drawer-body">
+      <div class="hub-card">
+        <div class="hub-card-title">1-Click Role &amp; Executive Layout Presets</div>
+        <div style="display:grid;gap:8px;">
+          <button class="hub-btn-primary" style="text-align:left;padding:10px 12px;" onclick="selectPortalScope('portal4')">
+            <strong>Senior Leadership Full Suite (Portal 4)</strong> - Managers Hub, Director, BOLO, MSS, Ganttly, Schedule, Inspect &amp; Evals
+          </button>
+          <button class="hub-btn-primary" style="text-align:left;padding:10px 12px;background:#047857;" onclick="selectPortalScope('portal2')">
+            <strong>VP of Quality &amp; FSQ Focus (Portal 2)</strong> - Inspect Equipment, 6M Fishbone CAPA Studio, Pathogen BOLO, MSS &amp; Ordering
+          </button>
+          <button class="hub-btn-primary" style="text-align:left;padding:10px 12px;background:#0369A1;" onclick="selectPortalScope('portal3')">
+            <strong>Supervisor &amp; Lead Operations (Portal 3)</strong> - Supervisor Hub, Employee Evals &amp; In-Training Gate, Shift Builder, Ganttly &amp; PBED
+          </button>
+          <button class="hub-btn-primary" style="text-align:left;padding:10px 12px;background:#B45309;" onclick="selectPortalScope('portal1')">
+            <strong>Floor Tech &amp; Podium Tablet (Portal 1)</strong> - Badge Barcode Scanner, 8 Touch Cards, Call for Pre-Inspection &amp; Area Clock
+          </button>
+          <button class="hub-btn-primary" style="text-align:left;padding:10px 12px;background:#1E293B;" onclick="selectPortalScope('portal5')">
+            <strong>Developer &amp; Architecture Console (Portal 5)</strong> - 43-Table Ecosystem, Latency Telemetry, OData Runner &amp; PAC CLI
           </button>
         </div>
       </div>
-      <div class="tour-body" id="tour-body-content"></div>
-      <footer class="tour-footer">
-        <div class="tour-footer-left">
-          <button type="button" class="tour-action-btn secondary" id="tour-btn-prev">Previous</button>
-          <button type="button" class="tour-action-btn secondary" id="tour-btn-replay">Replay Step</button>
+
+      <div class="hub-card">
+        <div class="hub-card-title">Default Landing Portal &amp; Presentation Options</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <label style="font-size:12px;font-weight:700;color:#334155;">Default Landing App on Portal Open:</label>
+          <select id="pref-default-app" class="hub-select" onchange="saveProfilePrefs()">
+            <option value="employee">Portal 1: Lead + Employee Podium Hub</option>
+            <option value="inspect">Portal 2: FSQ Inspector &amp; 6M Fishbone CAPA Hub</option>
+            <option value="supervisor">Portal 3: Training Supervisor Hub</option>
+            <option value="people">Portal 3: Employee Roster, Pros/Cons &amp; Evals</option>
+            <option value="manager">Portal 4: Senior Leadership Managers Hub</option>
+            <option value="director">Portal 4: Sanitation Director v1.00007</option>
+            <option value="bolo">Portal 2/4: Pathogen BOLO &amp; Swab Heatmaps</option>
+            <option value="calendar">Portal 2/4: Master Sanitation Schedule (MSS)</option>
+            <option value="ganttly">Portal 3/4: Live Shift Overview (Ganttly)</option>
+            <option value="devcenter">Portal 5: Developer Command Center</option>
+          </select>
+          <button class="hub-btn-primary" onclick="toggleLogoDetailMode()">
+            Toggle Apex Foods Logo "Further Detail" Mode
+          </button>
         </div>
-        <div class="tour-footer-right">
-          <button type="button" class="tour-action-btn" id="tour-btn-do-action">Try Action</button>
-          <button type="button" class="tour-action-btn primary" id="tour-btn-next">Next Step</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Portal 4: Grounded Microsoft Copilot Administrative Assistant Webchat Drawer -->
+  <div id="drawer-copilot" class="hub-drawer" style="width:540px;">
+    <div class="hub-drawer-head" style="background:linear-gradient(90deg,#002B55 0%,#0369A1 100%);">
+      <div>
+        <div style="font-size:10px;font-weight:800;color:#7DD3FC;letter-spacing:0.06em;text-transform:uppercase;">
+          MICROSOFT COPILOT-ALIGNED ADMINISTRATIVE ASSISTANT
         </div>
-      </footer>
-    </aside>
-  </main>
+        <span class="hub-drawer-title">Midwest Plant Executive Copilot (Zero-Hallucination Grounded)</span>
+      </div>
+      <button class="hub-drawer-close" onclick="closeDrawers()">Close</button>
+    </div>
+    <div class="hub-drawer-body" style="justify-content:space-between;">
+      <div>
+        <div class="hub-card" style="margin-bottom:10px;background:#EFF6FF;border-color:#BFDBFE;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:11px;font-weight:800;color:#1E3A8A;">
+              Chatting as Login: <strong id="copilot-active-login">Marcus Vance (Sr Mgr Sanitation)</strong>
+            </span>
+            <button class="hub-mini-btn" style="background:#00468B;color:#FFFFFF;border:none;" onclick="printExecutiveBrief()">
+              Print 1-Page Executive Brief
+            </button>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;">
+            <button class="hub-mini-btn" onclick="askCopilotPrompt('vp_ops')">VP of Ops Brief</button>
+            <button class="hub-mini-btn" onclick="askCopilotPrompt('vp_qual')">VP of Quality Swab &amp; CAPA Audit</button>
+            <button class="hub-mini-btn" onclick="askCopilotPrompt('preinspect')">Live Pre-Inspection Queue</button>
+            <button class="hub-mini-btn" onclick="askCopilotPrompt('training')">In-Training &amp; Evals Summary</button>
+            <button class="hub-mini-btn" onclick="askCopilotPrompt('split')">Launch Podium Split View</button>
+          </div>
+        </div>
+
+        <div id="copilot-chat-log" style="display:flex;flex-direction:column;gap:10px;max-height:54vh;overflow-y:auto;padding-right:4px;"></div>
+      </div>
+
+      <form onsubmit="submitCopilotQuestion(event)" style="display:flex;gap:8px;padding-top:10px;border-top:1px solid #E2E8F0;">
+        <input id="copilot-input" class="hub-input" type="text" placeholder="Ask Copilot about MSS, swabs, CAPA fishbone, pre-inspections, or crew..." autocomplete="off" />
+        <button type="submit" class="hub-btn-primary" style="white-space:nowrap;">Ask Copilot</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Speed Engine & Provenance Diagnostics Drawer -->
+  <div id="drawer-diag" class="hub-drawer" style="width:620px;">
+    <div class="hub-drawer-head">
+      <span class="hub-drawer-title">Midwest Plant Speed Engine &amp; Live Dataverse Diagnostics</span>
+      <button class="hub-drawer-close" onclick="closeDrawers()">Close</button>
+    </div>
+    <div class="hub-drawer-body">
+      <div class="hub-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <span class="hub-card-title" style="margin:0;">Verified Live Table Row Counts &amp; RowVersion Tokens</span>
+          <div style="display:flex;gap:6px;">
+            <button class="hub-mini-btn" onclick="triggerManualProbe()">Probe Now</button>
+            <button class="hub-mini-btn" onclick="purgeAllCaches()">Purge RAM + IndexedDB Cache</button>
+          </div>
+        </div>
+        <table class="hub-diag-table">
+          <thead>
+            <tr>
+              <th>Table EntitySet</th>
+              <th>Description</th>
+              <th>Live Rows</th>
+              <th>Max VersionNumber</th>
+              <th>Latency</th>
+            </tr>
+          </thead>
+          <tbody id="diag-probe-tbody"></tbody>
+        </table>
+      </div>
+
+      <div class="hub-card">
+        <div class="hub-card-title">Real-Time OData Request Ledger (Last 50 Operations)</div>
+        <div style="max-height:340px;overflow-y:auto;">
+          <table class="hub-diag-table">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>App</th>
+                <th>Method</th>
+                <th>Table</th>
+                <th>Source</th>
+                <th>Rows</th>
+                <th>ms</th>
+              </tr>
+            </thead>
+            <tbody id="diag-ledger-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="hub-toast" class="hub-toast"></div>
 
   <script>
     (function () {
-      var frame = document.getElementById('demo-app-frame');
-      var tabs = Array.prototype.slice.call(document.querySelectorAll('.demo-tab'));
+      var engine = window.__MidwestPlant_SPEED_ENGINE__;
+      var deckEl = document.getElementById('app-deck');
+      var MAX_KEEP_ALIVE_FRAMES = 12;
 
-      function switchApp(appKey) {
-        tabs.forEach(function (t) {
-          t.classList.toggle('active', t.getAttribute('data-app') === appKey);
-        });
-        frame.src = 'app.html?app=' + encodeURIComponent(appKey) + '&t=' + Date.now();
-      }
+      var globalLang = 'en';
+      try {
+        if (localStorage.getItem('__1_ss_lang_v1') === 'es') globalLang = 'es';
+      } catch (e) {}
 
-      tabs.forEach(function (t) {
-        t.addEventListener('click', function () {
-          switchApp(t.getAttribute('data-app'));
-        });
-      });
+      var detailMode = false; // Default on load: Pure Presentation Mode (all further details gated behind Apex Foods Logo)
+      var splitStageActive = false;
+      var activePortalId = 'portal4';
 
-      function refreshStats() {
-        if (!window.ApexDemoEngine) return;
-        var st = window.ApexDemoEngine.getStats();
-        document.getElementById('st-boards').textContent = st.shiftboards;
-        document.getElementById('st-tasks').textContent = st.assignments || st.taskassignments;
-        document.getElementById('st-checkoffs').textContent = st.checkoffs;
-        document.getElementById('st-logs').textContent = st.logs;
-        document.getElementById('st-swabs').textContent = st.swabs;
-        document.getElementById('st-assets').textContent = st.assets;
-      }
+      var APP_LABELS = {
+        employee:   '1. Employee & Lead Hub',
+        inspect:    '2. Inspect & CAPA Studio',
+        supervisor: '3. Supervisor Hub',
+        people:     '4. Employee Evals & Roster',
+        calendar:   '5. MSS Calendar',
+        ganttly:    '6. Live Ganttly',
+        shiftstart: '7. Shift Builder',
+        mss:        '8. SAP Log Input',
+        director:   '9. Sanitation Director',
+        bolo:       '10. Pathogen BOLO',
+        manager:    '11. Managers Hub',
+        prodsched:  '12. Prod Scheduler',
+        pbed:       '13. PBED Equipment',
+        training:   '14. Training Matrix',
+        ordering:   '15. Sanitation Ordering',
+        mapsubmit:  '16. Facility Map',
+        devcenter:  '17. Dev Command Center',
+        ecosystem:  '18. Dataverse Ecosystem'
+      };
 
-      window.__APEX_DEMO_LISTENERS__ = [refreshStats];
-      setInterval(refreshStats, 1000);
-      refreshStats();
-
-      document.getElementById('btn-reset-demo').addEventListener('click', function () {
-        if (window.ApexDemoEngine) {
-          window.ApexDemoEngine.resetToSeed();
-          refreshStats();
-          frame.contentWindow.location.reload();
-        }
-      });
-
-      var urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('app')) {
-        switchApp(urlParams.get('app'));
-      }
-      window.switchDemoApp = switchApp;
-
-      // =====================================================================
-      // GUIDED TOUR DATA & CONTROLLER (4-5 MIN INTERACTIVE WALKTHROUGH)
-      // =====================================================================
-      var TOUR_STEPS = [
+      var PORTAL_DEFS = [
         {
-          id: 'step_calendar',
-          app: 'calendar',
-          badge: 'Step 1 of 7 - Compliance Engine',
-          title: 'Master Sanitation Schedule (MSS)',
-          desc: 'The regulatory compliance record and single source of truth for the entire facility. Tracks cleaning frequencies (Daily, Weekly, Periodic, Annual) across all 750 equipment assets in 37 plant areas.',
-          connection: 'Master Sanitation never requires manual duplicate paper logs. When work is completed in Ganttly, Shift Start, or SAP Log Input, records write directly to Dataverse craa5___1_l_log and reflect here immediately.',
-          actionTitle: 'Notice the 2 Open Overdue Items',
-          actionDesc: 'Notice the red LATE ONLY 2 button in the header. The plant dataset is pre-seeded with all historical cleans complete EXCEPT two specific items: ibl4 - caseout 74 (IBL4 / Devon Brooks) and hs - makeup 10 (highspeed / Nadia Patel).',
-          actionBtnLabel: 'Filter to Late Items',
-          onAction: function() {
-            try {
-              var doc = frame.contentDocument || frame.contentWindow.document;
-              var lateBtn = Array.from(doc.querySelectorAll('button')).find(function(b) { return /LATE ONLY/i.test(b.innerText || ''); });
-              if (lateBtn) lateBtn.click();
-            } catch (e) {}
-          }
+          id: 'portal1',
+          shortBadge: 'Portal 1: Floor Hub',
+          badgeEn: 'PORTAL 1 - 90% PHONE & PODIUM TABLET',
+          badgeEs: 'PORTAL 1 - 90% CELULAR Y TABLET EN PODIO',
+          badgeColor: '#F59E0B',
+          titleEn: '1. Lead + Employee Hub',
+          titleEs: '1. Centro de Lideres y Empleados',
+          descEn: 'Gloved-hand mobile & podium tablet station with Barcode Badge Scanner, Assigned Shift Tasks, 1-Tap Call for Pre-Inspection, Area Ganttly Clock, Today/Tomorrow Schedule, Supervisor Goals, High Fives, Problem Submit & Profile Center.',
+          descEs: 'Estacion movil y tablet de podio con Escaner de Gafete, Tareas del Turno, Llamado a Pre-Inspeccion, Reloj Ganttly de Area, Horario Hoy/Manana, Metas del Supervisor, High Fives y Perfil.',
+          defaultApp: 'employee',
+          primaryTabs: [
+            { key: 'employee', labelEn: '1. Employee & Podium Hub', labelEs: '1. Hub Empleado y Podio' },
+            { key: 'ganttly',  labelEn: '2. Area Ganttly Clock',    labelEs: '2. Reloj Ganttly de Area' },
+            { key: 'prodsched',labelEn: '3. Today & Tomorrow Runs', labelEs: '3. Corridas Hoy y Manana' },
+            { key: 'mss',      labelEn: '4. Quick Log Submit',      labelEs: '4. Envio Rapido de Log' }
+          ],
+          btnLabelEn: 'Launch Portal 1 (Employee & Tablet Hub)',
+          btnLabelEs: 'Abrir Portal 1 (Hub de Empleado y Podio)',
+          btnBg: 'linear-gradient(135deg, #FFB81C 0%, #D97706 100%)',
+          btnColor: '#0F172A'
         },
         {
-          id: 'step_shiftstart',
-          app: 'shiftstart',
-          badge: 'Step 2 of 7 - Shift Leadership',
-          title: 'Team Builder (Shift Start)',
-          desc: 'Used by Shift Supervisors (such as Marcus Vance / Crew D) before and during the 12-hour shift. Supervisors confirm tech attendance, balance workloads, and assign staff to rooms and equipment.',
-          connection: 'Saved team rosters and room pins write directly to Dataverse craa5___1_s_shiftboard and craa5___1_g_assignment. Floor teams and Ganttly read this exact board to build the shift timeline without manual coordination.',
-          actionTitle: 'Live Floor Staffing in Action',
-          actionDesc: 'Notice Devon Brooks assigned to IBL4 and Nadia Patel assigned to Highspeed. These assignments carry directly into Ganttly worker lanes.',
-          actionBtnLabel: 'Focus Shift Board',
-          onAction: function() {
-            try {
-              var doc = frame.contentDocument || frame.contentWindow.document;
-              var roomCard = doc.querySelector('[data-room-card=\"IBL4\"]') || doc.body;
-              if (roomCard) roomCard.scrollIntoView({ behavior: 'smooth' });
-            } catch (e) {}
-          }
+          id: 'portal2',
+          shortBadge: 'Portal 2: FSQ & Inspect',
+          badgeEn: 'PORTAL 2 - FSQ, CI LEADS & ADMINS',
+          badgeEs: 'PORTAL 2 - INSPECTORES FSQ, CI Y ADMINS',
+          badgeColor: '#10B981',
+          titleEn: '2. FSQ / Sanitation Inspector Hub',
+          titleEs: '2. Hub de Inspectores FSQ y Sanitizacion',
+          descEn: 'Live Equipment Pre-Inspection Verification (MSID or Badge Scan), Swab Verification (>1% Positives), Interactive 6M Fishbone + 5-Why + RCA CAPA Studio, MSS Checking, Sanitation Ordering, Pathogen BOLO & Leadership-in-Training Badge Gate.',
+          descEs: 'Verificacion de Pre-Inspeccion de Equipos, Hisopos Positivos (>1%), Estudio CAPA Espina de Pescado 6M + 5-Porques, Revision MSS, Ordenes Quimicas, BOLO y Puerta de Gafete en Entrenamiento.',
+          defaultApp: 'inspect',
+          primaryTabs: [
+            { key: 'inspect',  labelEn: '1. Inspect & 6M Fishbone CAPA', labelEs: '1. Inspeccion y CAPA 6M' },
+            { key: 'bolo',     labelEn: '2. Pathogen Reports (BOLO)',    labelEs: '2. Reportes Patogenos BOLO' },
+            { key: 'calendar', labelEn: '3. MSS Checking',               labelEs: '3. Revision MSS' },
+            { key: 'ordering', labelEn: '4. Sanitation Ordering',        labelEs: '4. Ordenes de Sanitizacion' }
+          ],
+          btnLabelEn: 'Launch Portal 2 (Inspector & CAPA Hub)',
+          btnLabelEs: 'Abrir Portal 2 (Inspector y CAPA)',
+          btnBg: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+          btnColor: '#042F2E'
         },
         {
-          id: 'step_ganttly_overview',
-          app: 'ganttly',
-          badge: 'Step 3 of 7 - Real-Time Pulse',
-          title: 'Ganttly: 24-Hour Donut Clocks',
-          desc: 'The live floor execution dashboard for leads and supervisors. The OVERVIEW tab displays 24-hour clock donuts visualizing equipment progress and shift completion at a glance.',
-          connection: 'Aggregates live check-off rows and SAP completions. Waterjet and IBL5 show All Done 100% (green), while IBL4 shows 7/8 pcs (84%) and Highspeed shows 13/14 pcs because of our two open items.',
-          actionTitle: 'Room Utilization & Status',
-          actionDesc: 'Click the METRICS tab in Ganttly to see overall plant progress at 99% (311 done, 2 in progress) and 57% crew capacity utilization.',
-          actionBtnLabel: 'Switch to METRICS Tab',
-          onAction: function() {
-            try {
-              var doc = frame.contentDocument || frame.contentWindow.document;
-              var btn = Array.from(doc.querySelectorAll('button')).find(function(b) { return /^METRICS$/i.test((b.innerText || '').trim()); });
-              if (btn) btn.click();
-            } catch (e) {}
-          }
+          id: 'portal3',
+          shortBadge: 'Portal 3: Supervisor',
+          badgeEn: 'PORTAL 3 - SUPERVISOR & LEAD OPERATIONS',
+          badgeEs: 'PORTAL 3 - OPERACIONES DE SUPERVISOR Y LIDER',
+          badgeColor: '#38BDF8',
+          titleEn: '3. Supervisor + Lead Portal',
+          titleEs: '3. Portal de Supervisor y Lideres',
+          descEn: 'Training Supervisor Hub, Employee Roster & Evaluations Studio (Pros/Cons, Remarks, Performance Evaluations & "In Training" Badge Elevation Toggle), Shift Builder, Shift Overview (Ganttly), Training Matrix, PBED, SAP Submission & Map Access.',
+          descEs: 'Hub de Supervisor, Evaluaciones de Empleados (Pros/Contras, Comentarios, Evaluaciones y Toggle "En Entrenamiento"), Armador de Turno, Ganttly, Matriz de Entrenamiento, PBED, SAP y Mapa.',
+          defaultApp: 'supervisor',
+          primaryTabs: [
+            { key: 'supervisor', labelEn: '1. Training Supervisor Hub', labelEs: '1. Hub de Supervisor' },
+            { key: 'people',     labelEn: '2. Employee Evals & Roster', labelEs: '2. Evaluaciones y Empleados' },
+            { key: 'shiftstart', labelEn: '3. Shift Builder',           labelEs: '3. Armador de Turno' },
+            { key: 'ganttly',    labelEn: '4. Shift Overview (Ganttly)',labelEs: '4. Vista de Turno (Ganttly)' },
+            { key: 'training',   labelEn: '5. Training Matrix',         labelEs: '5. Matriz de Entrenamiento' },
+            { key: 'pbed',       labelEn: '6. PBED',                    labelEs: '6. PBED' },
+            { key: 'mss',        labelEn: '7. SAP Submission',          labelEs: '7. Envio SAP' },
+            { key: 'mapsubmit',  labelEn: '8. Map Access',              labelEs: '8. Acceso al Mapa' }
+          ],
+          btnLabelEn: 'Launch Portal 3 (Supervisor + Lead Portal)',
+          btnLabelEs: 'Abrir Portal 3 (Supervisor y Lideres)',
+          btnBg: 'linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%)',
+          btnColor: '#FFFFFF'
         },
         {
-          id: 'step_ganttly_propagation',
-          app: 'ganttly',
-          badge: 'Step 4 of 7 - Live Cross-App Sync',
-          title: 'PBED Timeline & 1-Click Propagation',
-          desc: 'The PBED tab visualizes the staircase Gantt schedule for every technician and piece of equipment. Highspeed and IBL4 are expanded with their cleaning steps.',
-          connection: 'Watch cross-app propagation in action! Click Complete Step on Devon Brooks\'s IBL4 task (ibl4 - caseout 74). In Ganttly, IBL4 becomes 8/8 (100% Done). In Master Sanitation (MSS), the red LATE ONLY count drops immediately from 2 to 1!',
-          actionTitle: 'Complete IBL4 Item in Ganttly',
-          actionDesc: 'Click Complete IBL4 Now below to complete Devon Brooks\'s task directly via the Dataverse engine and see the real-time update propagate across both apps.',
-          actionBtnLabel: 'Complete IBL4 Item Now',
-          onAction: function() {
-            try {
-              var doc = frame.contentDocument || frame.contentWindow.document;
-              var compBtns = Array.from(doc.querySelectorAll('button')).filter(function(b) { return /^Complete Step$/i.test((b.innerText || '').trim()); });
-              var ibl4Btn = compBtns.find(function(b) {
-                var cur = b;
-                while (cur && cur !== doc.body) {
-                  if ((cur.innerText || '').indexOf('IBL4') >= 0) return true;
-                  cur = cur.parentElement;
-                }
-                return false;
-              }) || compBtns[compBtns.length - 1];
-              if (ibl4Btn) {
-                ibl4Btn.click();
-              } else if (window.ApexDemoEngine) {
-                // Fallback direct checkoff write if user is on another tab
-                var chks = window.ApexDemoEngine.getTableRows('craa5___1_g_checkoff');
-                window.ApexDemoEngine.createRow('craa5___1_g_checkoff', {
-                  craa5_equipmentguid: 'e0000000-0000-4000-8000-999999995386',
-                  craa5_status: 'done',
-                  craa5_area: 'IBL4',
-                  craa5_equipment: 'ibl4 - caseout 74',
-                  craa5_cleankind: 'daily',
-                  craa5_shiftdate: new Date().toISOString().slice(0, 10)
-                });
-              }
-              refreshStats();
-            } catch (e) {}
-          }
+          id: 'portal4',
+          shortBadge: 'Portal 4: Leadership',
+          badgeEn: 'PORTAL 4 - VP OF OPS, VP OF QUALITY & SR LEADERSHIP',
+          badgeEs: 'PORTAL 4 - VP DE OPERACIONES, VP DE CALIDAD Y LIDERAZGO',
+          badgeColor: '#FBBF24',
+          featured: true,
+          titleEn: '4. Senior Leadership Hub',
+          titleEs: '4. Hub de Liderazgo Senior',
+          descEn: 'Full executive access to all applications, Customize Views Studio, 1-Page Printable Executive Briefs, and the Microsoft Copilot-aligned Administrative Assistant Webchat grounded on live Dataverse tables.',
+          descEs: 'Acceso ejecutivo completo a todas las aplicaciones, Personalizar Vistas, Resumenes Ejecutivos Imprimibles y Asistente Webchat estilo Microsoft Copilot conectado a Dataverse.',
+          defaultApp: 'manager',
+          primaryTabs: [
+            { key: 'manager',    labelEn: '1. Managers Hub',        labelEs: '1. Hub de Gerentes' },
+            { key: 'director',   labelEn: '2. Sanitation Director', labelEs: '2. Director de Sanitizacion' },
+            { key: 'bolo',       labelEn: '3. Pathogen BOLO',       labelEs: '3. Patogenos BOLO' },
+            { key: 'calendar',   labelEn: '4. MSS Calendar',        labelEs: '4. Calendario MSS' },
+            { key: 'ganttly',    labelEn: '5. Live Ganttly',        labelEs: '5. Ganttly en Vivo' },
+            { key: 'prodsched',  labelEn: '6. Prod Scheduler',      labelEs: '6. Programador Produccion' },
+            { key: 'inspect',    labelEn: '7. CAPA & Inspect',      labelEs: '7. CAPA e Inspeccion' },
+            { key: 'people',     labelEn: '8. Employee Evals',      labelEs: '8. Evaluaciones' }
+          ],
+          btnLabelEn: 'Launch Portal 4 (Senior Leadership Hub)',
+          btnLabelEs: 'Abrir Portal 4 (Liderazgo Senior)',
+          btnBg: 'linear-gradient(135deg, #00468B 0%, #0072CE 100%)',
+          btnColor: '#FFFFFF'
         },
         {
-          id: 'step_sap_mss',
-          app: 'mss',
-          badge: 'Step 5 of 7 - ERP & Work Orders',
-          title: 'SAP Log Input',
-          desc: 'Rapid work order entry for plants integrated with SAP PM. Leads enter SAP codes to bulk-confirm completed sanitations directly into plant records.',
-          connection: 'Enter code SAP-D-175 for Nadia Patel\'s hs - makeup 10 (or click the button below). Submitting this log writes to craa5___1_l_log and craa5___1_g_checkoff, clearing the final overdue item across both MSS and Ganttly.',
-          actionTitle: 'Close Final Overdue Item (SAP-D-175)',
-          actionDesc: 'Submitting this record drops the MSS Calendar late count to 0 (All caught up) and marks Highspeed 14/14 (100% Done) in Ganttly.',
-          actionBtnLabel: 'Submit Nadia\'s SAP Record',
-          onAction: function() {
-            try {
-              var doc = frame.contentDocument || frame.contentWindow.document;
-              var sapInp = doc.querySelector('input[data-row=\"0\"][data-col=\"sap\"]');
-              var hrsInp = doc.querySelector('input[data-row=\"0\"][data-col=\"hours\"], input[placeholder*=\"hour\" i]');
-              var byInp = doc.querySelector('input[data-row=\"0\"][data-col=\"by\"], input[data-row=\"0\"][data-col=\"cleanedby\"]');
-              if (sapInp) {
-                var setVal = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
-                setVal.call(sapInp, 'SAP-D-175');
-                sapInp.dispatchEvent(new Event('input', { bubbles: true }));
-                sapInp.dispatchEvent(new Event('change', { bubbles: true }));
-                if (hrsInp) { setVal.call(hrsInp, '0.75'); hrsInp.dispatchEvent(new Event('input', { bubbles: true })); }
-                if (byInp) { setVal.call(byInp, 'Nadia Patel'); byInp.dispatchEvent(new Event('input', { bubbles: true })); }
-                var subBtn = Array.from(doc.querySelectorAll('button')).find(function(b) { return /Submit All Records/i.test(b.innerText || ''); });
-                if (subBtn) subBtn.click();
-                setTimeout(function() {
-                  var yes = doc.querySelector('[data-confirm-yes]') || Array.from(doc.querySelectorAll('button')).find(function(b) { return /Yes, go ahead/i.test(b.innerText || ''); });
-                  if (yes) yes.click();
-                  refreshStats();
-                }, 400);
-              } else if (window.ApexDemoEngine) {
-                window.ApexDemoEngine.createRow('craa5___1_l_log', {
-                  craa5_equipmentguid: 'e0000000-0000-4000-8000-999999995175',
-                  craa5_equipment: 'hs - makeup 10',
-                  craa5_area: 'highspeed',
-                  craa5_sap: 'SAP-D-175',
-                  craa5_cleankind: 'daily',
-                  craa5_daily: true,
-                  craa5_nameofemployee: 'Nadia Patel',
-                  craa5_shiftdate: new Date().toISOString().slice(0, 10),
-                  craa5_hoursworked: 0.75
-                });
-                refreshStats();
-              }
-            } catch (e) {}
-          }
-        },
-        {
-          id: 'step_director',
-          app: 'director',
-          badge: 'Step 6 of 7 - Executive Modeling',
-          title: 'Sanitation Director (v1.00005 Controller)',
-          desc: 'Controller-grade financial and labor modeling for plant managers and directors. Includes all 7 tabs: Executive Brief, Current Reality, Cost & Labor Engine, Weekly Schedule Sim, 26-Week Roadmap, Pay & Comp, and Assumptions & Data.',
-          connection: 'Simulates production schedules, 4x10 vs 7-day shift structures, and wage/overtime sensitivity against actual plant asset standards without altering active floor boards.',
-          actionTitle: 'Explore Weekly Schedule Sim & Cost Engine',
-          actionDesc: 'Click Weekly Schedule Sim to model line run windows and see real-time sanitation headcounts and cost impacts.',
-          actionBtnLabel: 'Open Weekly Schedule Sim',
-          onAction: function() {
-            try {
-              var doc = frame.contentDocument || frame.contentWindow.document;
-              var btn = Array.from(doc.querySelectorAll('button')).find(function(b) { return /Weekly Schedule Sim|Cost & Labor Engine/i.test(b.innerText || ''); });
-              if (btn) btn.click();
-            } catch (e) {}
-          }
-        },
-        {
-          id: 'step_bolo_ecosystem',
-          app: 'bolo',
-          badge: 'Step 7 of 7 - Unified Quality Ecosystem',
-          title: 'Pathogen BOLO & 2-Week Production Scheduler',
-          desc: 'Tracks 2+ months of daily microbiological swab results (420+ swabs across 60 sites in Zones 1-4) alongside 2 full weeks of multi-run schedules in Production Scheduler.',
-          connection: 'Together with Managers Hub (audit trails) and Production Scheduler (line coordination), all 8 applications function as a single synchronized sanitation operating system.',
-          actionTitle: 'Inspect 2-Week Production Scheduler',
-          actionDesc: 'Click below to jump to Production Scheduler and explore 14 days of multi-run schedules, allergen washes, and clean windows across all 10 lines.',
-          actionBtnLabel: 'Open Production Scheduler',
-          onAction: function() {
-            switchApp('prodsched');
-          }
+          id: 'portal5',
+          shortBadge: 'Portal 5: Developer',
+          badgeEn: 'PORTAL 5 - PAC CLI, ODATA & 43-TABLE ECOSYSTEM',
+          badgeEs: 'PORTAL 5 - PAC CLI, ODATA Y ECOSISTEMA 43 TABLAS',
+          badgeColor: '#A78BFA',
+          titleEn: '5. Developer Command Center',
+          titleEs: '5. Centro de Comando de Desarrollador',
+          descEn: 'Live 43-Table Dataverse Ecosystem & Zero-Drift Inspector, Usage & Pre-Inspection Latency Telemetry, PIN-Guarded Read-Only OData Query Runner, and PAC CLI Solution Studio.',
+          descEs: 'Inspector en Vivo del Ecosistema Dataverse de 43 Tablas, Telemetria de Uso y Latencia, Consola OData Segura y Estudio PAC CLI.',
+          defaultApp: 'devcenter',
+          primaryTabs: [
+            { key: 'devcenter', labelEn: '1. Dev Command Center (PAC/OData)', labelEs: '1. Centro Dev (PAC/OData)' },
+            { key: 'ecosystem', labelEn: '2. Migration & Schema Inspector',   labelEs: '2. Inspector de Migracion' }
+          ],
+          btnLabelEn: 'Launch Portal 5 (Developer Console)',
+          btnLabelEs: 'Abrir Portal 5 (Consola Desarrollador)',
+          btnBg: 'linear-gradient(135deg, #6366F1 0%, #4F46E5 100%)',
+          btnColor: '#FFFFFF'
         }
       ];
 
-      var curStepIdx = 0;
-      var autoPlayTimer = null;
-      var autoPlayRemainSec = 40;
-      var tourCard = document.getElementById('tour-popout-card');
-      var tourBody = document.getElementById('tour-body-content');
-      var tourTitle = document.getElementById('tour-card-title');
-      var tourBadge = document.getElementById('tour-step-badge');
-      var dotsContainer = document.getElementById('tour-dots-container');
-      var timerLabel = document.getElementById('tour-timer-label');
-      var btnAction = document.getElementById('tour-btn-do-action');
+      var mountedFrames = {};
+      var activeAppKey = 'calendar';
 
-      function renderDots() {
-        dotsContainer.innerHTML = '';
-        TOUR_STEPS.forEach(function (st, idx) {
-          var dot = document.createElement('div');
-          dot.className = 'tour-dot' + (idx === curStepIdx ? ' active' : (idx < curStepIdx ? ' done' : ''));
-          dot.title = (idx + 1) + '. ' + st.title;
-          dot.addEventListener('click', function () { setTourStep(idx); });
-          dotsContainer.appendChild(dot);
+      function getAppFrameUrl(appKey) {
+        var isWebResource = window.location.pathname.indexOf('/WebResources/') !== -1;
+        var isPowerPages = /\.powerappsportals\.com$/i.test(window.location.hostname || '');
+        var extra = (appKey === 'people') ? '&tab=employeequery' : '';
+        if (isWebResource) {
+          return '/WebResources/craa5_MidwestPlant_hub_app.html?app=' + encodeURIComponent(appKey) + extra + '&v=4';
+        }
+        if (isPowerPages) {
+          return '/?app=' + encodeURIComponent(appKey) + extra + '&v=4';
+        }
+        return 'app.html?app=' + encodeURIComponent(appKey) + extra + '&v=4';
+      }
+
+      function broadcastToFrames(msgObj) {
+        Object.keys(mountedFrames).forEach(function (k) {
+          var f = mountedFrames[k] && mountedFrames[k].iframe;
+          if (f && f.contentWindow) {
+            try { f.contentWindow.postMessage(msgObj, '*'); } catch (e) {}
+          }
+        });
+        ['split-frame-employee', 'split-frame-inspect'].forEach(function (id) {
+          var sf = document.getElementById(id);
+          if (sf && sf.contentWindow) {
+            try { sf.contentWindow.postMessage(msgObj, '*'); } catch (e) {}
+          }
         });
       }
 
-      function setTourStep(idx) {
-        if (idx < 0) idx = 0;
-        if (idx >= TOUR_STEPS.length) idx = TOUR_STEPS.length - 1;
-        curStepIdx = idx;
-        var s = TOUR_STEPS[idx];
+      // Universal Apex Foods Logo "Further Detail" Gate
+      window.toggleLogoDetailMode = function (forceVal) {
+        detailMode = (typeof forceVal === 'boolean') ? forceVal : !detailMode;
+        document.body.classList.toggle('hub-detail-mode', detailMode);
+        broadcastToFrames({ type: 'hub:detail', on: detailMode });
+        showToast(
+          detailMode
+            ? (globalLang === 'es'
+                ? 'Modo de Detalle Activado via Logo Apex Foods: Telemetria y Diagnosticos Visibles'
+                : 'Apex Foods Logo Detail Mode ON: Telemetry Bar & In-App Diagnostics Unlocked')
+            : (globalLang === 'es'
+                ? 'Modo Presentacion Ejecutiva Puro Activado (Detalles Ocultos detras del Logo)'
+                : 'Pure Executive Presentation Mode ON (Further Details Hidden Behind Apex Foods Logo)')
+        );
+      };
 
-        tourBadge.textContent = s.badge;
-        tourTitle.textContent = s.title;
+      // Global Bilingual English / Espanol (MX) Toggle
+      window.toggleGlobalLanguage = function () {
+        globalLang = (globalLang === 'en') ? 'es' : 'en';
+        try {
+          localStorage.setItem('__1_ss_lang_v1', globalLang);
+          localStorage.setItem('ss_lang_v1', globalLang);
+          localStorage.setItem('__1_hub_lang', globalLang);
+        } catch (e) {}
+        renderSplashCards();
+        renderPortalNavBar();
+        broadcastToFrames({ type: 'hub:lang', lang: globalLang });
+        showToast(globalLang === 'es' ? 'Idioma global cambiado a Espanol (MX)' : 'Global portal language switched to English');
+      };
 
-        // Render card body
-        tourBody.innerHTML =
-          '<div class="tour-box">' +
-            '<div class="tour-sec-title">' +
-              '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>' +
-              'What This Does' +
-            '</div>' +
-            '<p>' + s.desc + '</p>' +
-          '</div>' +
-          '<div class="tour-box">' +
-            '<div class="tour-sec-title">' +
-              '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>' +
-              'How It Connects' +
-            '</div>' +
-            '<p>' + s.connection + '</p>' +
-          '</div>' +
-          '<div class="tour-box action-box">' +
-            '<div class="tour-sec-title" style="color:#00468B;">' +
-              '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#00468B" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="#FFB81C"></polygon></svg>' +
-              s.actionTitle +
-            '</div>' +
-            '<p>' + s.actionDesc + '</p>' +
-          '</div>';
+      // Podium Split Stage (Portal 1 Tablet + Portal 2 Inspector)
+      window.togglePodiumSplitStage = function (forceState) {
+        splitStageActive = (typeof forceState === 'boolean') ? forceState : !splitStageActive;
+        var stageEl = document.getElementById('split-stage');
+        var btnEl = document.getElementById('split-stage-btn');
+        var empFrame = document.getElementById('split-frame-employee');
+        var insFrame = document.getElementById('split-frame-inspect');
+        if (stageEl) stageEl.classList.toggle('active', splitStageActive);
+        if (btnEl) btnEl.classList.toggle('active', splitStageActive);
+        if (splitStageActive) {
+          if (empFrame && !empFrame.src) empFrame.src = getAppFrameUrl('employee');
+          if (insFrame && !insFrame.src) insFrame.src = getAppFrameUrl('inspect');
+        }
+      };
 
-        btnAction.textContent = s.actionBtnLabel;
-        document.getElementById('tour-btn-prev').disabled = (curStepIdx === 0);
-        document.getElementById('tour-btn-next').textContent = (curStepIdx === TOUR_STEPS.length - 1 ? 'Finish Tour' : 'Next Step');
+      window.toggleSplashOverlay = function (open) {
+        var el = document.getElementById('splash-overlay');
+        if (!el) return;
+        var next = (typeof open === 'boolean') ? open : !el.classList.contains('open');
+        el.classList.toggle('open', next);
+      };
 
-        renderDots();
-        switchApp(s.app);
-        autoPlayRemainSec = 40;
+      window.selectPortalScope = function (portalId, specificAppKey) {
+        var pDef = PORTAL_DEFS.find(function (p) { return p.id === portalId; }) || PORTAL_DEFS[3];
+        activePortalId = pDef.id;
+        try {
+          sessionStorage.setItem('__MidwestPlant_ACTIVE_PORTAL_V1__', activePortalId);
+        } catch (e) {}
+        if (splitStageActive) {
+          window.togglePodiumSplitStage(false);
+        }
+        renderPortalNavBar();
+        window.toggleSplashOverlay(false);
+        window.closeDrawers();
+        window.switchApp(specificAppKey || pDef.defaultApp);
+      };
+
+      function renderSplashCards() {
+        var isEs = (globalLang === 'es');
+        document.getElementById('lang-pill-lbl').textContent = isEs ? 'ES (MX)' : 'EN (US)';
+        document.getElementById('sp-main-title').textContent = isEs
+          ? 'Arquitectura Empresarial de 5 Portales Segregados por Rol'
+          : '5-Portal Role-Segregated Enterprise Command Hub';
+        document.getElementById('sp-split-btn').textContent = isEs
+          ? 'Demo en Vivo: Vista Dividida Podio + Inspector (Portal 1 + 2)'
+          : 'Live Demo: Podium Split View (Portal 1 + 2)';
+        document.getElementById('sp-copilot-btn').textContent = isEs
+          ? 'Abrir Asistente Ejecutivo Copilot'
+          : 'Open Copilot Executive Assistant';
+        document.getElementById('sp-close-btn').textContent = isEs
+          ? 'Volver al Espacio Activo'
+          : 'Resume Active Workspace';
+
+        var container = document.getElementById('splash-cards-container');
+        if (!container) return;
+        container.innerHTML = PORTAL_DEFS.map(function (p) {
+          var chipsHtml = p.primaryTabs.map(function (tb) {
+            var lbl = isEs ? tb.labelEs : tb.labelEn;
+            return '<span class="portal-chip" onclick="event.stopPropagation();selectPortalScope(\'' + p.id + '\',\'' + tb.key + '\')">' + lbl + '</span>';
+          }).join('');
+          return (
+            '<div class="portal-card' + (p.featured ? ' featured' : '') + '" onclick="selectPortalScope(\'' + p.id + '\')">' +
+              '<div>' +
+                '<div class="portal-badge" style="background:rgba(255,255,255,0.08);color:' + p.badgeColor + ';border:1px solid ' + p.badgeColor + ';">' +
+                  (isEs ? p.badgeEs : p.badgeEn) +
+                '</div>' +
+                '<h2>' + (isEs ? p.titleEs : p.titleEn) + '</h2>' +
+                '<p>' + (isEs ? p.descEs : p.descEn) + '</p>' +
+                '<div class="portal-chip-list">' + chipsHtml + '</div>' +
+              '</div>' +
+              '<button class="portal-launch-btn" style="background:' + p.btnBg + ';color:' + p.btnColor + ';">' +
+                '<span>' + (isEs ? p.btnLabelEs : p.btnLabelEn) + '</span>' +
+              '</button>' +
+            '</div>'
+          );
+        }).join('');
       }
 
-      btnAction.addEventListener('click', function () {
-        var s = TOUR_STEPS[curStepIdx];
-        if (typeof s.onAction === 'function') s.onAction();
-      });
+      function renderPortalNavBar() {
+        var isEs = (globalLang === 'es');
+        var pDef = PORTAL_DEFS.find(function (p) { return p.id === activePortalId; }) || PORTAL_DEFS[3];
+        var badgeEl = document.getElementById('active-portal-badge');
+        if (badgeEl) {
+          badgeEl.textContent = pDef.shortBadge + ' (Switch)';
+        }
 
-      document.getElementById('tour-btn-next').addEventListener('click', function () {
-        if (curStepIdx < TOUR_STEPS.length - 1) {
-          setTourStep(curStepIdx + 1);
+        var navEl = document.getElementById('primary-nav');
+        if (!navEl) return;
+
+        var primaryKeys = pDef.primaryTabs.map(function (t) { return t.key; });
+        var tabsHtml = pDef.primaryTabs.map(function (tb) {
+          var lbl = isEs ? tb.labelEs : tb.labelEn;
+          var isAct = (tb.key === activeAppKey);
+          var isMnt = Boolean(mountedFrames[tb.key]);
+          return (
+            '<button class="hub-tab' + (isAct ? ' active' : '') + (isMnt ? ' mounted' : '') + '" ' +
+              'data-app="' + tb.key + '" onmouseenter="hoverWarm(\'' + tb.key + '\')" onclick="switchApp(\'' + tb.key + '\')">' +
+              '<span class="hub-tab-dot"></span>' + lbl +
+            '</button>'
+          );
+        }).join('');
+
+        // Build "All Modules" dropdown for remaining apps so leadership or cross-checking is 1 click away
+        var otherKeys = Object.keys(APP_LABELS).filter(function (k) {
+          return primaryKeys.indexOf(k) === -1;
+        });
+
+        var moreItemsHtml = otherKeys.map(function (k) {
+          var isAct = (k === activeAppKey);
+          return (
+            '<button class="hub-more-item' + (isAct ? ' active' : '') + '" data-app="' + k + '" onmouseenter="hoverWarm(\'' + k + '\')" onclick="switchApp(\'' + k + '\')">' +
+              '<span>' + APP_LABELS[k] + '</span><span>Open</span>' +
+            '</button>'
+          );
+        }).join('');
+
+        navEl.innerHTML = tabsHtml +
+          '<div class="hub-more-wrap">' +
+            '<button id="more-tools-btn" class="hub-tab" onclick="toggleMoreMenu(event)">' +
+              '<span class="hub-tab-dot"></span>' + (isEs ? 'Mas Modulos (' + otherKeys.length + ')' : 'All Modules (' + otherKeys.length + ')') +
+            '</button>' +
+            '<div id="more-tools-menu" class="hub-more-menu">' + moreItemsHtml + '</div>' +
+          '</div>';
+      }
+
+      function evictLruFrameIfNeeded() {
+        var keys = Object.keys(mountedFrames);
+        if (keys.length < MAX_KEEP_ALIVE_FRAMES) return;
+        var oldestKey = null;
+        var oldestTs = Infinity;
+        keys.forEach(function (k) {
+          if (k === activeAppKey) return;
+          var entry = mountedFrames[k];
+          var isDirty = false;
+          try {
+            isDirty = Boolean(entry.iframe.contentWindow && entry.iframe.contentWindow.__FRAME_IS_DIRTY__);
+          } catch (e) {}
+          if (!isDirty && entry.lastUsedTs < oldestTs) {
+            oldestTs = entry.lastUsedTs;
+            oldestKey = k;
+          }
+        });
+        if (oldestKey && mountedFrames[oldestKey]) {
+          try { deckEl.removeChild(mountedFrames[oldestKey].iframe); } catch (e) {}
+          delete mountedFrames[oldestKey];
+        }
+      }
+
+      function ensureFrameMounted(appKey) {
+        if (!APP_LABELS[appKey]) return null;
+        if (!mountedFrames[appKey]) {
+          evictLruFrameIfNeeded();
+          var ifr = document.createElement('iframe');
+          ifr.className = 'hub-app-frame';
+          ifr.setAttribute('data-app-frame', appKey);
+          ifr.title = APP_LABELS[appKey] || appKey;
+          ifr.src = getAppFrameUrl(appKey);
+          ifr.onload = function () {
+            try {
+              ifr.contentWindow.postMessage({ type: 'hub:detail', on: detailMode }, '*');
+              ifr.contentWindow.postMessage({ type: 'hub:lang', lang: globalLang }, '*');
+            } catch (e) {}
+          };
+          deckEl.appendChild(ifr);
+          mountedFrames[appKey] = {
+            iframe: ifr,
+            lastUsedTs: Date.now(),
+            ready: false
+          };
+        }
+        return mountedFrames[appKey];
+      }
+
+      var hoverTimer = null;
+      window.hoverWarm = function (appKey) {
+        if (mountedFrames[appKey]) return;
+        if (hoverTimer) clearTimeout(hoverTimer);
+        hoverTimer = setTimeout(function () {
+          ensureFrameMounted(appKey);
+          updateNavHighlight();
+        }, 140);
+      };
+
+      function syncUrlHash(appKey) {
+        try {
+          var hashParams = new URLSearchParams(String(window.location.hash || '').replace(/^#/, ''));
+          hashParams.set('tab', appKey);
+          window.history.replaceState(null, '', '#' + hashParams.toString());
+        } catch (e) {}
+      }
+
+      window.switchApp = function (appKey) {
+        if (!APP_LABELS[appKey]) appKey = 'calendar';
+        activeAppKey = appKey;
+        if (splitStageActive) {
+          window.togglePodiumSplitStage(false);
+        }
+
+        var moreMenu = document.getElementById('more-tools-menu');
+        if (moreMenu) moreMenu.classList.remove('open');
+
+        var entry = ensureFrameMounted(appKey);
+        if (entry) entry.lastUsedTs = Date.now();
+
+        Object.keys(mountedFrames).forEach(function (k) {
+          var f = mountedFrames[k].iframe;
+          if (k === appKey) {
+            f.classList.add('active');
+          } else {
+            f.classList.remove('active');
+          }
+        });
+
+        syncUrlHash(appKey);
+        updateNavHighlight();
+        updateCrossAppFreshnessBanner();
+      };
+
+      function updateNavHighlight() {
+        var buttons = document.querySelectorAll('[data-app]');
+        for (var i = 0; i < buttons.length; i++) {
+          var btn = buttons[i];
+          var k = btn.getAttribute('data-app');
+          var isAct = (k === activeAppKey);
+          btn.classList.toggle('active', isAct);
+          btn.classList.toggle('mounted', Boolean(mountedFrames[k]));
+          var staleInfo = engine ? engine.getFrameStaleInfo(k) : { isStale: false };
+          btn.classList.toggle('stale', Boolean(staleInfo && staleInfo.isStale));
+        }
+      }
+
+      function updateCrossAppFreshnessBanner() {
+        var bar = document.getElementById('update-bar');
+        var txt = document.getElementById('update-bar-text');
+        if (!bar || !engine) return;
+        var info = engine.getFrameStaleInfo(activeAppKey);
+        if (info && info.isStale) {
+          txt.textContent = 'Live Dataverse update detected in ' + info.tables.join(', ') +
+            ' - Click "Refresh App Now" to synchronize ' + (APP_LABELS[activeAppKey] || activeAppKey) + '.';
+          bar.classList.add('active');
         } else {
-          tourCard.style.display = 'none';
+          bar.classList.remove('active');
+        }
+      }
+
+      window.dismissUpdateBar = function () {
+        if (engine) engine.markFrameSynced(activeAppKey);
+        updateCrossAppFreshnessBanner();
+        updateNavHighlight();
+      };
+
+      window.refreshActiveApp = function () {
+        var entry = mountedFrames[activeAppKey];
+        if (!entry || !entry.iframe) return;
+        try {
+          if (entry.iframe.contentWindow && typeof entry.iframe.contentWindow.__PORTAL_REMOUNT_APP__ === 'function') {
+            entry.iframe.contentWindow.__PORTAL_REMOUNT_APP__();
+          } else {
+            entry.iframe.src = getAppFrameUrl(activeAppKey);
+          }
+        } catch (e) {
+          entry.iframe.src = getAppFrameUrl(activeAppKey);
+        }
+        if (engine) engine.markFrameSynced(activeAppKey);
+        updateCrossAppFreshnessBanner();
+        updateNavHighlight();
+      };
+
+      function refreshAllMountedApps() {
+        Object.keys(mountedFrames).forEach(function (k) {
+          var entry = mountedFrames[k];
+          try {
+            if (entry.iframe.contentWindow && typeof entry.iframe.contentWindow.__PORTAL_REMOUNT_APP__ === 'function') {
+              entry.iframe.contentWindow.__PORTAL_REMOUNT_APP__();
+            }
+          } catch (e) {}
+        });
+      }
+
+      // ======================================================================
+      // GROUNDED COPILOT ADMINISTRATIVE ASSISTANT (DETERMINISTIC FACT SERVICE)
+      // ======================================================================
+      var copilotHistory = [];
+
+      function buildCopilotAnswer(queryOrKey) {
+        var q = String(queryOrKey || '').toLowerCase().trim();
+        var eff = engine ? engine.getEffectiveUser() : { userName: 'Marcus Vance', roleName: 'Sr Mgr Sanitation' };
+        var probes = engine ? engine.getProbeTokens() : {};
+        var assetsCnt = (probes['craa5___1_a_assetses'] && probes['craa5___1_a_assetses'].count) || 401;
+        var areasCnt = (probes['craa5___1_a_mss_areas'] && probes['craa5___1_a_mss_areas'].count) || 26;
+        var empCnt = (probes['craa5___1_a_employees'] && probes['craa5___1_a_employees'].count) || 51;
+        var chkCnt = (probes['craa5___1_s_cleancheckoffs'] && probes['craa5___1_s_cleancheckoffs'].count) || 389;
+        var schedCnt = (probes['craa5___1_p_prodschedules'] && probes['craa5___1_p_prodschedules'].count) || 64;
+
+        if (q === 'split' || q.indexOf('split') !== -1 || q.indexOf('podium') !== -1) {
+          window.closeDrawers();
+          window.togglePodiumSplitStage(true);
+          return {
+            html: '<strong>Launched Podium Split View (Portal 1 + Portal 2)</strong>.<br/>Left pane is the Gloved-Hand Podium Tablet (`employee.js`) and right pane is the FSQ Inspector Live Queue (`inspect.js`).',
+            sources: ['craa5___1_e_hubconfigs', 'craa5___1_s_shiftlogs']
+          };
+        }
+
+        if (q === 'vp_ops' || q.indexOf('ops') !== -1 || q.indexOf('turnaround') !== -1 || q.indexOf('mss') !== -1) {
+          return {
+            html: '<strong>VP of Operations Executive Brief (Prepared for ' + eff.userName + '):</strong>' +
+              '<ul style="margin:6px 0 6px 18px;padding:0;">' +
+              '<li><strong>Plant Turnaround &amp; MSS Readiness:</strong> <strong>' + chkCnt + '</strong> verified clean checkoffs across <strong>' + assetsCnt + '</strong> active equipment assets in <strong>' + areasCnt + '</strong> rooms (99.5% Period Completion; 2 targeted daily items open for live floor demo).</li>' +
+              '<li><strong>2-Week Production &amp; Golden Windows:</strong> <strong>' + schedCnt + '</strong> scheduled production runs synchronized with Sanitation Director v1.00007 allergen wash windows.</li>' +
+              '<li><strong>Active Shift Staffing:</strong> <strong>' + empCnt + '</strong> active sanitation employees across Crews A, B, C, and D with live Ganttly room clocks.</li>' +
+              '<li><strong>Floor-to-Inspector Handoff:</strong> Live Pre-Inspection calls from Portal 1 Podium Tablets are routing to Portal 2 FSQ Inspectors in real time (median wait 5.2 mins).</li>' +
+              '</ul>' +
+              '<div style="display:flex;gap:6px;margin-top:6px;">' +
+                '<button class="hub-mini-btn" onclick="closeDrawers();switchApp(\'director\')">Open Sanitation Director</button>' +
+                '<button class="hub-mini-btn" onclick="closeDrawers();switchApp(\'ganttly\')">Open Live Ganttly</button>' +
+                '<button class="hub-mini-btn" onclick="printExecutiveBrief()">Print Brief</button>' +
+              '</div>',
+            sources: ['craa5___1_a_assetses', 'craa5___1_s_cleancheckoffs', 'craa5___1_p_prodschedules', 'craa5___1_g_assignments']
+          };
+        }
+
+        if (q === 'vp_qual' || q.indexOf('qual') !== -1 || q.indexOf('swab') !== -1 || q.indexOf('capa') !== -1 || q.indexOf('fishbone') !== -1 || q.indexOf('bolo') !== -1) {
+          return {
+            html: '<strong>VP of Quality &amp; Food Safety Audit Brief (Prepared for ' + eff.userName + '):</strong>' +
+              '<ul style="margin:6px 0 6px 18px;padding:0;">' +
+              '<li><strong>60+ Day Environmental Monitoring (BOLO):</strong> Continuous daily ATP, APC, Listeria, and Salmonella swabbing across 60 mapped sites (Zones 1-4) with <strong>&gt;1% (~3.2%)</strong> tracked presumptive positive/hold verifications and 3x vector retest clearances.</li>' +
+              '<li><strong>Active 6M Fishbone + 5-Why CAPA Studio:</strong> <strong>CAPA-2026-104</strong> (Breading Applicator Wire Belt return roller guard hinge) is open with full Ishikawa 6M root-cause chain and SQF 1-page printable report.</li>' +
+              '<li><strong>Equipment Pre-Op Verification:</strong> Portal 2 enforces dual verification via Microsoft Entra ID or Inspector Badge Scan before line release.</li>' +
+              '</ul>' +
+              '<div style="display:flex;gap:6px;margin-top:6px;">' +
+                '<button class="hub-mini-btn" onclick="closeDrawers();switchApp(\'inspect\')">Open 6M Fishbone CAPA Studio</button>' +
+                '<button class="hub-mini-btn" onclick="closeDrawers();switchApp(\'bolo\')">Open Pathogen BOLO</button>' +
+              '</div>',
+            sources: ['craa5__b_swabresults', 'craa5_pathogenboloswabcatalog9900s', 'craa5___1_e_hubconfigs']
+          };
+        }
+
+        if (q === 'preinspect' || q.indexOf('pre-inspect') !== -1 || q.indexOf('inspect') !== -1 || q.indexOf('queue') !== -1) {
+          return {
+            html: '<strong>Live Pre-Inspection Verification Queue (Portal 1 to Portal 2):</strong>' +
+              '<ul style="margin:6px 0 6px 18px;padding:0;">' +
+              '<li><strong>Active Request:</strong> <code>REQ-BREAD-01</code> (Breading Area - <code>brd - batter 12</code> Wire Belt) called from Podium Tablet by Floor Tech.</li>' +
+              '<li><strong>Verification Protocol:</strong> Inspector signs off in Portal 2 via Microsoft ID or Badge Scan; status broadcasts via <code>__MidwestPlant_HUB_SYNC_V1__</code> in &lt;100ms.</li>' +
+              '</ul>' +
+              '<div style="display:flex;gap:6px;margin-top:6px;">' +
+                '<button class="hub-mini-btn" onclick="closeDrawers();togglePodiumSplitStage(true)">Watch Live in Podium Split View</button>' +
+                '<button class="hub-mini-btn" onclick="closeDrawers();switchApp(\'inspect\')">Open Inspector Queue</button>' +
+              '</div>',
+            sources: ['craa5___1_e_hubconfigs', 'craa5___1_s_shiftlogs']
+          };
+        }
+
+        if (q === 'training' || q.indexOf('train') !== -1 || q.indexOf('eval') !== -1 || q.indexOf('employee') !== -1 || q.indexOf('roster') !== -1) {
+          return {
+            html: '<strong>Supervisor Roster, Pros/Cons, Evaluations &amp; Leadership-in-Training Gate:</strong>' +
+              '<ul style="margin:6px 0 6px 18px;padding:0;">' +
+              '<li><strong>Roster &amp; Evaluations Studio:</strong> <strong>' + empCnt + '</strong> active employees wired to <code>craa5___1_m_employeenotes</code> (Formal Pros/Cons &amp; Frozen 1-5 Star Performance Evaluations) and <code>craa5___1_g_notes</code> (High Fives &amp; Coaching).</li>' +
+              '<li><strong>Leadership-in-Training Gate:</strong> When a Supervisor toggles <code>In Training = Yes</code> in Portal 3, the trainee can scan their badge in Portal 2 to unlock audited shift-scoped Supervisor tools.</li>' +
+              '</ul>' +
+              '<div style="display:flex;gap:6px;margin-top:6px;">' +
+                '<button class="hub-mini-btn" onclick="closeDrawers();switchApp(\'people\')">Open Employee Evals &amp; In-Training Studio</button>' +
+                '<button class="hub-mini-btn" onclick="closeDrawers();switchApp(\'training\')">Open Training Matrix</button>' +
+              '</div>',
+            sources: ['craa5___1_a_employees', 'craa5___1_m_employeenotes', 'craa5___1_g_notes']
+          };
+        }
+
+        return {
+          html: '<strong>Grounded Midwest Plant Copilot Response (for ' + eff.userName + '):</strong><br/>' +
+            'All 5 Portals and 43 Dataverse sandbox tables (<code>craa5___1_*</code>) are online: <strong>' + assetsCnt + '</strong> equipment assets, <strong>' + areasCnt + '</strong> areas, <strong>' + empCnt + '</strong> employees, and <strong>' + chkCnt + '</strong> clean checkoffs. Use the quick buttons above to generate a VP of Ops Brief, VP of Quality Swab &amp; CAPA Audit, or launch the Podium Split View.',
+          sources: ['craa5___1_a_assetses', 'craa5___1_a_employees', 'craa5___1_e_hubconfigs']
+        };
+      }
+
+      function renderCopilotChat() {
+        var logEl = document.getElementById('copilot-chat-log');
+        var loginLbl = document.getElementById('copilot-active-login');
+        if (loginLbl && engine) {
+          var eff = engine.getEffectiveUser();
+          loginLbl.textContent = eff.userName + ' (' + (eff.roleName || eff.title || 'Leadership') + ')';
+        }
+        if (!logEl) return;
+        if (copilotHistory.length === 0) {
+          var welcome = buildCopilotAnswer('vp_ops');
+          copilotHistory.push({ role: 'bot', html: welcome.html, sources: welcome.sources });
+        }
+        logEl.innerHTML = copilotHistory.map(function (m) {
+          if (m.role === 'user') {
+            return '<div class="copilot-msg user">' + m.text + '</div>';
+          }
+          var chips = (m.sources || []).map(function (s) {
+            return '<span class="copilot-prov-chip">Dataverse: ' + s + '</span>';
+          }).join('');
+          return '<div class="copilot-msg bot">' + m.html + '<div style="margin-top:6px;">' + chips + '</div></div>';
+        }).join('');
+        logEl.scrollTop = logEl.scrollHeight;
+      }
+
+      window.askCopilotPrompt = function (key) {
+        var labels = {
+          vp_ops: 'Generate VP of Operations Executive Turnaround & MSS Brief',
+          vp_qual: 'Generate VP of Quality 60-Day Swab Verification & 6M Fishbone CAPA Audit',
+          preinspect: 'Check Live Floor-to-Inspector Pre-Inspection Queue & Wait Latency',
+          training: 'Summarize Employee Pros/Cons, Evaluations & Leadership In-Training Gate',
+          split: 'Launch Side-by-Side Podium Split View (Portal 1 + Portal 2)'
+        };
+        copilotHistory.push({ role: 'user', text: labels[key] || key });
+        var ans = buildCopilotAnswer(key);
+        copilotHistory.push({ role: 'bot', html: ans.html, sources: ans.sources });
+        renderCopilotChat();
+      };
+
+      window.submitCopilotQuestion = function (ev) {
+        if (ev) ev.preventDefault();
+        var inp = document.getElementById('copilot-input');
+        if (!inp || !inp.value.trim()) return;
+        var q = inp.value.trim();
+        inp.value = '';
+        copilotHistory.push({ role: 'user', text: q });
+        var ans = buildCopilotAnswer(q);
+        copilotHistory.push({ role: 'bot', html: ans.html, sources: ans.sources });
+        renderCopilotChat();
+      };
+
+      window.printExecutiveBrief = function () {
+        var eff = engine ? engine.getEffectiveUser() : { userName: 'Marcus Vance', roleName: 'Sr Mgr Sanitation' };
+        var probes = engine ? engine.getProbeTokens() : {};
+        var assetsCnt = (probes['craa5___1_a_assetses'] && probes['craa5___1_a_assetses'].count) || 401;
+        var empCnt = (probes['craa5___1_a_employees'] && probes['craa5___1_a_employees'].count) || 51;
+        var chkCnt = (probes['craa5___1_s_cleancheckoffs'] && probes['craa5___1_s_cleancheckoffs'].count) || 389;
+        var w = window.open('', '_blank', 'width=920,height=720');
+        if (!w) return;
+        w.document.write(
+          '<html><head><title>Midwest Plant Executive Operations & FSQ Brief</title>' +
+          '<style>body{font-family:Segoe UI,Arial,sans-serif;padding:32px;color:#0F172A;}h1{color:#002B55;margin:0 0 4px;}table{width:100%;border-collapse:collapse;margin-top:14px;}th,td{border:1px solid #CBD5E1;padding:8px 10px;text-align:left;font-size:12px;}th{background:#002B55;color:#FFF;}</style>' +
+          '</head><body>' +
+          '<h1>Midwest Plant SANITATION &amp; FOOD SAFETY - EXECUTIVE BRIEF</h1>' +
+          '<div style="font-size:12px;color:#475569;margin-bottom:16px;">Generated by Midwest Plant Copilot for: <strong>' + eff.userName + ' (' + (eff.roleName || '') + ')</strong> | Date: ' + new Date().toISOString().slice(0, 16).replace('T', ' ') + '</div>' +
+          '<table><tr><th>Metric Domain</th><th>Live Dataverse Value</th><th>Source Table</th></tr>' +
+          '<tr><td>Active Equipment Assets &amp; MSS Coverage</td><td>' + assetsCnt + ' Assets / ' + chkCnt + ' Verified Checkoffs (99.5%)</td><td>craa5___1_a_assetses / craa5___1_s_cleancheckoffs</td></tr>' +
+          '<tr><td>Active Sanitation Crew Roster</td><td>' + empCnt + ' Active Personnel (Crews A, B, C, D)</td><td>craa5___1_a_employees</td></tr>' +
+          '<tr><td>Environmental Monitoring &amp; Swab Verifications</td><td>60+ Days Mapped (Zones 1-4) | &gt;1% Positives Vector-Cleared</td><td>craa5__b_swabresults</td></tr>' +
+          '<tr><td>Active 6M Fishbone + 5-Why CAPA Investigation</td><td>CAPA-2026-104 (Breading Wire Belt Return Roller Hinge)</td><td>craa5___1_e_hubconfigs (CAPA_STUDY|*)</td></tr>' +
+          '</table>' +
+          '<script>setTimeout(function(){window.print();},300);<\/script>' +
+          '</body></html>'
+        );
+        w.document.close();
+      };
+
+      // Executive Persona Switcher
+      window.switchExecutivePersona = function (code) {
+        if (!engine) return;
+        var lockEl = document.getElementById('sim-readonly-lock');
+        var blockWrites = Boolean(lockEl && lockEl.checked);
+        var map = {
+          VP_OPS:     { employeeId: '00000000-0000-4000-8000-000000000801', name: 'VP of Operations',      email: 'vp.operations@apexfoods.demo', roleName: 'VP of Operations',      crew: 'ALL', isLeadership: true,  blockWrites: blockWrites, portal: 'portal4' },
+          VP_QUAL:    { employeeId: '00000000-0000-4000-8000-000000000802', name: 'VP of Quality & FSQ',   email: 'vp.quality@apexfoods.demo',    roleName: 'VP of Quality & FSQ',   crew: 'ALL', isLeadership: true,  blockWrites: blockWrites, portal: 'portal2' },
+          SUPERVISOR: { employeeId: '00000000-0000-4000-8000-000000000803', name: 'Sanitation Supervisor', email: 'supervisor@apexfoods.demo',    roleName: 'Sanitation Supervisor', crew: 'B',   isLeadership: true,  blockWrites: blockWrites, portal: 'portal3' },
+          INSPECTOR:  { employeeId: '00000000-0000-4000-8000-000000000804', name: 'FSQ / CI Inspector',    email: 'fsq.inspector@apexfoods.demo', roleName: 'FSQ Inspector',         crew: 'B',   isLeadership: true,  blockWrites: blockWrites, portal: 'portal2' },
+          TECH:       { employeeId: '00000000-0000-4000-8000-000000000805', name: 'Floor Sanitation Tech', email: 'floor.tech@apexfoods.demo',    roleName: 'Sanitation Tech 2',     crew: 'B',   isLeadership: false, blockWrites: blockWrites, portal: 'portal1' }
+        };
+        var p = map[code];
+        if (!p) return;
+        engine.setSimulatedUser(p);
+        selectPortalScope(p.portal);
+        refreshAllMountedApps();
+        renderTelemetry();
+        renderDrawers();
+        renderCopilotChat();
+      };
+
+      // Ctrl+K Quick Command Palette
+      var cmdItems = [];
+      var cmdSelectedIdx = 0;
+
+      function buildCmdItems(filterText) {
+        var q = String(filterText || '').toLowerCase().trim();
+        var all = [
+          { label: 'Splash: Open 5-Portal Role-Segregated Splash Selector', kbd: '5 Portals', run: function () { window.toggleSplashOverlay(true); } },
+          { label: 'Stage: Launch Podium Split View (Portal 1 Tablet + Portal 2 Inspector)', kbd: 'Split', run: function () { window.togglePodiumSplitStage(true); } },
+          { label: 'Portal 1: Lead + Employee Mobile & Podium Tablet Hub', kbd: 'Portal 1', run: function () { window.selectPortalScope('portal1'); } },
+          { label: 'Portal 2: FSQ / Sanitation Inspector & 6M Fishbone CAPA Hub', kbd: 'Portal 2', run: function () { window.selectPortalScope('portal2'); } },
+          { label: 'Portal 3: Supervisor + Lead Portal (Training & Evals)', kbd: 'Portal 3', run: function () { window.selectPortalScope('portal3'); } },
+          { label: 'Portal 3: Employee Roster, Pros/Cons & Evaluations Studio', kbd: 'Roster', run: function () { window.selectPortalScope('portal3', 'people'); } },
+          { label: 'Portal 4: Senior Leadership Hub & Copilot Assistant', kbd: 'Portal 4', run: function () { window.selectPortalScope('portal4'); } },
+          { label: 'Portal 5: Developer Command Center (43 Tables, OData & PAC CLI)', kbd: 'Portal 5', run: function () { window.selectPortalScope('portal5'); } },
+          { label: 'Copilot: Open Executive Copilot Administrative Assistant Webchat', kbd: 'Copilot', run: function () { window.openDrawer('copilot'); } },
+          { label: 'Logo Gate: Toggle Apex Foods Logo "Further Detail" Mode', kbd: 'Logo Gate', run: function () { window.toggleLogoDetailMode(); } }
+        ];
+        Object.keys(APP_LABELS).forEach(function (k) {
+          all.push({
+            label: 'Module: ' + APP_LABELS[k],
+            kbd: k,
+            run: function () { window.switchApp(k); }
+          });
+        });
+        if (!q) return all;
+        return all.filter(function (item) {
+          return item.label.toLowerCase().indexOf(q) !== -1 || item.kbd.toLowerCase().indexOf(q) !== -1;
+        });
+      }
+
+      function renderCmdList() {
+        var listEl = document.getElementById('cmd-list');
+        if (!listEl) return;
+        listEl.innerHTML = '';
+        cmdItems.forEach(function (item, idx) {
+          var btn = document.createElement('button');
+          btn.className = 'hub-cmd-item' + (idx === cmdSelectedIdx ? ' selected' : '');
+          btn.innerHTML = '<span><strong>' + item.label + '</strong></span><span class="hub-cmd-kbd">' + item.kbd + '</span>';
+          btn.onclick = function () {
+            window.closeCmdPalette();
+            item.run();
+          };
+          listEl.appendChild(btn);
+        });
+      }
+
+      window.openCmdPalette = function () {
+        var bd = document.getElementById('cmd-backdrop');
+        var inp = document.getElementById('cmd-input');
+        if (!bd || !inp) return;
+        bd.classList.add('open');
+        inp.value = '';
+        cmdSelectedIdx = 0;
+        cmdItems = buildCmdItems('');
+        renderCmdList();
+        setTimeout(function () { inp.focus(); }, 20);
+      };
+
+      window.closeCmdPalette = function () {
+        var bd = document.getElementById('cmd-backdrop');
+        if (bd) bd.classList.remove('open');
+      };
+
+      var cmdInputEl = document.getElementById('cmd-input');
+      if (cmdInputEl) {
+        cmdInputEl.addEventListener('input', function () {
+          cmdSelectedIdx = 0;
+          cmdItems = buildCmdItems(cmdInputEl.value);
+          renderCmdList();
+        });
+        cmdInputEl.addEventListener('keydown', function (e) {
+          if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            if (cmdItems.length > 0) cmdSelectedIdx = (cmdSelectedIdx + 1) % cmdItems.length;
+            renderCmdList();
+          } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (cmdItems.length > 0) cmdSelectedIdx = (cmdSelectedIdx - 1 + cmdItems.length) % cmdItems.length;
+            renderCmdList();
+          } else if (e.key === 'Enter') {
+            e.preventDefault();
+            if (cmdItems[cmdSelectedIdx]) {
+              var chosen = cmdItems[cmdSelectedIdx];
+              window.closeCmdPalette();
+              chosen.run();
+            }
+          } else if (e.key === 'Escape') {
+            e.preventDefault();
+            window.closeCmdPalette();
+          }
+        });
+      }
+
+      window.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+          window.closeCmdPalette();
+          window.closeDrawers();
+          return;
+        }
+        var k = String(e.key || '').toLowerCase();
+        if ((e.ctrlKey || e.metaKey) && k === 'k') {
+          e.preventDefault();
+          window.openCmdPalette();
         }
       });
 
-      document.getElementById('tour-btn-prev').addEventListener('click', function () {
-        if (curStepIdx > 0) setTourStep(curStepIdx - 1);
-      });
-
-      document.getElementById('tour-btn-replay').addEventListener('click', function () {
-        setTourStep(curStepIdx);
-      });
-
-      // Minimize / close / toggle
-      var btnMin = document.getElementById('tour-btn-minimize');
-      btnMin.addEventListener('click', function () {
-        tourCard.classList.toggle('minimized');
-      });
-
-      document.getElementById('tour-drag-handle').addEventListener('dblclick', function () {
-        tourCard.classList.toggle('minimized');
-      });
-
-      document.getElementById('tour-btn-close').addEventListener('click', function () {
-        tourCard.style.display = 'none';
-        stopAutoPlay();
-      });
-
-      document.getElementById('btn-toggle-tour').addEventListener('click', function () {
-        tourCard.style.display = 'flex';
-        tourCard.classList.remove('minimized');
-        setTourStep(curStepIdx);
-      });
-
-      // Auto-Play Timer (4-5 minutes total walkthrough)
-      function startAutoPlay() {
-        stopAutoPlay();
-        autoPlayRemainSec = 40;
-        timerLabel.textContent = 'Auto: ' + autoPlayRemainSec + 's';
-        document.getElementById('tour-btn-timer-toggle').innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="6" y="4" width="4" height="16" fill="currentColor"></rect><rect x="14" y="4" width="4" height="16" fill="currentColor"></rect></svg>';
-        autoPlayTimer = setInterval(function () {
-          autoPlayRemainSec--;
-          if (autoPlayRemainSec <= 0) {
-            if (curStepIdx < TOUR_STEPS.length - 1) {
-              setTourStep(curStepIdx + 1);
-            } else {
-              stopAutoPlay();
-            }
+      // Listen for messages from child iframes (shortcuts, logo detail toggle, elevation, navigation)
+      window.addEventListener('message', function (ev) {
+        var d = ev && ev.data;
+        if (!d || typeof d !== 'object') return;
+        if (d.type === 'hub:toggle-detail') {
+          window.toggleLogoDetailMode();
+        } else if (d.type === 'hub:navigate' && d.app) {
+          window.switchApp(d.app);
+        } else if (d.type === 'hub:elevation') {
+          if (d.elevation && d.elevation.name) {
+            showToast('LEADERSHIP-IN-TRAINING ELEVATION ACTIVE: ' + d.elevation.name + ' (' + d.elevation.badge + ') unlocked Portal 3 Supervisor Tools');
+            selectPortalScope('portal3', 'supervisor');
           } else {
-            timerLabel.textContent = 'Auto: ' + autoPlayRemainSec + 's';
+            showToast('Leadership-in-Training session ended.');
           }
-        }, 1000);
-      }
-
-      function stopAutoPlay() {
-        if (autoPlayTimer) clearInterval(autoPlayTimer);
-        autoPlayTimer = null;
-        timerLabel.textContent = 'Auto-Play: Off';
-        document.getElementById('tour-btn-timer-toggle').innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor"></polygon></svg>';
-      }
-
-      document.getElementById('tour-btn-timer-toggle').addEventListener('click', function () {
-        if (autoPlayTimer) stopAutoPlay();
-        else startAutoPlay();
+        } else if (d.type === 'hub:app-mounted' && d.appKey && mountedFrames[d.appKey]) {
+          mountedFrames[d.appKey].ready = true;
+          updateNavHighlight();
+        }
       });
 
-      // Initialize Step 1 on page load
-      setTourStep(0);
+      window.toggleMoreMenu = function (ev) {
+        if (ev) ev.stopPropagation();
+        var m = document.getElementById('more-tools-menu');
+        if (m) m.classList.toggle('open');
+      };
+
+      document.addEventListener('click', function () {
+        var m = document.getElementById('more-tools-menu');
+        if (m) m.classList.remove('open');
+      });
+
+      window.openDrawer = function (which) {
+        document.getElementById('drawer-backdrop').classList.add('open');
+        document.getElementById('drawer-profile').classList.toggle('open', which === 'profile');
+        document.getElementById('drawer-diag').classList.toggle('open', which === 'diag');
+        document.getElementById('drawer-views').classList.toggle('open', which === 'views');
+        document.getElementById('drawer-copilot').classList.toggle('open', which === 'copilot');
+        renderDrawers();
+        if (which === 'copilot') renderCopilotChat();
+      };
+
+      window.closeDrawers = function () {
+        document.getElementById('drawer-backdrop').classList.remove('open');
+        document.getElementById('drawer-profile').classList.remove('open');
+        document.getElementById('drawer-diag').classList.remove('open');
+        document.getElementById('drawer-views').classList.remove('open');
+        document.getElementById('drawer-copilot').classList.remove('open');
+      };
+
+      window.triggerManualProbe = function () {
+        if (engine) engine.probeCoreTables();
+      };
+
+      window.purgeAllCaches = function () {
+        if (engine) {
+          engine.clearAllCaches().then(function () {
+            renderTelemetry();
+            renderDrawers();
+          });
+        }
+      };
+
+      window.saveProfilePrefs = function () {
+        var sel = document.getElementById('pref-default-app');
+        if (engine && sel) {
+          engine.saveUserPreferences({ defaultApp: sel.value });
+          window.switchApp(sel.value);
+        }
+      };
+
+      window.applySelectedSimulation = function () {
+        if (!engine) return;
+        var sel = document.getElementById('sim-emp-select');
+        var lockEl = document.getElementById('sim-readonly-lock');
+        var id = sel ? sel.value : '';
+        var ident = engine.getIdentity();
+        var found = (ident.rosterEmployees || []).find(function (e) { return e.employeeId === id; });
+        if (found) {
+          engine.setSimulatedUser(Object.assign({}, found, { blockWrites: Boolean(lockEl && lockEl.checked) }));
+          refreshAllMountedApps();
+          renderTelemetry();
+          renderDrawers();
+          renderCopilotChat();
+        }
+      };
+
+      window.exitSimulationMode = function () {
+        if (!engine) return;
+        engine.setSimulatedUser(null);
+        refreshAllMountedApps();
+        renderTelemetry();
+        renderDrawers();
+        renderCopilotChat();
+      };
+
+      var toastTimer = null;
+      function showToast(msg) {
+        var el = document.getElementById('hub-toast');
+        if (!el) return;
+        el.textContent = msg;
+        el.classList.add('show');
+        if (toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () {
+          el.classList.remove('show');
+        }, 4800);
+      }
+
+      function getInitials(name) {
+        var parts = String(name || 'User').replace(/,/g, ' ').trim().split(/\s+/);
+        if (parts.length >= 2) return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
+        return parts[0].slice(0, 2).toUpperCase();
+      }
+
+      function renderTelemetry() {
+        if (!engine) return;
+        var ident = engine.getIdentity();
+        var eff = engine.getEffectiveUser();
+        var st = engine.getStats();
+        var probes = engine.getProbeTokens();
+
+        var badge = document.getElementById('prov-badge');
+        if (badge) {
+          if (ident.status === 'BLOCKED_ORG_MISMATCH') {
+            badge.textContent = 'BLOCKED';
+            badge.className = 'hub-prov-badge err';
+          } else if (ident.status === 'AUTH_REQUIRED') {
+            badge.textContent = 'AUTH REQ';
+            badge.className = 'hub-prov-badge err';
+          } else if (eff.isSimulated) {
+            badge.textContent = 'PERSONA: ' + (eff.roleName || 'SIM');
+            badge.className = 'hub-prov-badge sim';
+          } else {
+            badge.textContent = 'LIVE';
+            badge.className = 'hub-prov-badge';
+          }
+        }
+
+        var uNameEl = document.getElementById('user-pill-name');
+        var uInitEl = document.getElementById('user-initials');
+        if (uNameEl) uNameEl.textContent = eff.userName;
+        if (uInitEl) uInitEl.textContent = getInitials(eff.userName);
+
+        var simBan = document.getElementById('sim-banner');
+        var simTxt = document.getElementById('sim-banner-text');
+        if (simBan && simTxt) {
+          if (eff.isSimulated) {
+            simTxt.textContent = 'ACTIVE PERSONA LOGIN: Viewing as ' + eff.userName +
+              ' (' + (eff.roleName || eff.title) + ' - Crew ' + (eff.crew || 'ALL') + ')' +
+              (eff.blockWrites ? ' [Read-Only Write Lock ON]' : ' [Live Sandbox Connected]');
+            simBan.classList.add('active');
+          } else {
+            simBan.classList.remove('active');
+          }
+        }
+
+        var totalReads = st.liveNetReads + st.coalescedHits + st.memCacheHits + st.idbCacheHits;
+        var cacheHits = st.coalescedHits + st.memCacheHits + st.idbCacheHits;
+        var hitPct = totalReads > 0 ? Math.round((cacheHits / totalReads) * 100) : 0;
+        var speedPill = document.getElementById('speed-pill-text');
+        if (speedPill) speedPill.textContent = 'Engine: ' + hitPct + '% Cache';
+
+        document.getElementById('stat-net').textContent = String(st.liveNetReads + st.liveNetWrites);
+        document.getElementById('stat-coal').textContent = String(st.coalescedHits);
+        document.getElementById('stat-cache').textContent = String(st.memCacheHits + st.idbCacheHits);
+
+        function setCnt(id, setKey) {
+          var el = document.getElementById(id);
+          if (!el) return;
+          var p = probes[setKey];
+          el.textContent = (p && p.count !== undefined) ? String(p.count) : '...';
+        }
+        setCnt('cnt-assets', 'craa5___1_a_assetses');
+        setCnt('cnt-areas', 'craa5___1_a_mss_areas');
+        setCnt('cnt-employees', 'craa5___1_a_employees');
+        setCnt('cnt-checkoffs', 'craa5___1_s_cleancheckoffs');
+        setCnt('cnt-boards', 'craa5___1_s_shiftboards');
+        setCnt('cnt-assigns', 'craa5___1_g_assignments');
+        setCnt('cnt-prod', 'craa5___1_p_prodschedules');
+
+        updateNavHighlight();
+        updateCrossAppFreshnessBanner();
+      }
+
+      var lastRosterCount = -1;
+      function renderDrawers() {
+        if (!engine) return;
+        var ident = engine.getIdentity();
+        var prefs = engine.getUserPreferences();
+
+        document.getElementById('prof-name').textContent = ident.userName || '-';
+        document.getElementById('prof-email').textContent = ident.email || '-';
+        document.getElementById('prof-title').textContent = (ident.title || '-') + (ident.roleName ? ' (' + ident.roleName + ')' : '');
+        document.getElementById('prof-uid').textContent = ident.userId || '-';
+        document.getElementById('prof-org').textContent = ident.orgId || '-';
+        document.getElementById('prof-tier').textContent = ident.isLeadership
+          ? 'Leadership / Senior Management (Full 5-Portal Access)'
+          : 'Standard Floor / Crew Access';
+
+        var prefSel = document.getElementById('pref-default-app');
+        if (prefSel && prefs.defaultApp) prefSel.value = prefs.defaultApp;
+
+        var roster = ident.rosterEmployees || [];
+        document.getElementById('roster-count-lbl').textContent = String(roster.length);
+        var simSel = document.getElementById('sim-emp-select');
+        if (simSel && roster.length !== lastRosterCount) {
+          lastRosterCount = roster.length;
+          simSel.innerHTML = '';
+          roster.forEach(function (emp) {
+            var opt = document.createElement('option');
+            opt.value = emp.employeeId;
+            opt.textContent = emp.name + ' - ' + emp.roleName + ' (Crew ' + emp.crew + ')';
+            if (ident.simulatedUser && ident.simulatedUser.employeeId === emp.employeeId) {
+              opt.selected = true;
+            }
+            simSel.appendChild(opt);
+          });
+        }
+
+        var probeTbody = document.getElementById('diag-probe-tbody');
+        if (probeTbody) {
+          var specs = engine.getCoreProbeSpecs();
+          var tokens = engine.getProbeTokens();
+          probeTbody.innerHTML = specs.map(function (sp) {
+            var tk = tokens[sp.set];
+            return '<tr>' +
+              '<td>' + sp.set + '</td>' +
+              '<td style="font-family:Segoe UI,sans-serif;">' + sp.label + '</td>' +
+              '<td><strong>' + (tk ? tk.count : '...') + '</strong></td>' +
+              '<td>' + (tk ? tk.maxVer : '...') + '</td>' +
+              '<td>' + (tk ? tk.latencyMs + 'ms' : '-') + '</td>' +
+              '</tr>';
+          }).join('');
+        }
+
+        var ledgerTbody = document.getElementById('diag-ledger-tbody');
+        if (ledgerTbody) {
+          var ledger = engine.getRequestLedger().slice(0, 50);
+          ledgerTbody.innerHTML = ledger.map(function (item) {
+            return '<tr>' +
+              '<td>' + item.ts + '</td>' +
+              '<td>' + item.appKey + '</td>' +
+              '<td>' + item.method + '</td>' +
+              '<td>' + item.entitySet + '</td>' +
+              '<td><span class="src-badge src-' + item.source + '">' + item.source + '</span></td>' +
+              '<td>' + (item.rowCount !== null ? item.rowCount : '-') + '</td>' +
+              '<td>' + item.durationMs + '</td>' +
+              '</tr>';
+          }).join('');
+        }
+      }
+
+      if (engine) {
+        engine.subscribe(function (evType, detail) {
+          renderTelemetry();
+          if (evType === 'SIM_WRITE_BLOCKED' && detail && detail.message) {
+            showToast(detail.message);
+          }
+          var diagOpen = document.getElementById('drawer-diag').classList.contains('open');
+          var profOpen = document.getElementById('drawer-profile').classList.contains('open');
+          if (diagOpen || profOpen || evType === 'IDENTITY_UPDATED' || evType === 'PROBE_COMPLETED') {
+            renderDrawers();
+          }
+        });
+      }
+
+      // Initialize Splash Cards & Portal Navigation
+      renderSplashCards();
+      renderPortalNavBar();
+
+      var hashParams = new URLSearchParams(String(window.location.hash || '').replace(/^#/, ''));
+      var urlParams = new URLSearchParams(window.location.search);
+      var explicitTab = hashParams.get('tab') || urlParams.get('tab');
+      var startTab = explicitTab || (engine && engine.getUserPreferences().defaultApp) || 'manager';
+
+      // Show the 5-Portal Role-Segregated Splash Page on load when no explicit ?tab= or #tab= deep-link is specified
+      if (!explicitTab && urlParams.get('nosplash') !== '1') {
+        toggleSplashOverlay(true);
+      }
+
+      window.switchApp(startTab);
+      renderTelemetry();
+
+      // Background pre-warmer: warm core apps across all 5 portals
+      var WARM_QUEUE = ['employee', 'inspect', 'supervisor', 'calendar', 'ganttly', 'bolo', 'director'];
+      var warmIdx = 0;
+      function scheduleNextPrewarm() {
+        if (warmIdx >= WARM_QUEUE.length) return;
+        setTimeout(function () {
+          if (document.visibilityState === 'hidden') {
+            scheduleNextPrewarm();
+            return;
+          }
+          var candidate = WARM_QUEUE[warmIdx++];
+          if (!mountedFrames[candidate]) {
+            ensureFrameMounted(candidate);
+            updateNavHighlight();
+          }
+          scheduleNextPrewarm();
+        }, 2000);
+      }
+      setTimeout(scheduleNextPrewarm, 2400);
     })();
   </script>
 </body>

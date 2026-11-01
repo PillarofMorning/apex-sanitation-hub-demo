@@ -292,6 +292,8 @@
           if (global.indexedDB && typeof global.indexedDB.deleteDatabase === 'function') {
             global.indexedDB.deleteDatabase('__1_stl_pathogen_bolo_idb_v2');
             global.indexedDB.deleteDatabase('stl_pathogen_bolo_idb_v2');
+            global.indexedDB.deleteDatabase('__1_apx_pathogen_bolo_idb_v2');
+            global.indexedDB.deleteDatabase('apx_pathogen_bolo_idb_v2');
           }
         } catch (eIdb) {}
         global.localStorage.setItem(META_KEY, wantMeta);

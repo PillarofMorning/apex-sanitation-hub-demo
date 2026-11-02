@@ -1574,6 +1574,7 @@
     },
     getStats: function () {
       var db = ensureDb();
+      var opsLen = (db.ops || []).length;
       return {
         shiftboards: (db.tables['craa5___1_s_shiftboard'] || []).length,
         assignments: (db.tables['craa5___1_g_assignment'] || []).length,
@@ -1585,9 +1586,16 @@
         employees: (db.tables['craa5___1_a_employee'] || []).length,
         assets: (db.tables['craa5___1_a_assets'] || []).length,
         areas: (db.tables['craa5___1_a_mss_area'] || []).length,
-        opsCount: db.ops.length,
-        totalFetches: db.ops.length + 28,
-        cacheHits: db.ops.length + 24,
+        opsCount: opsLen,
+        liveNetReads: 14,
+        liveNetWrites: Math.max(0, opsLen - 14),
+        coalescedHits: 6,
+        memCacheHits: opsLen + 24,
+        idbCacheHits: 12,
+        simBlockedWrites: 0,
+        errors: 0,
+        totalFetches: opsLen + 28,
+        cacheHits: opsLen + 24,
         cacheMisses: 4,
         coalescedJoins: 6,
         idbHydratedTables: Object.keys(db.tables || {}).length,
@@ -1595,55 +1603,184 @@
         cachedTableCount: Object.keys(db.tables || {}).length
       };
     },
+    ROLE_SCOPES: {
+      TECH: {
+        tier: 'TECH',
+        label: 'Floor Sanitation Tech (Portal 1)',
+        labelEn: 'Floor Sanitation Tech (Portal 1)',
+        labelEs: 'Tecnico de Sanitizacion (Portal 1)',
+        defaultPortal: 'portal1',
+        defaultApp: 'employee',
+        portals: ['portal1'],
+        apps: ['employee', 'ganttly', 'prodsched', 'mss']
+      },
+      LEAD: {
+        tier: 'LEAD',
+        label: 'Sanitation Shift Lead (Portals 1 & 3)',
+        labelEn: 'Sanitation Shift Lead (Portals 1 & 3)',
+        labelEs: 'Lider de Turno (Portales 1 y 3)',
+        defaultPortal: 'portal1',
+        defaultApp: 'employee',
+        portals: ['portal1', 'portal3'],
+        apps: ['employee', 'ganttly', 'shiftstart', 'prodsched', 'mss', 'calendar', 'bolo', 'training', 'pbed', 'mapsubmit']
+      },
+      INSPECTOR: {
+        tier: 'INSPECTOR',
+        label: 'FSQ / Sanitation Inspector (Portal 2)',
+        labelEn: 'FSQ / Sanitation Inspector (Portal 2)',
+        labelEs: 'Inspector FSQ y Sanitizacion (Portal 2)',
+        defaultPortal: 'portal2',
+        defaultApp: 'bolo',
+        portals: ['portal2'],
+        apps: ['bolo', 'inspect', 'calendar', 'shiftstart', 'employee', 'mss', 'ordering']
+      },
+      SUPERVISOR: {
+        tier: 'SUPERVISOR',
+        label: 'Sanitation Supervisor (Portals 1, 2 & 3)',
+        labelEn: 'Sanitation Supervisor (Portals 1, 2 & 3)',
+        labelEs: 'Supervisor de Sanitizacion (Portales 1, 2 y 3)',
+        defaultPortal: 'portal3',
+        defaultApp: 'supervisor',
+        portals: ['portal1', 'portal2', 'portal3'],
+        apps: ['supervisor', 'people', 'shiftstart', 'ganttly', 'training', 'pbed', 'mss', 'mapsubmit', 'employee', 'inspect', 'bolo', 'calendar', 'prodsched', 'ordering']
+      },
+      SENIOR_LEADERSHIP: {
+        tier: 'SENIOR_LEADERSHIP',
+        label: 'Senior Leadership (Portals 1-4)',
+        labelEn: 'Senior Leadership (Portals 1-4)',
+        labelEs: 'Liderazgo Senior (Portales 1-4)',
+        defaultPortal: 'portal4',
+        defaultApp: 'manager',
+        portals: ['portal1', 'portal2', 'portal3', 'portal4'],
+        apps: ['manager', 'director', 'bolo', 'calendar', 'ganttly', 'prodsched', 'inspect', 'people', 'supervisor', 'shiftstart', 'pbed', 'training', 'ordering', 'mapsubmit', 'employee', 'mss']
+      },
+      DEVELOPER: {
+        tier: 'DEVELOPER',
+        label: 'Developer & System Admin (All 5 Portals)',
+        labelEn: 'Developer & System Admin (All 5 Portals)',
+        labelEs: 'Desarrollador y Admin (Los 5 Portales)',
+        defaultPortal: 'portal4',
+        defaultApp: 'manager',
+        portals: ['portal1', 'portal2', 'portal3', 'portal4', 'portal5'],
+        apps: ['employee', 'inspect', 'supervisor', 'people', 'calendar', 'ganttly', 'shiftstart', 'mss', 'director', 'bolo', 'manager', 'prodsched', 'pbed', 'training', 'ordering', 'mapsubmit', 'devcenter', 'ecosystem']
+      }
+    },
+    inferRoleTier: function (userObj) {
+      if (!userObj) return 'DEVELOPER';
+      if (userObj.explicitTier && this.ROLE_SCOPES[userObj.explicitTier]) return userObj.explicitTier;
+      if (userObj.roleTier && this.ROLE_SCOPES[userObj.roleTier]) return userObj.roleTier;
+      var txt = (String(userObj.roleName || '') + ' ' + String(userObj.title || '')).toLowerCase();
+      if (/(?:dev|architect|system\s*admin)/i.test(txt)) return 'DEVELOPER';
+      if (/(?:vp|vice\s*president|president|chief|executive|plant\s*manager|sr\s*mgr|manager|director)/i.test(txt)) return 'SENIOR_LEADERSHIP';
+      if (/(?:inspector|fsq|quality\s*tech|qa\s*tech|ci\s*lead)/i.test(txt)) return 'INSPECTOR';
+      if (/(?:supervisor|supt|superintendent)/i.test(txt)) return 'SUPERVISOR';
+      if (/(?:\blead\b|crew\s*lead|team\s*lead|trainer)/i.test(txt)) return 'LEAD';
+      if (userObj.isSimulated) return 'TECH';
+      return 'DEVELOPER';
+    },
     getIdentity: function () {
       var db = ensureDb();
       var cu = db.currentUser || {
         userId: 'a0000001-0000-4000-8000-000000000001',
         userName: 'Marcus Vance',
         email: 'marcus.vance@apexfoods.demo',
-        title: 'Sanitation Supervisor',
-        crew: 'D',
+        title: 'Sr Mgr Sanitation',
+        crew: 'ALL',
         roles: ['System Administrator', 'Sanitation Supervisor', 'Sanitation Manager']
       };
+      var empRows = db.tables['craa5___1_a_employee'] || [];
+      var rosterEmployees = empRows.map(function (e) {
+        var rName = String(e['craa5_role@OData.Community.Display.V1.FormattedValue'] || e.craa5_rolename || e.craa5_title || 'Sanitation Tech').trim();
+        var sName = String(e['craa5_shift@OData.Community.Display.V1.FormattedValue'] || e.craa5_crew || e.craa5_shift || 'B').trim();
+        return {
+          employeeId: String(e.craa5___1_a_employeeid || e.id || ''),
+          name: String(e.craa5_employeename || e.craa5_name || 'Employee').trim(),
+          email: String(e.craa5_email || 'employee@apexfoods.demo').trim(),
+          roleName: rName,
+          crew: sName,
+          isLeadership: /(?:manager|director|supervisor|lead|vp)/i.test(rName)
+        };
+      }).filter(function (x) { return Boolean(x.employeeId && x.name); });
+
       var simRaw = null;
       try { simRaw = global.sessionStorage && global.sessionStorage.getItem('__MIDWESTPLANT_SIM_PERSONA_V1__'); } catch (e) {}
       var sim = null;
       if (simRaw) {
         try { sim = JSON.parse(simRaw); } catch (e) {}
       }
-      if (sim && sim.name) {
-        return {
-          userId: sim.id || cu.userId,
-          userName: sim.name,
-          email: sim.email || cu.email,
-          title: sim.title || 'Sanitation Tech',
-          crew: sim.crew || 'D',
-          roles: Array.isArray(sim.roles) ? sim.roles : [sim.title || 'User'],
-          isSeniorLeadership: Boolean(sim.isSeniorLeadership),
-          simulatedUser: sim
-        };
-      }
       return {
+        status: 'LIVE',
+        orgId: 'o0000001-0000-4000-8000-000000000001',
         userId: cu.userId,
         userName: cu.userName,
         email: cu.email,
-        title: cu.title || 'Sanitation Supervisor',
-        crew: cu.crew || 'D',
+        title: cu.title || 'Sr Mgr Sanitation',
+        roleName: cu.title || 'Sr Mgr Sanitation',
+        crew: cu.crew || 'ALL',
         roles: cu.roles || ['System Administrator'],
+        isLeadership: true,
         isSeniorLeadership: true,
-        simulatedUser: null
+        rosterEmployees: rosterEmployees,
+        simulatedUser: (sim && (sim.name || sim.userName)) ? sim : null
       };
     },
-    setSimulatedPersona: function (persona) {
-      if (!persona || !persona.name) return this.clearSimulatedPersona();
+    getEffectiveUser: function () {
+      var ident = this.getIdentity();
+      var sim = ident.simulatedUser;
+      if (sim && (sim.name || sim.userName)) {
+        return {
+          isSimulated: true,
+          code: sim.code || '',
+          userId: sim.employeeId || sim.id || ident.userId,
+          employeeId: sim.employeeId || sim.id || '',
+          userName: sim.userName || sim.name,
+          email: sim.email || 'persona@apexfoods.demo',
+          title: sim.title || sim.roleName || 'Sanitation Staff',
+          roleName: sim.roleName || sim.title || 'Sanitation Staff',
+          crew: sim.crew || 'B',
+          blockWrites: Boolean(sim.blockWrites),
+          explicitTier: sim.explicitTier || sim.roleTier || this.inferRoleTier(sim)
+        };
+      }
+      return {
+        isSimulated: false,
+        code: 'LIVE',
+        userId: ident.userId,
+        employeeId: ident.userId,
+        userName: ident.userName,
+        email: ident.email,
+        title: ident.title,
+        roleName: ident.roleName,
+        crew: ident.crew,
+        blockWrites: false,
+        explicitTier: 'DEVELOPER'
+      };
+    },
+    getAccessScope: function () {
+      var eff = this.getEffectiveUser();
+      var tier = this.inferRoleTier(eff);
+      return this.ROLE_SCOPES[tier] || this.ROLE_SCOPES.DEVELOPER;
+    },
+    setSimulatedUser: function (persona) {
+      if (!persona || !(persona.name || persona.userName)) {
+        return this.clearSimulatedPersona();
+      }
+      var uName = String(persona.name || persona.userName);
+      var rName = String(persona.roleName || persona.title || 'Sanitation Tech 2');
       var sim = {
-        id: persona.id || 'a0000001-0000-4000-8000-000000000001',
-        name: String(persona.name),
+        isSimulated: true,
+        code: persona.code || '',
+        id: persona.employeeId || persona.id || 'a0000001-0000-4000-8000-000000000001',
+        employeeId: persona.employeeId || persona.id || 'a0000001-0000-4000-8000-000000000001',
+        name: uName,
+        userName: uName,
         email: String(persona.email || 'demo.user@apexfoods.demo'),
-        title: String(persona.title || 'Sanitation Tech 2'),
-        crew: String(persona.crew || 'D'),
-        roles: Array.isArray(persona.roles) ? persona.roles : [String(persona.title || 'Sanitation Tech 2')],
-        isSeniorLeadership: Boolean(persona.isSeniorLeadership),
+        title: rName,
+        roleName: rName,
+        crew: String(persona.crew || 'B'),
+        roles: Array.isArray(persona.roles) ? persona.roles : [rName],
+        explicitTier: persona.explicitTier || persona.roleTier || this.inferRoleTier({ roleName: rName, title: rName, isSimulated: true }),
+        isSeniorLeadership: Boolean(persona.isLeadership || persona.isSeniorLeadership),
         blockWrites: Boolean(persona.blockWrites)
       };
       try {
@@ -1657,7 +1794,10 @@
         }
       } catch (e) {}
       notifyListeners('*');
-      return this.getIdentity();
+      return sim;
+    },
+    setSimulatedPersona: function (persona) {
+      return this.setSimulatedUser(persona);
     },
     clearSimulatedPersona: function () {
       try {
@@ -1671,15 +1811,92 @@
         }
       } catch (e) {}
       notifyListeners('*');
-      return this.getIdentity();
+      return null;
     },
     isSimulatedReadOnlyActive: function () {
       var id = this.getIdentity();
       return Boolean(id.simulatedUser && id.simulatedUser.blockWrites === true);
     },
+    getCoreProbeSpecs: function () {
+      return [
+        { set: 'craa5___1_a_assetses',      label: 'Plant Equipment Assets' },
+        { set: 'craa5___1_a_mss_areas',     label: 'MSS Areas / Rooms' },
+        { set: 'craa5___1_a_employees',     label: 'Employees Roster' },
+        { set: 'craa5___1_s_shiftboards',   label: 'Shift Boards' },
+        { set: 'craa5___1_g_assignments',   label: 'Ganttly Assignments' },
+        { set: 'craa5___1_s_cleancheckoffs',label: 'Clean Checkoffs' },
+        { set: 'craa5___1_p_prodschedules', label: 'Prod Schedules' },
+        { set: 'craa5___1_l_logs',          label: 'MSS Completion Logs' }
+      ];
+    },
+    getProbeTokens: function () {
+      var st = this.getStats();
+      return {
+        craa5___1_a_assetses:       { count: st.assets,        maxVer: 941020, latencyMs: 2 },
+        craa5___1_a_mss_areas:      { count: st.areas,         maxVer: 941021, latencyMs: 1 },
+        craa5___1_a_employees:      { count: st.employees,     maxVer: 941022, latencyMs: 1 },
+        craa5___1_s_shiftboards:    { count: st.shiftboards,   maxVer: 941023, latencyMs: 2 },
+        craa5___1_g_assignments:    { count: st.assignments,   maxVer: 941024, latencyMs: 2 },
+        craa5___1_s_cleancheckoffs: { count: st.checkoffs,     maxVer: 941025, latencyMs: 2 },
+        craa5___1_p_prodschedules:  { count: st.prodschedules, maxVer: 941026, latencyMs: 2 },
+        craa5___1_l_logs:           { count: st.logs,          maxVer: 941027, latencyMs: 3 }
+      };
+    },
+    getRequestLedger: function () {
+      var db = ensureDb();
+      return (db.ops || []).slice(-50).reverse().map(function (op, idx) {
+        return {
+          id: idx + 1,
+          ts: String(op.at || new Date().toISOString()).slice(11, 19),
+          appKey: 'portal',
+          method: op.type || 'GET',
+          entitySet: op.table || 'craa5___1_a_assetses',
+          source: 'CACHE_MEM',
+          status: 200,
+          rowCount: op.count !== undefined ? op.count : 1,
+          durationMs: 2
+        };
+      });
+    },
+    getFrameStaleInfo: function () {
+      return { isStale: false, tables: [] };
+    },
+    markFrameSynced: function () {},
+    getUserPreferences: function () {
+      try {
+        var raw = global.localStorage && global.localStorage.getItem('__MIDWEST_USER_PREFS_V1__');
+        if (raw) return JSON.parse(raw);
+      } catch (e) {}
+      return { defaultApp: 'manager' };
+    },
+    saveUserPreferences: function (prefs) {
+      var next = Object.assign({}, this.getUserPreferences(), prefs || {});
+      try {
+        if (global.localStorage) global.localStorage.setItem('__MIDWEST_USER_PREFS_V1__', JSON.stringify(next));
+      } catch (e) {}
+      return next;
+    },
+    probeCoreTables: function () {
+      notifyListeners('PROBE_COMPLETED');
+      return Promise.resolve(this.getProbeTokens());
+    },
+    clearAllCaches: function () {
+      notifyListeners('CACHE_CLEARED');
+      return Promise.resolve(true);
+    },
     clearCache: function () {
       notifyListeners('*');
       return Promise.resolve(true);
+    },
+    subscribe: function (fn) {
+      var rw = getRootWin();
+      if (!rw.__APEX_DEMO_LISTENERS__) rw.__APEX_DEMO_LISTENERS__ = [];
+      if (typeof fn === 'function') {
+        rw.__APEX_DEMO_LISTENERS__.push(function (ev) {
+          fn(ev === '*' ? 'SIMULATION_CHANGED' : ev, {});
+        });
+      }
+      return function () {};
     },
     getDiagnostics: function () {
       var db = ensureDb();
@@ -1702,6 +1919,7 @@
     }
   };
   global.__MIDWESTPLANT_SPEED_ENGINE__ = global.ApexDemoEngine;
+  global.__MidwestPlant_SPEED_ENGINE__ = global.ApexDemoEngine;
   global.MidwestPlantSpeedEngine = global.ApexDemoEngine;
   global['__STIL' + 'WELL_SPEED_ENGINE__'] = global.ApexDemoEngine;
   global['Stil' + 'wellSpeedEngine'] = global.ApexDemoEngine;

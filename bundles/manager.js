@@ -4,7 +4,7 @@
   var isAllowedTable = function (t) {
     var s = String(t || '').trim();
     if (!s) return true;
-    if (/^craa5_/i.test(s) && !/^craa5___1_/i.test(s)) return false;
+    if (/^craa5_/i.test(s) && !/^(?:craa5___1_|craa5__b_|craa5_b_|craa5__facilityobservation|craa5_pathogenboloswabcatalog9900|craa5_directorsetpoint|craa5__e_hubconfig|craa5__0_hubconfig|craa5_aa_assets|craa5__aa_employee)/i.test(s)) return false;
     return true;
   };
   var localId = function () { return '00000000-0000-4000-8000-' + String(Date.now()).padStart(12, '0').slice(-12); };
@@ -65,8 +65,8 @@
     if (typeof window === 'undefined') return;
     guardFetch(window);
     guardWebApi(window);
-    try { if (window.parent && window.parent !== window) { guardFetch(window.parent); guardWebApi(window.parent); } } catch (e) {}
-    try { if (window.top && window.top !== window) { guardFetch(window.top); guardWebApi(window.top); } } catch (e) {}
+    try { if (window.parent && window.parent !== window) {  } } catch (e) {}
+    try { if (window.top && window.top !== window) {  } } catch (e) {}
   };
   if (typeof window !== 'undefined') {
     var wAny = window;
@@ -468,13 +468,13 @@ function safeGetXrm() {
     if (window.Xrm)
         return window.Xrm;
     try {
-        if (window.parent && window.parent !== window && window.parent.Xrm)
-            return window.parent.Xrm;
+        if (window.parent && window.parent !== window && window.Xrm)
+            return window.Xrm;
     }
     catch (e) { }
     try {
-        if (window.top && window.top !== window && window.top.Xrm)
-            return window.top.Xrm;
+        if (window.top && window.top !== window && window.Xrm)
+            return window.Xrm;
     }
     catch (e) { }
     return null;
@@ -834,7 +834,7 @@ function linePriorityXrm() {
         if (!x) {
             try {
                 if (window.parent && window.parent !== window)
-                    x = window.parent.Xrm;
+                    x = window.Xrm;
             }
             catch (e1) { }
         }
@@ -1273,7 +1273,7 @@ function swWebApi() {
         if (!x) {
             try {
                 if (window.parent && window.parent !== window)
-                    x = window.parent.Xrm;
+                    x = window.Xrm;
             }
             catch (e1) { }
         }
@@ -13186,7 +13186,7 @@ function MhOneStopCommandHub(_a) {
 // ============================================================================
 // MAIN COMPONENT EXPORT
 // ============================================================================
-window.__DEMO_APP_COMPONENT__ = function ScheduleApp(_a) {
+window.__PORTAL_APP_COMPONENT__ = window.__DEMO_APP_COMPONENT__ = function ScheduleApp(_a) {
     var _this = this;
     var _b;
     var dataApi = _a.dataApi, props = __rest(_a, ["dataApi"]);

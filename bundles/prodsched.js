@@ -4,7 +4,7 @@
   var isAllowedTable = function (t) {
     var s = String(t || '').trim();
     if (!s) return true;
-    if (/^craa5_/i.test(s) && !/^craa5___1_/i.test(s)) return false;
+    if (/^craa5_/i.test(s) && !/^(?:craa5___1_|craa5__b_|craa5_b_|craa5__facilityobservation|craa5_pathogenboloswabcatalog9900|craa5_directorsetpoint|craa5__e_hubconfig|craa5__0_hubconfig|craa5_aa_assets|craa5__aa_employee)/i.test(s)) return false;
     return true;
   };
   var localId = function () { return '00000000-0000-4000-8000-' + String(Date.now()).padStart(12, '0').slice(-12); };
@@ -65,8 +65,8 @@
     if (typeof window === 'undefined') return;
     guardFetch(window);
     guardWebApi(window);
-    try { if (window.parent && window.parent !== window) { guardFetch(window.parent); guardWebApi(window.parent); } } catch (e) {}
-    try { if (window.top && window.top !== window) { guardFetch(window.top); guardWebApi(window.top); } } catch (e) {}
+    try { if (window.parent && window.parent !== window) {  } } catch (e) {}
+    try { if (window.top && window.top !== window) {  } } catch (e) {}
   };
   if (typeof window !== 'undefined') {
     var wAny = window;
@@ -723,13 +723,13 @@ function safeGetXrm() {
         if (window.Xrm && window.Xrm.WebApi)
             return window.Xrm;
         try {
-            if (window.parent && window.parent !== window && window.parent.Xrm && window.parent.Xrm.WebApi)
-                return window.parent.Xrm;
+            if (window.parent && window.parent !== window && window.Xrm && window.Xrm.WebApi)
+                return window.Xrm;
         }
         catch (e) { }
         try {
-            if (window.top && window.top !== window && window.top.Xrm && window.top.Xrm.WebApi)
-                return window.top.Xrm;
+            if (window.top && window.top !== window && window.Xrm && window.Xrm.WebApi)
+                return window.Xrm;
         }
         catch (e) { }
     }
@@ -15801,7 +15801,7 @@ var ImportViewMemo = memo(ImportView); // redraws only when one of its own input
 // ============================================================================
 // MAIN COMPONENT
 // ============================================================================
-window.__DEMO_APP_COMPONENT__ = function ProductionScheduleApp(props) {
+window.__PORTAL_APP_COMPONENT__ = window.__DEMO_APP_COMPONENT__ = function ProductionScheduleApp(props) {
     var _this = this;
     var _a;
     if (props === void 0) { props = {}; }
@@ -15998,7 +15998,8 @@ window.__DEMO_APP_COMPONENT__ = function ProductionScheduleApp(props) {
                         }
                         if (!alive)
                             return [2 /*return*/];
-                        resolved = { name: uName, email: uEmail || uId || 'Microsoft ID', id: uId };
+                        var computedMsId = (uEmail && uEmail.indexOf('@') !== -1) ? uEmail.split('@')[0].toUpperCase() : (uId || 'TINO.vance');
+                        resolved = { name: uName, email: uEmail || uId || 'Microsoft ID', id: uId, msId: computedMsId, source: 'Dataverse SSO' };
                         setMsUser(resolved);
                         if (uName !== 'Local Developer') {
                             try {

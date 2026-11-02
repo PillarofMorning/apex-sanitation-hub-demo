@@ -7,15 +7,16 @@
   <link rel="icon" href="data:," />
   <title>Apex Foods Sanitation Hub - Application Frame</title>
   <script>
+    window.__PORTAL_OFFLINE_DEMO__ = true;
     window.tailwind = window.tailwind || {};
     window.tailwind.config = { darkMode: 'class' };
   </script>
   <script id="tailwind-cdn" src="vendor/tailwind.js"></script>
   <script src="vendor/react.production.min.js"></script>
   <script src="vendor/react-dom.production.min.js"></script>
-  <script src="fluent_ui_shim.js?v=13"></script>
-  <script src="demo_seed_data.js?v=13"></script>
-  <script src="mock_dataverse_engine.js?v=13"></script>
+  <script src="fluent_ui_shim.js?v=14"></script>
+  <script src="demo_seed_data.js?v=14"></script>
+  <script src="mock_dataverse_engine.js?v=14"></script>
   <style>
     html, body, #root {
       margin: 0;
@@ -84,6 +85,7 @@
       function reportFrameError(code, message, detail) {
         var errCode = String(code || 'ERR-APP-RUNTIME-500');
         var errMsg = String(message || 'Unexpected error in module [' + appKey + ']');
+        window.__LAST_FRAME_ERROR__ = errCode + ': ' + errMsg + (detail ? ' (' + detail + ')' : '');
         try {
           if (engine && typeof engine.emitEngineError === 'function') {
             engine.emitEngineError(errCode, errMsg, { appKey: appKey, detail: detail || '' });
@@ -307,7 +309,7 @@
       };
 
       var s = document.createElement('script');
-      s.src = 'bundles/' + appKey + '.js?v=13';
+      s.src = 'bundles/' + appKey + '.js?v=14';
       s.onload = function () {
         LoadedComponent = window.__DEMO_APP_COMPONENT__ || window.__MIDWESTPLANT_APP_COMPONENT__ || window.__PORTAL_APP_COMPONENT__;
         var rootEl = document.getElementById('root');

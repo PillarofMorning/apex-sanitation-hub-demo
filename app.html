@@ -13,9 +13,9 @@
   <script id="tailwind-cdn" src="vendor/tailwind.js"></script>
   <script src="vendor/react.production.min.js"></script>
   <script src="vendor/react-dom.production.min.js"></script>
-  <script src="fluent_ui_shim.js?v=12"></script>
-  <script src="demo_seed_data.js?v=12"></script>
-  <script src="mock_dataverse_engine.js?v=12"></script>
+  <script src="fluent_ui_shim.js?v=13"></script>
+  <script src="demo_seed_data.js?v=13"></script>
+  <script src="mock_dataverse_engine.js?v=13"></script>
   <style>
     html, body, #root {
       margin: 0;
@@ -30,12 +30,23 @@
     html[data-hub-detail="0"] [data-hub-detail-only="1"] {
       display: none !important;
     }
+    /* Light Executive Top Header Normalization across embedded modules */
+    #root header {
+      background: #FFFFFF !important;
+      color: #0F172A !important;
+      border-bottom: 1px solid #CBD5E1 !important;
+      border-top: 3px solid #2563EB !important;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05) !important;
+    }
+    #root header h1, #root header h2, #root header h3 {
+      color: #0F172A !important;
+    }
     #root header img, #root nav img {
       cursor: pointer;
       transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
     html[data-hub-detail="1"] #root header img {
-      box-shadow: 0 0 0 2px #FFB81C;
+      box-shadow: 0 0 0 2px #D97706;
       border-radius: 6px;
     }
   </style>
@@ -296,7 +307,7 @@
       };
 
       var s = document.createElement('script');
-      s.src = 'bundles/' + appKey + '.js?v=12';
+      s.src = 'bundles/' + appKey + '.js?v=13';
       s.onload = function () {
         LoadedComponent = window.__DEMO_APP_COMPONENT__ || window.__MIDWESTPLANT_APP_COMPONENT__ || window.__PORTAL_APP_COMPONENT__;
         var rootEl = document.getElementById('root');

@@ -6,8 +6,8 @@
   <link rel="icon" href="data:," />
   <meta name="robots" content="noindex,nofollow" />
   <title>Apex Foods - Midwest Plant Sanitation Hub (5-Portal Architecture)</title>
-  <script src="demo_seed_data.js?v=12"></script>
-  <script src="mock_dataverse_engine.js?v=12"></script>
+  <script src="demo_seed_data.js?v=13"></script>
+  <script src="mock_dataverse_engine.js?v=13"></script>
   <style>
     * { box-sizing: border-box; }
     html, body {
@@ -23,10 +23,11 @@
       overflow: hidden;
     }
 
-    /* Single-Row 48px Executive Corporate Blue Header (#002B55 + #FFB81C Gold Bar) */
+    /* Single-Row 48px Light Executive Topbar (Clean White #FFFFFF + Soft Slate/Blue Accents) */
     .hub-topbar {
-      background: #002B55;
-      border-bottom: 3px solid #FFB81C;
+      background: #FFFFFF;
+      border-bottom: 1px solid #CBD5E1;
+      border-top: 3px solid #2563EB;
       height: 48px;
       min-height: 48px;
       padding: 0 14px;
@@ -36,7 +37,7 @@
       justify-content: space-between;
       gap: 8px;
       z-index: 120;
-      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.14);
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
     }
     .hub-brand {
       display: flex;
@@ -44,43 +45,45 @@
       gap: 8px;
       flex-shrink: 0;
     }
-    /* Universal Apex Foods Logo Detail Gate Button */
+    /* Universal Apex Foods Logo Detail Gate Button (Soft Executive Blue/Amber Pill) */
     .hub-emblem {
       height: 30px;
       padding: 0 10px;
       border-radius: 5px;
-      background: #FFB81C;
-      color: #002B55;
+      background: #EFF6FF;
+      color: #1E40AF;
       font-weight: 800;
       font-size: 11.5px;
-      border: 1.5px solid #D97706;
+      border: 1px solid #93C5FD;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 5px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.18);
       cursor: pointer;
       flex-shrink: 0;
-      transition: background 0.14s ease;
+      transition: all 0.14s ease;
       user-select: none;
     }
     .hub-emblem:hover {
-      background: #FCD34D;
+      background: #DBEAFE;
+      border-color: #60A5FA;
     }
     body.hub-detail-mode .hub-emblem {
-      border-color: #FFFFFF;
-      box-shadow: 0 0 0 2px #FFB81C;
+      background: #FFFBEB;
+      color: #B45309;
+      border-color: #F59E0B;
+      box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.20);
     }
     .hub-title {
       font-size: 13px;
       font-weight: 700;
-      color: #FFFFFF;
+      color: #0F172A;
       white-space: nowrap;
     }
     .hub-portal-pill {
-      background: #00468B;
-      color: #FFFFFF;
-      border: 1px solid #93C5FD;
+      background: #EFF6FF;
+      color: #1E40AF;
+      border: 1px solid #BFDBFE;
       border-radius: 5px;
       padding: 3.5px 9px;
       font-size: 11px;
@@ -93,9 +96,9 @@
       transition: all 0.14s ease;
     }
     .hub-portal-pill:hover {
-      background: #FFB81C;
-      color: #002B55;
-      border-color: #FFB81C;
+      background: #DBEAFE;
+      color: #1E3A8A;
+      border-color: #93C5FD;
     }
     .hub-prov-badge {
       font-size: 10px;
@@ -103,9 +106,9 @@
       padding: 2px 7px;
       border-radius: 4px;
       text-transform: uppercase;
-      background: #FEF3C7;
-      color: #002B55;
-      border: 1px solid #FFB81C;
+      background: #FFFBEB;
+      color: #B45309;
+      border: 1px solid #FCD34D;
       white-space: nowrap;
       display: none;
     }
@@ -113,13 +116,15 @@
       display: inline-block;
     }
     .hub-prov-badge.sim {
-      background: #FFB81C;
-      color: #002B55;
+      background: #FFFBEB;
+      color: #B45309;
+      border: 1px solid #FCD34D;
       display: inline-block;
     }
     .hub-prov-badge.err {
-      background: #EA580C;
-      color: #FFFFFF;
+      background: #FFF7ED;
+      color: #C2410C;
+      border: 1px solid #FDBA74;
       display: inline-block;
     }
 
@@ -127,8 +132,8 @@
     .hub-sb-mode-group {
       display: inline-flex;
       align-items: center;
-      background: #001F3F;
-      border: 1px solid rgba(255, 255, 255, 0.28);
+      background: #F1F5F9;
+      border: 1px solid #CBD5E1;
       border-radius: 5px;
       padding: 2px;
       gap: 2px;
@@ -139,8 +144,8 @@
       padding: 0 8px;
       border-radius: 4px;
       background: transparent;
-      color: #E2E8F0;
-      border: none;
+      color: #475569;
+      border: 1px solid transparent;
       display: inline-flex;
       align-items: center;
       gap: 4px;
@@ -151,20 +156,22 @@
       white-space: nowrap;
     }
     .hub-sb-mode-btn:hover {
-      color: #FFFFFF;
-      background: rgba(255, 255, 255, 0.12);
+      color: #0F172A;
+      background: #E2E8F0;
     }
     .hub-sb-mode-btn.active {
-      background: #FFB81C;
-      color: #002B55;
+      background: #FFFFFF;
+      color: #1D4ED8;
+      border-color: #93C5FD;
       font-weight: 800;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
     }
     .hub-home-top-btn {
       height: 30px;
       padding: 0 11px;
       border-radius: 5px;
-      background: #FFFFFF;
-      color: #002B55;
+      background: #F8FAFC;
+      color: #1E3A8A;
       border: 1px solid #CBD5E1;
       display: inline-flex;
       align-items: center;
@@ -177,27 +184,27 @@
       white-space: nowrap;
     }
     .hub-home-top-btn:hover {
-      background: #FEF3C7;
-      border-color: #FFB81C;
-      color: #002B55;
+      background: #EFF6FF;
+      border-color: #93C5FD;
+      color: #1D4ED8;
     }
     .hub-context-crumb {
       display: inline-flex;
       align-items: center;
       gap: 7px;
-      background: #003A70;
-      border: 1px solid rgba(255, 255, 255, 0.24);
+      background: #F8FAFC;
+      border: 1px solid #CBD5E1;
       border-radius: 5px;
       padding: 3.5px 10px;
       font-size: 11px;
-      color: #FFFFFF;
+      color: #334155;
       white-space: nowrap;
       min-width: 0;
       overflow: hidden;
       text-overflow: ellipsis;
     }
     .hub-crumb-portal {
-      color: #FFB81C;
+      color: #1D4ED8;
       font-weight: 700;
       cursor: pointer;
     }
@@ -205,11 +212,11 @@
       text-decoration: underline;
     }
     .hub-crumb-sep {
-      color: #93C5FD;
+      color: #94A3B8;
       font-weight: 700;
     }
     .hub-crumb-app {
-      color: #FFFFFF;
+      color: #0F172A;
       font-weight: 700;
     }
 
@@ -218,8 +225,8 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: #FFFFFF;
-      border: 1.5px solid #FFB81C;
+      background: #FFFBEB;
+      border: 1px solid #FCD34D;
       border-radius: 5px;
       padding: 2px 8px 2px 9px;
       height: 30px;
@@ -227,13 +234,13 @@
     .hub-viewas-lbl {
       font-size: 10px;
       font-weight: 800;
-      color: #002B55;
+      color: #B45309;
       text-transform: uppercase;
       white-space: nowrap;
     }
     .hub-viewas-select {
       background: transparent;
-      color: #002B55;
+      color: #0F172A;
       border: none;
       font-size: 11px;
       font-weight: 700;
@@ -268,7 +275,7 @@
       z-index: 80;
       user-select: none;
       overflow: hidden;
-      box-shadow: 1px 0 4px rgba(15, 23, 42, 0.05);
+      box-shadow: 1px 0 4px rgba(15, 23, 42, 0.04);
       transition: width 0.16s ease, min-width 0.16s ease;
     }
     .hub-sidebar.medallions {
@@ -296,21 +303,21 @@
     }
     .sb-home-btn {
       width: 100%;
-      background: #FFB81C;
-      color: #002B55;
-      border: 1px solid #D97706;
+      background: #EFF6FF;
+      color: #1E3A8A;
+      border: 1px solid #BFDBFE;
       border-radius: 6px;
       padding: 7px 10px;
       display: flex;
       align-items: center;
       gap: 9px;
       cursor: pointer;
-      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
-      transition: background 0.14s ease;
+      transition: all 0.14s ease;
       text-align: left;
     }
     .sb-home-btn:hover {
-      background: #FCD34D;
+      background: #DBEAFE;
+      border-color: #93C5FD;
     }
     .hub-sidebar.medallions .sb-home-btn {
       width: 44px;
@@ -323,7 +330,7 @@
       width: 22px;
       height: 22px;
       border-radius: 5px;
-      background: rgba(0, 43, 85, 0.12);
+      background: #DBEAFE;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -332,14 +339,14 @@
     .sb-home-title {
       font-size: 12px;
       font-weight: 800;
-      color: #002B55;
+      color: #1E3A8A;
       line-height: 1.15;
       display: block;
     }
     .sb-home-sub {
       font-size: 10px;
       font-weight: 600;
-      color: #1E3A8A;
+      color: #3B82F6;
       display: block;
       margin-top: 1px;
     }
@@ -506,7 +513,7 @@
       border: 1px solid #CBD5E1;
       border-radius: 6px;
       padding: 6px 8px;
-      color: #0F172A;
+      color: #1E293B;
       font-size: 11.5px;
       font-weight: 700;
       cursor: pointer;
@@ -519,15 +526,16 @@
     }
     .sb-portal-btn:hover {
       background: #EFF6FF;
-      color: #002B55;
-      border-color: #00468B;
+      color: #1E40AF;
+      border-color: #93C5FD;
     }
     .sb-portal-btn.active {
-      background: #002B55;
-      color: #FFFFFF;
-      border-color: #002B55;
-      border-left: 4px solid #FFB81C;
+      background: #EFF6FF;
+      color: #1E40AF;
+      border-color: #93C5FD;
+      border-left: 4px solid #2563EB;
       font-weight: 800;
+      box-shadow: 0 1px 2px rgba(37, 99, 235, 0.08);
     }
     .sb-p-tag {
       width: 24px;
@@ -541,12 +549,12 @@
       flex-shrink: 0;
       background: #FFFFFF;
       border: 1px solid #CBD5E1;
-      color: #002B55;
+      color: #1E40AF;
     }
     .sb-portal-btn.active .sb-p-tag {
-      background: #FFB81C;
-      color: #002B55;
-      border-color: #FFB81C;
+      background: #2563EB;
+      color: #FFFFFF;
+      border-color: #1D4ED8;
     }
     .sb-nav-item {
       position: relative;
@@ -555,7 +563,7 @@
       border-left: 3px solid transparent;
       border-radius: 6px;
       padding: 6.5px 8px;
-      color: #0F172A;
+      color: #1E293B;
       font-size: 11.5px;
       font-weight: 600;
       cursor: pointer;
@@ -569,17 +577,17 @@
       width: 100%;
     }
     .sb-nav-item:hover {
-      background: #EFF6FF;
-      color: #002B55;
+      background: #F8FAFC;
+      color: #1E40AF;
       border-color: #93C5FD;
     }
     .sb-nav-item.active {
-      background: #002B55;
-      color: #FFFFFF;
-      border-color: #002B55;
-      border-left: 4px solid #FFB81C;
+      background: #EFF6FF;
+      color: #1E40AF;
+      border-color: #93C5FD;
+      border-left: 4px solid #2563EB;
       font-weight: 700;
-      box-shadow: 0 1px 3px rgba(0, 43, 85, 0.16);
+      box-shadow: 0 1px 2px rgba(37, 99, 235, 0.08);
     }
     .sb-item-left {
       display: flex;
@@ -592,8 +600,8 @@
       width: 30px;
       height: 20px;
       border-radius: 4px;
-      background: #F1F5F9;
-      color: #00468B;
+      background: #F8FAFC;
+      color: #1E40AF;
       border: 1px solid #CBD5E1;
       font-size: 9px;
       font-weight: 800;
@@ -603,9 +611,9 @@
       flex-shrink: 0;
     }
     .sb-nav-item.active .sb-item-badge {
-      background: #FFB81C;
-      color: #002B55;
-      border-color: #FFB81C;
+      background: #2563EB;
+      color: #FFFFFF;
+      border-color: #1D4ED8;
     }
     .sb-item-lbl {
       overflow: hidden;
@@ -616,12 +624,12 @@
       width: 6px;
       height: 6px;
       border-radius: 999px;
-      background: #00468B;
+      background: #2563EB;
       display: none;
       flex-shrink: 0;
     }
     .sb-nav-item.active .hub-tab-dot {
-      background: #FFB81C;
+      background: #D97706;
     }
     .sb-nav-item.mounted .hub-tab-dot,
     .sb-medallion.mounted .hub-tab-dot {
@@ -642,7 +650,7 @@
       border-radius: 7px;
       background: #FFFFFF;
       border: 1.5px solid #CBD5E1;
-      color: #002B55;
+      color: #1E293B;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -655,14 +663,14 @@
     }
     .sb-medallion:hover {
       background: #EFF6FF;
-      border-color: #00468B;
-      color: #002B55;
+      border-color: #2563EB;
+      color: #1E40AF;
     }
     .sb-medallion.active {
-      background: #002B55;
-      color: #FFFFFF;
-      border: 2px solid #FFB81C;
-      box-shadow: 0 1px 4px rgba(0, 43, 85, 0.22);
+      background: #EFF6FF;
+      color: #1E40AF;
+      border: 2px solid #2563EB;
+      box-shadow: 0 1px 4px rgba(37, 99, 235, 0.16);
     }
     .sb-medallion-code {
       font-size: 8.5px;
@@ -685,10 +693,10 @@
       background: #FFFFFF;
       color: #0F172A;
       border: 1px solid #CBD5E1;
-      border-left: 4px solid #002B55;
+      border-left: 4px solid #2563EB;
       border-radius: 6px;
       padding: 9px 12px;
-      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.16);
+      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.14);
       z-index: 420;
       pointer-events: none;
       display: none;
@@ -702,7 +710,7 @@
       border: 1px solid #CBD5E1;
       border-radius: 5px;
       padding: 5px 8px;
-      color: #002B55;
+      color: #1E40AF;
       font-size: 10px;
       font-weight: 800;
       text-transform: uppercase;
@@ -714,7 +722,7 @@
     }
     .sb-cat-head:hover {
       background: #EFF6FF;
-      border-color: #00468B;
+      border-color: #93C5FD;
     }
     .sb-cat-body {
       display: flex;
@@ -749,7 +757,7 @@
     }
     .sb-foot-btn {
       background: #FFFFFF;
-      color: #002B55;
+      color: #1E293B;
       border: 1px solid #CBD5E1;
       border-radius: 5px;
       padding: 5px 7px;
@@ -765,15 +773,15 @@
     }
     .sb-foot-btn:hover {
       background: #EFF6FF;
-      border-color: #00468B;
-      color: #002B55;
+      border-color: #93C5FD;
+      color: #1E40AF;
     }
     .sb-mode-bar {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       gap: 3px;
       width: 100%;
-      background: #E2E8F0;
+      background: #F1F5F9;
       border: 1px solid #CBD5E1;
       border-radius: 5px;
       padding: 2px;
@@ -783,8 +791,8 @@
     }
     .sb-mode-opt {
       background: transparent;
-      color: #334155;
-      border: none;
+      color: #475569;
+      border: 1px solid transparent;
       border-radius: 4px;
       padding: 4px 3px;
       font-size: 9.5px;
@@ -794,16 +802,18 @@
       white-space: nowrap;
     }
     .sb-mode-opt:hover {
-      color: #002B55;
+      color: #1E40AF;
       background: #FFFFFF;
     }
     .sb-mode-opt.active {
-      background: #002B55;
-      color: #FFFFFF;
+      background: #FFFFFF;
+      color: #1E40AF;
+      border-color: #93C5FD;
       font-weight: 800;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
     }
 
-    /* Right Controls */
+    /* Right Controls (Light Executive Topbar) */
     .hub-actions {
       display: flex;
       align-items: center;
@@ -811,9 +821,9 @@
       flex-shrink: 0;
     }
     .hub-next-pill {
-      background: #FFB81C;
-      color: #002B55;
-      border: 1px solid #D97706;
+      background: #FFFBEB;
+      color: #B45309;
+      border: 1px solid #FCD34D;
       border-radius: 5px;
       padding: 4px 10px;
       font-size: 11px;
@@ -825,16 +835,17 @@
       white-space: nowrap;
     }
     .hub-next-pill:hover {
-      background: #FCD34D;
+      background: #FEF3C7;
+      border-color: #F59E0B;
     }
     .hub-copilot-btn {
-      background: #00468B;
-      color: #FFFFFF;
+      background: #EFF6FF;
+      color: #1D4ED8;
       border: 1px solid #93C5FD;
       border-radius: 5px;
       padding: 5px 10px;
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -842,12 +853,13 @@
       white-space: nowrap;
     }
     .hub-copilot-btn:hover {
-      background: #005BB5;
+      background: #DBEAFE;
+      border-color: #2563EB;
     }
     .hub-pill-btn {
-      background: rgba(255, 255, 255, 0.12);
-      color: #FFFFFF;
-      border: 1px solid rgba(255, 255, 255, 0.28);
+      background: #F8FAFC;
+      color: #334155;
+      border: 1px solid #CBD5E1;
       border-radius: 5px;
       padding: 4.5px 9px;
       font-size: 11px;
@@ -860,9 +872,9 @@
       transition: all 0.12s ease;
     }
     .hub-pill-btn:hover, .hub-pill-btn.active {
-      background: #FFB81C;
-      color: #002B55;
-      border-color: #FFB81C;
+      background: #EFF6FF;
+      color: #1E40AF;
+      border-color: #93C5FD;
     }
     /* Detail-only header controls hidden until Apex Foods Logo is clicked */
     .hub-detail-only {
@@ -875,8 +887,9 @@
       width: 18px;
       height: 18px;
       border-radius: 4px;
-      background: #FFB81C;
-      color: #002B55;
+      background: #DBEAFE;
+      color: #1E40AF;
+      border: 1px solid #93C5FD;
       font-weight: 800;
       font-size: 9.5px;
       display: inline-flex;
@@ -886,8 +899,8 @@
 
     /* Sub-Header Live Telemetry Bar (Hidden by Default behind Apex Foods Logo Gate) */
     .hub-statsbar {
-      background: #EFF6FF;
-      border-bottom: 1px solid #BFDBFE;
+      background: #F8FAFC;
+      border-bottom: 1px solid #CBD5E1;
       height: 28px;
       min-height: 28px;
       padding: 0 14px;
@@ -917,18 +930,18 @@
       display: inline-flex;
       align-items: center;
       gap: 3px;
-      color: #334155;
+      color: #475569;
       font-weight: 600;
     }
     .hub-stat-item strong {
-      color: #002B55;
+      color: #1E40AF;
       font-family: Consolas, Monaco, monospace;
       font-size: 11px;
       font-weight: 800;
     }
     .hub-mini-btn {
       background: #FFFFFF;
-      color: #002B55;
+      color: #1E293B;
       border: 1px solid #CBD5E1;
       border-radius: 4px;
       padding: 2px 8px;
@@ -938,15 +951,15 @@
       white-space: nowrap;
     }
     .hub-mini-btn:hover {
-      background: #FEF3C7;
-      border-color: #FFB81C;
-      color: #002B55;
+      background: #EFF6FF;
+      border-color: #93C5FD;
+      color: #1E40AF;
     }
 
     /* Simulation / Elevation Banner */
     .hub-sim-banner {
-      background: #FEF3C7;
-      color: #002B55;
+      background: #FFFBEB;
+      color: #92400E;
       padding: 4px 14px;
       font-size: 11.5px;
       font-weight: 700;
@@ -954,16 +967,16 @@
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      border-bottom: 1.5px solid #FFB81C;
+      border-bottom: 1px solid #FCD34D;
       z-index: 95;
     }
     .hub-sim-banner.active {
       display: flex;
     }
     .hub-sim-exit-btn {
-      background: #002B55;
-      color: #FFFFFF;
-      border: none;
+      background: #FFFFFF;
+      color: #92400E;
+      border: 1px solid #F59E0B;
       border-radius: 4px;
       padding: 3px 10px;
       font-size: 10.5px;
@@ -975,7 +988,7 @@
     .hub-update-bar {
       background: #EFF6FF;
       border-bottom: 1px solid #93C5FD;
-      color: #002B55;
+      color: #1E40AF;
       padding: 4px 14px;
       font-size: 11px;
       font-weight: 700;
@@ -1032,13 +1045,13 @@
     }
     .podium-bezel {
       background: #FFFFFF;
-      border: 2px solid #002B55;
-      border-top: 4px solid #FFB81C;
+      border: 1.5px solid #CBD5E1;
+      border-top: 4px solid #D97706;
       border-radius: 10px;
       padding: 8px;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.10);
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
       overflow: hidden;
     }
     .podium-bezel-top {
@@ -1046,7 +1059,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 4px 10px 8px;
-      color: #002B55;
+      color: #1E293B;
       font-size: 11px;
       font-weight: 800;
       border-bottom: 1px solid #E2E8F0;
@@ -1059,27 +1072,28 @@
     }
     .inspector-stage-pane {
       background: #FFFFFF;
-      border: 2px solid #002B55;
+      border: 1.5px solid #CBD5E1;
+      border-top: 4px solid #2563EB;
       border-radius: 10px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.10);
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
     }
     .inspector-stage-top {
-      background: #002B55;
-      color: #FFFFFF;
+      background: #F8FAFC;
+      color: #0F172A;
       padding: 8px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       font-size: 12px;
       font-weight: 700;
-      border-bottom: 3px solid #FFB81C;
+      border-bottom: 1px solid #CBD5E1;
     }
 
     /* ========================================================================
-       CLEAN EXECUTIVE CORPORATE 5-PORTAL SPLASH PAGE OVERLAY (White/Blue/Yellow/Orange)
+       CLEAN EXECUTIVE CORPORATE 5-PORTAL SPLASH PAGE OVERLAY (Light Executive Palette)
        ======================================================================== */
     .splash-overlay {
       position: fixed;
@@ -1105,11 +1119,12 @@
       width: 100%;
       margin: 0 auto 16px;
       padding: 14px 20px;
-      background: #002B55;
-      color: #FFFFFF;
+      background: #FFFFFF;
+      color: #0F172A;
       border-radius: 8px;
-      border-bottom: 4px solid #FFB81C;
-      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+      border: 1px solid #CBD5E1;
+      border-top: 4px solid #2563EB;
+      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.06);
     }
     .splash-hero {
       max-width: 1420px;
@@ -1118,7 +1133,7 @@
       padding: 14px 18px;
       background: #FFFFFF;
       border: 1px solid #CBD5E1;
-      border-left: 4px solid #00468B;
+      border-left: 4px solid #2563EB;
       border-radius: 8px;
       display: flex;
       flex-wrap: wrap;
@@ -1134,15 +1149,15 @@
       margin: 0 auto 16px;
       padding: 14px 18px;
       background: #FFFFFF;
-      border: 1.5px solid #EA580C;
-      border-left: 6px solid #EA580C;
+      border: 1px solid #FDBA74;
+      border-left: 5px solid #EA580C;
       border-radius: 8px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
       gap: 14px;
-      box-shadow: 0 2px 6px rgba(234, 88, 12, 0.08);
+      box-shadow: 0 1px 4px rgba(234, 88, 12, 0.06);
     }
     .splash-grid {
       max-width: 1420px;
@@ -1155,7 +1170,7 @@
     .portal-card {
       background: #FFFFFF;
       border: 1px solid #CBD5E1;
-      border-top: 4px solid #00468B;
+      border-top: 4px solid #2563EB;
       border-radius: 8px;
       padding: 18px 20px;
       display: flex;
@@ -1165,16 +1180,16 @@
       cursor: pointer;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
     }
     .portal-card:hover {
       transform: translateY(-2px);
-      border-color: #00468B;
-      box-shadow: 0 6px 16px rgba(0, 43, 85, 0.10);
+      border-color: #93C5FD;
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.10);
     }
     .portal-card.featured {
-      border: 1.5px solid #002B55;
-      border-top: 4px solid #FFB81C;
+      border: 1.5px solid #93C5FD;
+      border-top: 4px solid #D97706;
       background: #FFFFFF;
     }
     .portal-badge {
@@ -1194,7 +1209,7 @@
       margin: 0 0 6px;
       font-size: 17.5px;
       font-weight: 800;
-      color: #002B55;
+      color: #0F172A;
     }
     .portal-card p {
       margin: 0 0 14px;
@@ -1210,7 +1225,7 @@
     }
     .portal-chip {
       background: #F8FAFC;
-      color: #002B55;
+      color: #1E293B;
       border: 1px solid #CBD5E1;
       border-radius: 5px;
       padding: 4px 8px;
@@ -1220,9 +1235,9 @@
       transition: all 0.12s ease;
     }
     .portal-chip:hover {
-      background: #00468B;
-      color: #FFFFFF;
-      border-color: #00468B;
+      background: #EFF6FF;
+      color: #1E40AF;
+      border-color: #93C5FD;
     }
     .portal-launch-btn {
       width: 100%;
@@ -1243,7 +1258,7 @@
     .hub-drawer-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.35);
+      background: rgba(15, 23, 42, 0.30);
       display: none;
       z-index: 300;
     }
@@ -1259,7 +1274,7 @@
       height: 100vh;
       background: #FFFFFF;
       border-left: 1px solid #CBD5E1;
-      box-shadow: -6px 0 24px rgba(15, 23, 42, 0.18);
+      box-shadow: -6px 0 24px rgba(15, 23, 42, 0.14);
       display: none;
       flex-direction: column;
       z-index: 310;
@@ -1268,21 +1283,23 @@
       display: flex;
     }
     .hub-drawer-head {
-      background: #002B55;
-      color: #FFFFFF;
+      background: #F8FAFC;
+      color: #0F172A;
       padding: 14px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 3px solid #FFB81C;
+      border-bottom: 1px solid #CBD5E1;
+      border-top: 3px solid #2563EB;
     }
     .hub-drawer-title {
       font-size: 15px;
       font-weight: 800;
+      color: #0F172A;
     }
     .hub-drawer-close {
       background: #FFFFFF;
-      color: #002B55;
+      color: #334155;
       border: 1px solid #CBD5E1;
       border-radius: 5px;
       padding: 4px 10px;
@@ -1309,7 +1326,7 @@
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      color: #002B55;
+      color: #1E40AF;
       margin-bottom: 8px;
     }
     .hub-kv-grid {
@@ -1338,9 +1355,9 @@
       background: #FFFFFF;
     }
     .hub-btn-primary {
-      background: #00468B;
-      color: #FFFFFF;
-      border: 1px solid #002B55;
+      background: #EFF6FF;
+      color: #1E40AF;
+      border: 1px solid #93C5FD;
       border-radius: 5px;
       padding: 7px 12px;
       font-size: 12px;
@@ -1348,12 +1365,13 @@
       cursor: pointer;
     }
     .hub-btn-primary:hover {
-      background: #002B55;
+      background: #DBEAFE;
+      border-color: #2563EB;
     }
     .hub-btn-danger {
       background: #FFF7ED;
       color: #9A3412;
-      border: 1px solid #EA580C;
+      border: 1px solid #FDBA74;
       border-radius: 5px;
       padding: 7px 12px;
       font-size: 12px;
@@ -1374,15 +1392,16 @@
       color: #0F172A;
     }
     .copilot-msg.user {
-      background: #002B55;
-      color: #FFFFFF;
+      background: #EFF6FF;
+      color: #1E3A8A;
+      border: 1px solid #BFDBFE;
       align-self: flex-end;
       max-width: 88%;
     }
     .copilot-prov-chip {
       display: inline-block;
       background: #EFF6FF;
-      color: #00468B;
+      color: #1D4ED8;
       border: 1px solid #BFDBFE;
       border-radius: 4px;
       padding: 1px 6px;
@@ -1397,7 +1416,7 @@
     .hub-cmd-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.40);
+      background: rgba(15, 23, 42, 0.35);
       display: none;
       align-items: flex-start;
       justify-content: center;
@@ -1412,9 +1431,9 @@
       max-width: 92vw;
       background: #FFFFFF;
       border: 1px solid #CBD5E1;
-      border-top: 4px solid #002B55;
+      border-top: 4px solid #2563EB;
       border-radius: 7px;
-      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.22);
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18);
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -1452,14 +1471,14 @@
     }
     .hub-cmd-item:hover, .hub-cmd-item.selected {
       background: #EFF6FF;
-      color: #002B55;
+      color: #1E40AF;
     }
     .hub-cmd-kbd {
       font-family: Consolas, Monaco, monospace;
       font-size: 10px;
       font-weight: 700;
       background: #F8FAFC;
-      color: #002B55;
+      color: #1E40AF;
       border: 1px solid #CBD5E1;
       border-radius: 4px;
       padding: 1px 6px;
@@ -1472,8 +1491,9 @@
       font-size: 11px;
     }
     .hub-diag-table th {
-      background: #002B55;
-      color: #FFFFFF;
+      background: #F1F5F9;
+      color: #1E293B;
+      border-bottom: 2px solid #CBD5E1;
       text-align: left;
       padding: 6px 8px;
       font-weight: 700;
@@ -1490,10 +1510,10 @@
       font-size: 10px;
       font-weight: 800;
     }
-    .src-LIVE_NET { background: #EFF6FF; color: #00468B; border: 1px solid #BFDBFE; }
-    .src-CACHE_MEM, .src-CACHE_IDB { background: #FEF3C7; color: #002B55; border: 1px solid #FFB81C; }
+    .src-LIVE_NET { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; }
+    .src-CACHE_MEM, .src-CACHE_IDB { background: #FFFBEB; color: #B45309; border: 1px solid #FCD34D; }
     .src-COALESCED { background: #FFF7ED; color: #9A3412; border: 1px solid #FDBA74; }
-    .src-SIM_BLOCKED { background: #FFF7ED; color: #EA580C; border: 1px solid #EA580C; }
+    .src-SIM_BLOCKED { background: #FFF7ED; color: #EA580C; border: 1px solid #FDBA74; }
 
     /* Toast Alert */
     .hub-toast {
@@ -1501,14 +1521,15 @@
       bottom: 18px;
       right: 18px;
       max-width: 440px;
-      background: #002B55;
-      color: #FFFFFF;
-      border-left: 5px solid #FFB81C;
+      background: #FFFFFF;
+      color: #0F172A;
+      border: 1px solid #CBD5E1;
+      border-left: 5px solid #2563EB;
       border-radius: 6px;
       padding: 11px 16px;
       font-size: 12px;
       font-weight: 700;
-      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.22);
+      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.14);
       display: none;
       z-index: 400;
     }
@@ -1526,7 +1547,7 @@
       height: 100vh !important;
     }
 
-    /* Structured Diagnostic Error Code & Freeze Watchdog HUD (Clean Corporate White/Orange/Blue) */
+    /* Structured Diagnostic Error Code & Freeze Watchdog HUD (Clean Corporate Light Mode) */
     .hub-err-pill {
       display: none;
       align-items: center;
@@ -1534,9 +1555,9 @@
       height: 28px;
       padding: 0 9px;
       border-radius: 5px;
-      background: #EA580C;
-      color: #FFFFFF;
-      border: 1px solid #FFEDD5;
+      background: #FFF7ED;
+      color: #C2410C;
+      border: 1px solid #FDBA74;
       font-family: Consolas, Monaco, monospace;
       font-size: 10.5px;
       font-weight: 800;
@@ -1554,10 +1575,10 @@
       max-width: calc(100vw - 32px);
       background: #FFFFFF;
       color: #0F172A;
-      border: 1.5px solid #EA580C;
+      border: 1px solid #FDBA74;
       border-top: 4px solid #EA580C;
       border-radius: 8px;
-      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.22);
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.16);
       z-index: 410;
       display: none;
       flex-direction: column;
@@ -1567,14 +1588,14 @@
       display: flex;
     }
     .hub-error-hud-head {
-      background: #002B55;
-      color: #FFFFFF;
+      background: #FFF7ED;
+      color: #9A3412;
       padding: 9px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      border-bottom: 2px solid #FFB81C;
+      border-bottom: 1px solid #FDBA74;
     }
     .hub-error-code-badge {
       background: #EA580C;
@@ -1597,7 +1618,7 @@
     .hub-error-hud-meta {
       font-family: Consolas, Monaco, monospace;
       font-size: 10.5px;
-      color: #002B55;
+      color: #1E40AF;
       background: #F8FAFC;
       border: 1px solid #CBD5E1;
       border-radius: 5px;
@@ -1611,7 +1632,7 @@
       margin-top: 2px;
     }
 
-    /* Clean Executive Corporate 10-Stop VP Presentation Guided Tour Controller (White, Blue, Yellow, Orange) */
+    /* Clean Light Executive Corporate 10-Stop VP Presentation Guided Tour Controller (White, Soft Blue, Soft Cream-Amber, Soft Orange) */
     .vp-tour-launch-btn {
       display: inline-flex;
       align-items: center;
@@ -1619,18 +1640,20 @@
       height: 30px;
       padding: 0 11px;
       border-radius: 5px;
-      background: #FFB81C;
-      color: #002B55;
-      border: 1.5px solid #D97706;
+      background: #FFFBEB;
+      color: #B45309;
+      border: 1.5px solid #FCD34D;
       font-size: 11px;
       font-weight: 800;
       cursor: pointer;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
       transition: background 0.14s ease;
       white-space: nowrap;
     }
     .vp-tour-launch-btn:hover {
-      background: #FCD34D;
+      background: #FEF3C7;
+      border-color: #F59E0B;
+      color: #92400E;
     }
     .vp-tour-card {
       position: fixed;
@@ -1640,10 +1663,10 @@
       max-width: calc(100vw - 28px);
       background: #FFFFFF;
       color: #0F172A;
-      border: 2px solid #002B55;
-      border-top: 4px solid #FFB81C;
+      border: 1.5px solid #93C5FD;
+      border-top: 4px solid #2563EB;
       border-radius: 8px;
-      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.22);
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.16);
       z-index: 350;
       display: none;
       flex-direction: column;
@@ -1670,24 +1693,24 @@
       justify-content: space-between;
       gap: 8px;
       padding: 10px 14px;
-      background: #002B55;
-      color: #FFFFFF;
-      border-bottom: 2px solid #FFB81C;
+      background: #EFF6FF;
+      color: #1E40AF;
+      border-bottom: 2px solid #93C5FD;
     }
     .vp-tour-eyebrow {
       font-size: 10px;
       font-weight: 800;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: #FFB81C;
+      color: #1E40AF;
     }
     .vp-tour-step-badge {
       display: inline-block;
       padding: 2px 8px;
       border-radius: 4px;
-      background: #FEF3C7;
-      border: 1px solid #FFB81C;
-      color: #002B55;
+      background: #FFFBEB;
+      border: 1px solid #FCD34D;
+      color: #B45309;
       font-size: 10px;
       font-weight: 800;
       margin-left: 6px;
@@ -1698,9 +1721,9 @@
       gap: 5px;
     }
     .vp-tour-icon-btn {
-      background: rgba(255, 255, 255, 0.14);
-      color: #FFFFFF;
-      border: 1px solid rgba(255, 255, 255, 0.28);
+      background: #FFFFFF;
+      color: #1E40AF;
+      border: 1px solid #BFDBFE;
       border-radius: 4px;
       padding: 3px 8px;
       font-size: 10.5px;
@@ -1708,9 +1731,9 @@
       cursor: pointer;
     }
     .vp-tour-icon-btn:hover {
-      background: #FFB81C;
-      color: #002B55;
-      border-color: #FFB81C;
+      background: #FFFBEB;
+      color: #B45309;
+      border-color: #FCD34D;
     }
     .vp-tour-steps-strip {
       display: flex;
@@ -1734,15 +1757,15 @@
       transition: all 0.12s ease;
     }
     .vp-tour-step-pill:hover {
-      color: #002B55;
-      border-color: #00468B;
+      color: #1E40AF;
+      border-color: #93C5FD;
       background: #EFF6FF;
     }
     .vp-tour-step-pill.active {
-      background: #002B55;
-      color: #FFFFFF;
-      border-color: #002B55;
-      border-bottom: 2px solid #FFB81C;
+      background: #EFF6FF;
+      color: #1E40AF;
+      border-color: #2563EB;
+      border-bottom: 2px solid #2563EB;
       font-weight: 800;
     }
     .vp-tour-body {
@@ -1854,18 +1877,19 @@
       background: #EFF6FF;
     }
     .vp-tour-nav-btn.next-primary {
-      background: #FFB81C;
-      color: #002B55;
-      border-color: #D97706;
+      background: #FFFBEB;
+      color: #B45309;
+      border-color: #FCD34D;
       font-weight: 800;
     }
     .vp-tour-nav-btn.next-primary:hover {
-      background: #FCD34D;
+      background: #FEF3C7;
+      border-color: #F59E0B;
     }
     .vp-tour-nav-btn.autoplay-on {
-      background: #EA580C;
-      color: #FFFFFF;
-      border-color: #C2410C;
+      background: #FFF7ED;
+      color: #C2410C;
+      border-color: #FDBA74;
       font-weight: 800;
     }
   </style>
@@ -2022,7 +2046,7 @@
       <div class="sb-scroll" id="sidebar-scroll-content"></div>
 
       <div class="sb-footer">
-        <button id="sb-tour-btn" class="sb-foot-btn" style="width:100%;background:#FFB81C;color:#002B55;border-color:#D97706;font-weight:800;" onclick="startVpPresentationTour(0)" title="Start Expansive 10-Stop VP Presentation Guided Tour"><span>Tour</span><span class="sb-text-hide" id="sb-tour-lbl">VP Guided Tour (10)</span></button>
+        <button id="sb-tour-btn" class="sb-foot-btn" style="width:100%;background:#FFFBEB;color:#B45309;border-color:#FCD34D;font-weight:800;" onclick="startVpPresentationTour(0)" title="Start Expansive 10-Stop VP Presentation Guided Tour"><span>Tour</span><span class="sb-text-hide" id="sb-tour-lbl">VP Guided Tour (10)</span></button>
         <div class="sb-foot-row">
           <button id="sb-split-btn" class="sb-foot-btn" onclick="togglePodiumSplitStage()" title="Launch Side-by-Side Podium Split View (Portal 1 + Portal 2)">
             <span>Split</span>
@@ -2056,8 +2080,8 @@
         </div>
         <div class="inspector-stage-pane">
           <div class="inspector-stage-top">
-            <span id="split-right-title">PORTAL 2 - FSQ / SANITATION INSPECTOR LIVE QUEUE &amp; 6M FISHBONE CAPA STUDIO</span>
-            <button onclick="togglePodiumSplitStage()" style="background:#FFB81C;color:#002B55;border:1px solid #D97706;border-radius:5px;padding:3px 10px;font-size:11px;font-weight:800;cursor:pointer;">Exit Split View</button>
+            <span id="split-right-title">PORTAL 2 - FSQ / SANITATION INSPECTOR LIVE QUEUE &amp; SIX SIGMA DMAIC CAPA STUDIO</span>
+            <button onclick="togglePodiumSplitStage()" style="background:#FFFBEB;color:#B45309;border:1px solid #FCD34D;border-radius:5px;padding:3px 10px;font-size:11px;font-weight:800;cursor:pointer;">Exit Split View</button>
           </div>
           <iframe id="split-frame-inspect" style="flex:1;width:100%;border:0;background:#F8FAFC;" title="Portal 2 Inspector Hub"></iframe>
         </div>
@@ -2075,29 +2099,29 @@
           <span>APEX FOODS</span>
         </div>
         <div>
-          <div style="font-size:10.5px;font-weight:800;color:#FFB81C;letter-spacing:0.06em;text-transform:uppercase;" id="sp-eyebrow">
+          <div style="font-size:10.5px;font-weight:800;color:#D97706;letter-spacing:0.06em;text-transform:uppercase;" id="sp-eyebrow">
             MIDWEST PLANT SANITATION OPERATIONS &amp; FOOD SAFETY ARCHITECTURE
           </div>
-          <div style="font-size:20px;font-weight:800;color:#FFFFFF;" id="sp-main-title">
+          <div style="font-size:20px;font-weight:800;color:#0F172A;" id="sp-main-title">
             Role-Segregated Enterprise Command Hub
           </div>
         </div>
       </div>
       <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
         <button id="sp-tour-btn" class="vp-tour-launch-btn" style="height:32px;padding:0 14px;font-size:12px;" onclick="startVpPresentationTour(0)"><span id="sp-tour-lbl">Start VP Presentation Tour (10 Stops)</span></button>
-        <button id="sp-bolo-top-btn" class="hub-pill-btn" style="padding:7px 13px;font-size:12px;background:#EA580C;color:#FFFFFF;border-color:#FDBA74;font-weight:800;" onclick="toggleSplashOverlay(false);switchApp('bolo');">
+        <button id="sp-bolo-top-btn" class="hub-pill-btn" style="padding:7px 13px;font-size:12px;background:#FFF7ED;color:#C2410C;border-color:#FDBA74;font-weight:800;" onclick="toggleSplashOverlay(false);switchApp('bolo');">
           <span>Pathogen BOLO Surveillance</span>
         </button>
         <button id="sp-split-wrap" class="hub-copilot-btn" style="padding:7px 13px;font-size:12px;" onclick="toggleSplashOverlay(false);togglePodiumSplitStage(true);">
           <span id="sp-split-btn">Podium Split View (Portal 1 + 2)</span>
         </button>
-        <button class="hub-copilot-btn" style="padding:7px 13px;font-size:12px;background:#00468B;border-color:#93C5FD;" onclick="toggleSplashOverlay(false);openDrawer('copilot');">
+        <button class="hub-copilot-btn" style="padding:7px 13px;font-size:12px;" onclick="toggleSplashOverlay(false);openDrawer('copilot');">
           <span id="sp-copilot-btn">Open Copilot Executive Assistant</span>
         </button>
         <button class="hub-pill-btn" style="padding:7px 13px;font-size:12px;" onclick="toggleGlobalLanguage()">
           <span id="sp-lang-btn">Language: EN / ES</span>
         </button>
-        <button class="hub-pill-btn" style="padding:7px 13px;font-size:12px;background:#FFB81C;color:#002B55;border-color:#FFB81C;font-weight:800;" onclick="toggleSplashOverlay(false)">
+        <button class="hub-pill-btn" style="padding:7px 13px;font-size:12px;background:#FFFBEB;color:#B45309;border-color:#FCD34D;font-weight:800;" onclick="toggleSplashOverlay(false)">
           <span id="sp-close-btn">Resume Active Workspace</span>
         </button>
       </div>
@@ -2108,18 +2132,18 @@
         <div style="font-size:13px;color:#334155;line-height:1.5;" id="sp-hero-desc">
           Select a role-segregated portal below to scope navigation to that operational tier. Further diagnostic details are gated behind the <strong>Apex Foods logo</strong> in the top-left corner, keeping executive and plant-floor views clean and focused.
         </div>
-        <div id="sp-role-scope-banner" style="margin-top:8px;display:inline-flex;align-items:center;gap:8px;background:#FEF3C7;border:1px solid #FFB81C;border-radius:5px;padding:4px 10px;font-size:11.5px;color:#002B55;font-weight:800;">
+        <div id="sp-role-scope-banner" style="margin-top:8px;display:inline-flex;align-items:center;gap:8px;background:#FFFBEB;border:1px solid #FCD34D;border-radius:5px;padding:4px 10px;font-size:11.5px;color:#92400E;font-weight:800;">
           Viewing as: Live Identity (All 5 Portals Accessible)
         </div>
       </div>
       <div style="display:flex;gap:12px;flex-wrap:wrap;">
-        <div style="background:#F8FAFC;border:1px solid #CBD5E1;border-top:3px solid #002B55;border-radius:6px;padding:7px 13px;">
+        <div style="background:#F8FAFC;border:1px solid #CBD5E1;border-top:3px solid #2563EB;border-radius:6px;padding:7px 13px;">
           <div style="font-size:10px;font-weight:800;color:#475569;text-transform:uppercase;">Dataverse Sandbox</div>
-          <div style="font-size:14px;font-weight:800;color:#002B55;" id="sp-kpi-tables">43 Live Tables Connected</div>
+          <div style="font-size:14px;font-weight:800;color:#1E40AF;" id="sp-kpi-tables">43 Live Tables Connected</div>
         </div>
-        <div style="background:#F8FAFC;border:1px solid #CBD5E1;border-top:3px solid #FFB81C;border-radius:6px;padding:7px 13px;">
+        <div style="background:#F8FAFC;border:1px solid #CBD5E1;border-top:3px solid #D97706;border-radius:6px;padding:7px 13px;">
           <div style="font-size:10px;font-weight:800;color:#475569;text-transform:uppercase;">Live Plant Telemetry</div>
-          <div style="font-size:14px;font-weight:800;color:#00468B;" id="sp-kpi-assets">Pure Live OData v9.2</div>
+          <div style="font-size:14px;font-weight:800;color:#B45309;" id="sp-kpi-assets">Pure Live OData v9.2</div>
         </div>
       </div>
     </div>
@@ -2127,11 +2151,11 @@
     <!-- Flagship Pathogen BOLO & Automated Data Feeds Spotlight Bar -->
     <div id="splash-bolo-spotlight" class="splash-bolo-spotlight">
       <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-        <span style="background:#FFF7ED;color:#EA580C;border:1.5px solid #EA580C;border-radius:5px;padding:4px 10px;font-size:11px;font-weight:800;text-transform:uppercase;">
+        <span style="background:#FFF7ED;color:#C2410C;border:1px solid #FDBA74;border-radius:5px;padding:4px 10px;font-size:11px;font-weight:800;text-transform:uppercase;">
           FLAGSHIP FOOD SAFETY SURVEILLANCE
         </span>
         <div>
-          <div style="font-size:15px;font-weight:800;color:#002B55;">
+          <div style="font-size:15px;font-weight:800;color:#0F172A;">
             Pathogen BOLO Environmental Monitoring &amp; Automated Daily Data Feeds
           </div>
           <div style="font-size:12px;color:#475569;margin-top:2px;" id="sp-feeds-status-line">
@@ -2140,13 +2164,13 @@
         </div>
       </div>
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-        <button class="hub-btn-primary" style="background:#EA580C;border-color:#C2410C;padding:8px 14px;font-weight:800;" onclick="toggleSplashOverlay(false);switchApp('bolo');">
+        <button class="hub-btn-primary" style="background:#FFF7ED;color:#C2410C;border-color:#FDBA74;padding:8px 14px;font-weight:800;" onclick="toggleSplashOverlay(false);switchApp('bolo');">
           Open Pathogen BOLO Now
         </button>
-        <button class="hub-btn-primary" style="background:#002B55;border-color:#002B55;padding:8px 13px;" onclick="toggleSplashOverlay(false);switchApp('inspect');">
-          Open 6M Fishbone CAPA Studio
+        <button class="hub-btn-primary" style="background:#EFF6FF;color:#1E40AF;border-color:#93C5FD;padding:8px 13px;font-weight:800;" onclick="toggleSplashOverlay(false);switchApp('inspect');">
+          Open Six Sigma CAPA Studio
         </button>
-        <button class="hub-mini-btn" style="padding:7px 11px;font-size:11.5px;border-color:#00468B;color:#002B55;" onclick="toggleSplashOverlay(false);openDrawer('copilot');askCopilotPrompt('feeds');">
+        <button class="hub-mini-btn" style="padding:7px 11px;font-size:11.5px;border-color:#CBD5E1;color:#334155;" onclick="toggleSplashOverlay(false);openDrawer('copilot');askCopilotPrompt('feeds');">
           Auto-Feeds Status (antonio.csv &amp; L:\)
         </button>
       </div>
@@ -2200,11 +2224,11 @@
           <button class="hub-btn-primary" onclick="switchExecutivePersona('VP_OPS')">VP of Operations (P1-P4)</button>
           <button class="hub-btn-primary" onclick="switchExecutivePersona('VP_QUAL')">VP of Quality &amp; FSQ (P2, P4)</button>
           <button class="hub-btn-primary" onclick="switchExecutivePersona('SUPERVISOR')">Sanitation Supervisor (P1-P3)</button>
-          <button class="hub-btn-primary" style="background:#EA580C;border-color:#C2410C;" onclick="switchExecutivePersona('INSPECTOR')">FSQ / CI Inspector (P2 Only)</button>
+          <button class="hub-btn-primary" style="background:#FFF7ED;color:#C2410C;border-color:#FDBA74;" onclick="switchExecutivePersona('INSPECTOR')">FSQ / CI Inspector (P2 Only)</button>
           <button class="hub-btn-primary" onclick="switchExecutivePersona('LEAD')">Sanitation Lead (P1, P3)</button>
           <button class="hub-btn-primary" onclick="switchExecutivePersona('TECH')">Floor Tech (P1 Only)</button>
-          <button class="hub-btn-primary" style="background:#002B55;" onclick="switchExecutivePersona('DEVELOPER')">Developer Console (P1-P5)</button>
-          <button class="hub-btn-primary" style="background:#FFB81C;color:#002B55;border-color:#D97706;" onclick="exitSimulationMode()">Restore My Live Identity</button>
+          <button class="hub-btn-primary" onclick="switchExecutivePersona('DEVELOPER')">Developer Console (P1-P5)</button>
+          <button class="hub-btn-primary" style="background:#FFFBEB;color:#B45309;border-color:#FCD34D;" onclick="exitSimulationMode()">Restore My Live Identity</button>
         </div>
         <label style="display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;color:#334155;margin-top:6px;">
           <input type="checkbox" id="sim-readonly-lock" />
@@ -2243,8 +2267,8 @@
           <label style="font-size:12px;font-weight:700;color:#334155;">Sidebar Layout Mode:</label>
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
             <button class="hub-btn-primary" onclick="setSidebarMode('expanded')">Expanded (256px)</button>
-            <button class="hub-btn-primary" style="background:#00468B;" onclick="setSidebarMode('medallions')">Medallions (64px)</button>
-            <button class="hub-btn-primary" style="background:#002B55;" onclick="setSidebarMode('hidden')">Collapsed (0px)</button>
+            <button class="hub-btn-primary" onclick="setSidebarMode('medallions')">Medallions (64px)</button>
+            <button class="hub-btn-primary" onclick="setSidebarMode('hidden')">Collapsed (0px)</button>
           </div>
           <label style="font-size:12px;font-weight:700;color:#334155;margin-top:4px;">Default Landing App on Portal Open:</label>
           <select id="pref-default-app" class="hub-select" onchange="saveProfilePrefs()"></select>
@@ -2258,9 +2282,9 @@
 
   <!-- Portal 4: Grounded Microsoft Copilot Administrative Assistant Webchat Drawer -->
   <div id="drawer-copilot" class="hub-drawer" style="width:540px;">
-    <div class="hub-drawer-head" style="background:#002B55;">
+    <div class="hub-drawer-head">
       <div>
-        <div style="font-size:10px;font-weight:800;color:#FFB81C;letter-spacing:0.06em;text-transform:uppercase;">
+        <div style="font-size:10px;font-weight:800;color:#D97706;letter-spacing:0.06em;text-transform:uppercase;">
           MICROSOFT COPILOT-ALIGNED ADMINISTRATIVE ASSISTANT
         </div>
         <span class="hub-drawer-title">Midwest Plant Executive Copilot (100% Live Dataverse Grounded)</span>
@@ -2271,17 +2295,17 @@
       <div>
         <div class="hub-card" style="margin-bottom:10px;background:#EFF6FF;border-color:#BFDBFE;">
           <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
-            <span style="font-size:11px;font-weight:800;color:#002B55;">
+            <span style="font-size:11px;font-weight:800;color:#1E40AF;">
               Chatting as Login: <strong id="copilot-active-login">Marcus Vance (Sr Mgr Sanitation)</strong>
             </span>
-            <button class="hub-mini-btn" style="background:#002B55;color:#FFFFFF;border:none;" onclick="printExecutiveBrief()">
+            <button class="hub-mini-btn" style="background:#FFFFFF;color:#1E40AF;border-color:#93C5FD;" onclick="printExecutiveBrief()">
               Print 1-Page Executive Brief
             </button>
           </div>
           <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;">
             <button class="hub-mini-btn" onclick="askCopilotPrompt('vp_ops')">VP of Ops Brief</button>
             <button class="hub-mini-btn" onclick="askCopilotPrompt('vp_qual')">VP of Quality Swab &amp; CAPA Audit</button>
-            <button class="hub-mini-btn" style="border-color:#EA580C;color:#9A3412;background:#FFF7ED;" onclick="askCopilotPrompt('feeds')">Auto-Feeds (antonio.csv &amp; L:\)</button>
+            <button class="hub-mini-btn" style="border-color:#FDBA74;color:#C2410C;background:#FFF7ED;" onclick="askCopilotPrompt('feeds')">Auto-Feeds (antonio.csv &amp; L:\)</button>
             <button class="hub-mini-btn" onclick="askCopilotPrompt('preinspect')">Live Pre-Inspection Queue</button>
             <button class="hub-mini-btn" onclick="askCopilotPrompt('training')">In-Training &amp; Evals Summary</button>
             <button class="hub-mini-btn" onclick="askCopilotPrompt('split')">Launch Podium Split View</button>
@@ -2352,7 +2376,7 @@
   <!-- Floating Medallion Hover Flyout Card (Clean Executive White Card) -->
   <div id="sb-medallion-flyout" class="sb-medallion-flyout" role="tooltip">
     <div id="sb-flyout-tag" style="font-size:9.5px;font-weight:800;color:#EA580C;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;">PORTAL MODULE</div>
-    <div id="sb-flyout-title" style="font-size:13px;font-weight:800;color:#002B55;line-height:1.25;">Module Name</div>
+    <div id="sb-flyout-title" style="font-size:13px;font-weight:800;color:#1E40AF;line-height:1.25;">Module Name</div>
     <div id="sb-flyout-sub" style="font-size:11px;color:#475569;margin-top:3px;font-weight:600;">Click to open</div>
   </div>
 
@@ -2361,16 +2385,16 @@
     <div class="hub-error-hud-head">
       <div style="display:flex;align-items:center;gap:8px;">
         <span class="hub-error-code-badge" id="hud-err-code">ERR-DV-TIMEOUT-408</span>
-        <span style="font-size:11.5px;font-weight:800;color:#FFFFFF;" id="hud-err-title">Runtime Diagnostic Alert</span>
+        <span style="font-size:11.5px;font-weight:800;color:#9A3412;" id="hud-err-title">Runtime Diagnostic Alert</span>
       </div>
-      <button onclick="toggleErrorHud(false)" style="background:#FFFFFF;color:#002B55;border:1px solid #CBD5E1;border-radius:4px;padding:2px 8px;font-size:10.5px;font-weight:800;cursor:pointer;">Dismiss</button>
+      <button onclick="toggleErrorHud(false)" style="background:#FFFFFF;color:#334155;border:1px solid #CBD5E1;border-radius:4px;padding:2px 8px;font-size:10.5px;font-weight:800;cursor:pointer;">Dismiss</button>
     </div>
     <div class="hub-error-hud-body">
       <div id="hud-err-msg" style="color:#0F172A;font-weight:700;">An operation exceeded the deadline or encountered an error.</div>
       <div id="hud-err-meta" class="hub-error-hud-meta">Module: - | Time: -</div>
       <div class="hub-error-hud-actions">
-        <button class="hub-btn-primary" style="background:#FFB81C;color:#002B55;border-color:#D97706;font-weight:800;padding:5px 10px;font-size:11px;" onclick="recoverFromErrorHud(false)">Reload Active Module</button>
-        <button class="hub-btn-primary" style="background:#00468B;border-color:#002B55;padding:5px 10px;font-size:11px;" onclick="recoverFromErrorHud(true)">Purge Cache &amp; Recover</button>
+        <button class="hub-btn-primary" style="background:#FFFBEB;color:#B45309;border-color:#FCD34D;font-weight:800;padding:5px 10px;font-size:11px;" onclick="recoverFromErrorHud(false)">Reload Active Module</button>
+        <button class="hub-btn-primary" style="padding:5px 10px;font-size:11px;" onclick="recoverFromErrorHud(true)">Purge Cache &amp; Recover</button>
         <button class="hub-mini-btn" style="padding:5px 10px;font-size:11px;" onclick="toggleErrorHud(false);openDrawer('diag');">Open Diagnostics</button>
       </div>
     </div>
@@ -2456,9 +2480,9 @@
           badgeEn: 'PORTAL 1 - 90% PHONE & PODIUM TABLET',
           badgeEs: 'PORTAL 1 - 90% CELULAR Y TABLET EN PODIO',
           badgeColor: '#B45309',
-          badgeBg: '#FEF3C7',
-          badgeBorder: '#FFB81C',
-          topBarColor: '#FFB81C',
+          badgeBg: '#FFFBEB',
+          badgeBorder: '#FCD34D',
+          topBarColor: '#D97706',
           titleEn: '1. Lead + Employee Hub',
           titleEs: '1. Centro de Lideres y Empleados',
           descEn: 'Gloved-hand mobile & podium tablet station with Barcode Badge Scanner, Assigned Shift Tasks, 1-Tap Call for Pre-Inspection, Area Ganttly Clock, Today/Tomorrow Schedule, Supervisor Goals, High Fives, Problem Submit & Profile Center.',
@@ -2472,26 +2496,27 @@
           ],
           btnLabelEn: 'Launch Portal 1 (Employee & Tablet Hub)',
           btnLabelEs: 'Abrir Portal 1 (Hub de Empleado y Podio)',
-          btnBg: '#FFB81C',
-          btnColor: '#002B55'
+          btnBg: '#FFFBEB',
+          btnColor: '#92400E',
+          btnBorder: '#FCD34D'
         },
         {
           id: 'portal2',
           shortBadge: 'Portal 2: FSQ & BOLO',
           badgeEn: 'PORTAL 2 - FSQ INSPECTORS, BOLO & CI LEADS',
           badgeEs: 'PORTAL 2 - INSPECTORES FSQ, BOLO Y LIDERES CI',
-          badgeColor: '#9A3412',
+          badgeColor: '#C2410C',
           badgeBg: '#FFF7ED',
-          badgeBorder: '#EA580C',
+          badgeBorder: '#FDBA74',
           topBarColor: '#EA580C',
           titleEn: '2. FSQ / Sanitation Inspector & BOLO Hub',
           titleEs: '2. Hub de Inspectores FSQ y Patogenos BOLO',
-          descEn: 'Pathogen BOLO Environmental Surveillance (FSNS antonio.csv auto-ingest), Live Equipment Pre-Inspection Verification (MSID or Badge Scan), 6M Fishbone + 5-Why CAPA Studio, Simplified MSS Checking, Team & Shift Builder, Sanitation Ordering & Leadership-in-Training Gate.',
-          descEs: 'Vigilancia Ambiental Patogenos BOLO (ingesta automatica antonio.csv), Pre-Inspeccion de Equipos, Estudio CAPA Espina de Pescado 6M, MSS Simplificado, Armador de Equipos/Turnos y Ordenes Quimicas.',
+          descEn: 'Pathogen BOLO Environmental Surveillance (FSNS antonio.csv auto-ingest), Live Equipment Pre-Inspection Verification (MSID or Badge Scan), Six Sigma DMAIC 6M Fishbone + 5-Why CAPA Studio, Simplified MSS Checking, Team & Shift Builder, Sanitation Ordering & Leadership-in-Training Gate.',
+          descEs: 'Vigilancia Ambiental Patogenos BOLO (ingesta automatica antonio.csv), Pre-Inspeccion de Equipos, Estudio CAPA Six Sigma DMAIC 6M, MSS Simplificado, Armador de Equipos/Turnos y Ordenes Quimicas.',
           defaultApp: 'bolo',
           primaryTabs: [
             { key: 'bolo',       labelEn: '1. Pathogen BOLO Surveillance',   labelEs: '1. Vigilancia Patogenos BOLO' },
-            { key: 'inspect',    labelEn: '2. Inspect & 6M Fishbone CAPA',   labelEs: '2. Inspeccion y CAPA 6M' },
+            { key: 'inspect',    labelEn: '2. Inspect & Six Sigma CAPA',     labelEs: '2. Inspeccion y CAPA Six Sigma' },
             { key: 'calendar',   labelEn: '3. MSS Checking (Simplified)',    labelEs: '3. Revision MSS (Simplificado)' },
             { key: 'shiftstart', labelEn: '4. Team & Shift Builder',         labelEs: '4. Armador de Equipos y Turno' },
             { key: 'mss',        labelEn: '5. Daily MSS / SAP Checkoff',     labelEs: '5. Checkoff Diario MSS / SAP' },
@@ -2499,18 +2524,19 @@
           ],
           btnLabelEn: 'Launch Portal 2 (Pathogen BOLO & Inspector Hub)',
           btnLabelEs: 'Abrir Portal 2 (Patogenos BOLO e Inspector)',
-          btnBg: '#EA580C',
-          btnColor: '#FFFFFF'
+          btnBg: '#FFF7ED',
+          btnColor: '#C2410C',
+          btnBorder: '#FDBA74'
         },
         {
           id: 'portal3',
           shortBadge: 'Portal 3: Supervisor',
           badgeEn: 'PORTAL 3 - SUPERVISOR & LEAD OPERATIONS',
           badgeEs: 'PORTAL 3 - OPERACIONES DE SUPERVISOR Y LIDER',
-          badgeColor: '#00468B',
+          badgeColor: '#1D4ED8',
           badgeBg: '#EFF6FF',
           badgeBorder: '#93C5FD',
-          topBarColor: '#00468B',
+          topBarColor: '#2563EB',
           titleEn: '3. Supervisor + Lead Portal',
           titleEs: '3. Portal de Supervisor y Lideres',
           descEn: 'Training Supervisor Hub, Employee Roster & Evaluations Studio (Pros/Cons, Remarks, Performance Evaluations & "In Training" Badge Elevation Toggle), Team & Shift Builder, Shift Overview (Ganttly), Training Matrix, PBED, SAP Submission & Map Access.',
@@ -2528,23 +2554,24 @@
           ],
           btnLabelEn: 'Launch Portal 3 (Supervisor + Lead Portal)',
           btnLabelEs: 'Abrir Portal 3 (Supervisor y Lideres)',
-          btnBg: '#00468B',
-          btnColor: '#FFFFFF'
+          btnBg: '#EFF6FF',
+          btnColor: '#1E40AF',
+          btnBorder: '#93C5FD'
         },
         {
           id: 'portal4',
           shortBadge: 'Portal 4: Senior Leadership',
           badgeEn: 'PORTAL 4 - SENIOR LEADERSHIP',
           badgeEs: 'PORTAL 4 - LIDERAZGO SENIOR',
-          badgeColor: '#002B55',
-          badgeBg: '#FEF3C7',
-          badgeBorder: '#FFB81C',
-          topBarColor: '#FFB81C',
+          badgeColor: '#1E40AF',
+          badgeBg: '#EFF6FF',
+          badgeBorder: '#93C5FD',
+          topBarColor: '#2563EB',
           featured: true,
           titleEn: '4. Senior Leadership',
           titleEs: '4. Liderazgo Senior',
-          descEn: 'Full executive access to all applications, Pathogen BOLO Surveillance, Customize Views Studio, 1-Page Printable Executive Briefs, and the Microsoft Copilot-aligned Administrative Assistant Webchat grounded on live Dataverse tables.',
-          descEs: 'Acceso ejecutivo completo a todas las aplicaciones, Vigilancia Patogenos BOLO, Personalizar Vistas, Resumenes Ejecutivos Imprimibles y Asistente Webchat estilo Microsoft Copilot conectado a Dataverse.',
+          descEn: 'Full executive access to all applications, Pathogen BOLO Surveillance, Six Sigma DMAIC CAPA Studio, Customize Views Studio, 1-Page Printable Executive Briefs, and the Microsoft Copilot-aligned Administrative Assistant Webchat grounded on live Dataverse tables.',
+          descEs: 'Acceso ejecutivo completo a todas las aplicaciones, Vigilancia Patogenos BOLO, Estudio CAPA Six Sigma DMAIC, Personalizar Vistas, Resumenes Ejecutivos Imprimibles y Asistente Webchat estilo Microsoft Copilot conectado a Dataverse.',
           defaultApp: 'manager',
           primaryTabs: [
             { key: 'manager',    labelEn: '1. Managers Hub',        labelEs: '1. Hub de Gerentes' },
@@ -2558,18 +2585,19 @@
           ],
           btnLabelEn: 'Launch Portal 4 - Senior Leadership',
           btnLabelEs: 'Abrir Portal 4 - Liderazgo Senior',
-          btnBg: '#002B55',
-          btnColor: '#FFFFFF'
+          btnBg: '#EFF6FF',
+          btnColor: '#1E40AF',
+          btnBorder: '#93C5FD'
         },
         {
           id: 'portal5',
           shortBadge: 'Portal 5: Developer',
           badgeEn: 'PORTAL 5 - PAC CLI, ODATA & 43-TABLE ECOSYSTEM',
           badgeEs: 'PORTAL 5 - PAC CLI, ODATA Y ECOSISTEMA 43 TABLAS',
-          badgeColor: '#002B55',
-          badgeBg: '#EFF6FF',
-          badgeBorder: '#00468B',
-          topBarColor: '#002B55',
+          badgeColor: '#334155',
+          badgeBg: '#F8FAFC',
+          badgeBorder: '#CBD5E1',
+          topBarColor: '#475569',
           titleEn: '5. Developer Command Center',
           titleEs: '5. Centro de Comando de Desarrollador',
           descEn: 'Live 43-Table Dataverse Ecosystem & Zero-Drift Inspector, Automated Data Feed Connectors (FSNS antonio.csv & L:\\day by days\\2026), PIN-Guarded Read-Only OData Query Runner, and PAC CLI Solution Studio.',
@@ -2581,8 +2609,9 @@
           ],
           btnLabelEn: 'Launch Portal 5 (Developer Console)',
           btnLabelEs: 'Abrir Portal 5 (Consola Desarrollador)',
-          btnBg: '#00468B',
-          btnColor: '#FFFFFF'
+          btnBg: '#F8FAFC',
+          btnColor: '#1E293B',
+          btnBorder: '#CBD5E1'
         }
       ];
 
@@ -2620,12 +2649,12 @@
         var isPowerPages = /\.powerappsportals\.com$/i.test(window.location.hostname || '');
         var extra = (appKey === 'people') ? '&tab=employeequery' : '';
         if (isWebResource) {
-          return '/WebResources/craa5_MidwestPlant_hub_app.html?app=' + encodeURIComponent(appKey) + extra + '&v=8';
+          return '/WebResources/craa5_MidwestPlant_hub_app.html?app=' + encodeURIComponent(appKey) + extra + '&v=9';
         }
         if (isPowerPages) {
-          return '/?app=' + encodeURIComponent(appKey) + extra + '&v=8';
+          return '/?app=' + encodeURIComponent(appKey) + extra + '&v=9';
         }
-        return 'app.html?app=' + encodeURIComponent(appKey) + extra + '&v=12';
+        return 'app.html?app=' + encodeURIComponent(appKey) + extra + '&v=13';
       }
 
       function broadcastToFrames(msgObj) {
@@ -2802,7 +2831,7 @@
                 '<p>' + (isEs ? p.descEs : p.descEn) + '</p>' +
                 '<div class="portal-chip-list">' + chipsHtml + '</div>' +
               '</div>' +
-              '<button class="portal-launch-btn" style="background:' + p.btnBg + ';color:' + p.btnColor + ';">' +
+              '<button class="portal-launch-btn" style="background:' + p.btnBg + ';color:' + p.btnColor + ';border:1px solid ' + (p.btnBorder || '#93C5FD') + ';">' +
                 '<span>' + (isEs ? p.btnLabelEs : p.btnLabelEn) + '</span>' +
               '</button>' +
             '</div>'
@@ -2831,26 +2860,26 @@
         ecosystem:  '43TB'
       };
 
-      // Strictly Clean Corporate Blue (#00468B / #002B55), Amber/Yellow (#D97706), and Orange (#EA580C)
+      // Strictly Clean Light Executive Corporate Blue (#2563EB / #1D4ED8), Amber/Yellow (#D97706), and Orange (#EA580C)
       var APP_RING_COLORS = {
         employee:   '#D97706',
         inspect:    '#EA580C',
-        supervisor: '#00468B',
-        people:     '#00468B',
-        calendar:   '#00468B',
+        supervisor: '#2563EB',
+        people:     '#2563EB',
+        calendar:   '#2563EB',
         ganttly:    '#D97706',
-        shiftstart: '#00468B',
+        shiftstart: '#2563EB',
         mss:        '#D97706',
-        director:   '#002B55',
+        director:   '#1E40AF',
         bolo:       '#EA580C',
-        manager:    '#002B55',
-        prodsched:  '#00468B',
-        pbed:       '#00468B',
-        training:   '#00468B',
+        manager:    '#1E40AF',
+        prodsched:  '#2563EB',
+        pbed:       '#2563EB',
+        training:   '#2563EB',
         ordering:   '#EA580C',
-        mapsubmit:  '#00468B',
-        devcenter:  '#002B55',
-        ecosystem:  '#002B55'
+        mapsubmit:  '#2563EB',
+        devcenter:  '#334155',
+        ecosystem:  '#334155'
       };
 
       var APP_SVG_PATHS = {
@@ -2968,7 +2997,7 @@
       function buildSidebarAppBtnHtml(appKey, customLabel, portalBadgeText) {
         var lbl = customLabel || APP_LABELS[appKey] || appKey;
         var shortTag = APP_SHORT_BADGES[appKey] || appKey.slice(0, 3).toUpperCase();
-        var ringColor = APP_RING_COLORS[appKey] || '#00468B';
+        var ringColor = APP_RING_COLORS[appKey] || '#2563EB';
         var svgInner = APP_SVG_PATHS[appKey] || '<circle cx="12" cy="12" r="8"/>';
         var isAct = (appKey === activeAppKey);
         var isMnt = Boolean(mountedFrames[appKey]);
@@ -2986,7 +3015,7 @@
               'onmouseenter="showMedallionFlyout(event, \'' + escLbl + '\', \'' + escTag + '\', \'' + statusTxt + '\')" ' +
               'onmouseleave="hideMedallionFlyout()" ' +
               'onclick="switchApp(\'' + appKey + '\')">' +
-              '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="' + (isAct ? '#FFB81C' : ringColor) + '" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' + svgInner + '</svg>' +
+              '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="' + (isAct ? '#2563EB' : ringColor) + '" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' + svgInner + '</svg>' +
               '<span class="sb-medallion-code">' + shortTag + '</span>' +
               '<span class="hub-tab-dot"></span>' +
             '</button>'
@@ -2995,8 +3024,8 @@
 
         var badgeInline = !isAct
           ? (appKey === 'bolo'
-              ? 'background:#FFF7ED;border:1px solid #EA580C;color:#9A3412;'
-              : 'border:1px solid ' + ringColor + '66;color:' + ringColor + ';')
+              ? 'background:#FFF7ED;border:1px solid #FDBA74;color:#C2410C;'
+              : 'border:1px solid ' + ringColor + '55;color:' + ringColor + ';')
           : '';
 
         return (
@@ -3066,8 +3095,8 @@
         var searchInp = document.getElementById('sidebar-search-input');
         if (searchInp) {
           searchInp.placeholder = isEs
-            ? ('Filtrar ' + scope.apps.length + ' modulos visibles...')
-            : ('Filter ' + scope.apps.length + ' viewable modules...');
+            ? ('Buscar en ' + scope.apps.length + ' modulos del rol...')
+            : ('Search ' + scope.apps.length + ' viewable modules...');
         }
         applySidebarModeDom();
 
@@ -3080,25 +3109,21 @@
         var activePrimaryTabs = pDef.primaryTabs.filter(function (tb) {
           return scope.apps.indexOf(tb.key) !== -1;
         });
-        var primaryKeysMap = {};
-        activePrimaryTabs.forEach(function (t) { primaryKeysMap[t.key] = true; });
-        var otherKeys = scope.apps.filter(function (k) {
-          return !primaryKeysMap[k] && Boolean(APP_LABELS[k]);
-        });
 
-        // MEDALLIONS RAIL MODE (Compact 64px rail with crisp portal & module medallions + hover flyouts)
+        // MEDALLIONS RAIL MODE (Compact 64px rail: Portals grouped at the top, followed by ONLY the selected Portal's modules)
         if (sidebarMode === 'medallions') {
           var portalMedallionsHtml = visiblePortals.map(function (p) {
             var pNum = p.id.replace('portal', 'P');
             var isActPortal = (p.id === activePortalId);
             var pTitle = (isEs ? p.titleEs : p.titleEn).replace(/'/g, "\\'").replace(/"/g, '&quot;');
+            var pModCnt = p.primaryTabs.filter(function (tb) { return scope.apps.indexOf(tb.key) !== -1; }).length;
             return (
               '<button class="sb-medallion' + (isActPortal ? ' active' : '') + '" ' +
-                'style="border-color:' + p.badgeColor + ';" ' +
-                'onmouseenter="showMedallionFlyout(event, \'' + pTitle + '\', \'ROLE PORTAL ' + pNum + '\', \'Click to switch active role portal\')" ' +
+                'style="border-color:' + (isActPortal ? '#2563EB' : p.badgeColor) + ';" ' +
+                'onmouseenter="showMedallionFlyout(event, \'' + pTitle + '\', \'PORTAL ' + pNum + ' (' + pModCnt + ' MODULES)\', \'Click to filter modules to ' + p.shortBadge + '\')" ' +
                 'onmouseleave="hideMedallionFlyout()" ' +
                 'onclick="selectPortalScope(\'' + p.id + '\')">' +
-                '<span style="font-size:11px;font-weight:900;color:' + (isActPortal ? '#FFB81C' : p.badgeColor) + ';">' + pNum + '</span>' +
+                '<span style="font-size:11px;font-weight:900;color:' + (isActPortal ? '#1E40AF' : p.badgeColor) + ';">' + pNum + '</span>' +
                 '<span class="sb-medallion-code">PORTAL</span>' +
               '</button>'
             );
@@ -3109,30 +3134,50 @@
             return buildSidebarAppBtnHtml(tb.key, lbl, pDef.shortBadge);
           }).join('');
 
-          var otherAppMedallionsHtml = otherKeys.map(function (k) {
-            return buildSidebarAppBtnHtml(k, APP_LABELS[k], 'ADDITIONAL VIEWABLE MODULE');
-          }).join('');
-
           sbScroll.innerHTML =
-            (visiblePortals.length > 1
-              ? '<div class="sb-section">' +
-                  '<div class="sb-sec-head"><span>P</span></div>' +
-                  '<div class="sb-portal-grid">' + portalMedallionsHtml + '</div>' +
-                '</div>'
-              : '') +
             '<div class="sb-section">' +
-              '<div class="sb-sec-head"><span>MOD</span></div>' +
-              '<div class="sb-portal-grid">' + activeAppMedallionsHtml + '</div>' +
+              '<div class="sb-sec-head"><span>P (' + visiblePortals.length + ')</span></div>' +
+              '<div class="sb-portal-grid">' + portalMedallionsHtml + '</div>' +
             '</div>' +
-            (otherKeys.length > 0
-              ? '<div class="sb-section">' +
-                  '<div class="sb-sec-head"><span>+' + otherKeys.length + '</span></div>' +
-                  '<div class="sb-portal-grid">' + otherAppMedallionsHtml + '</div>' +
-                '</div>'
-              : '');
+            '<div class="sb-section">' +
+              '<div class="sb-sec-head"><span>' + pDef.id.replace('portal', 'P') + ' (' + activePrimaryTabs.length + ')</span></div>' +
+              '<div class="sb-portal-grid">' + activeAppMedallionsHtml + '</div>' +
+            '</div>';
           return;
         }
 
+        // 1. TOP PORTALS GROUP (All portals at or below the user's login tier grouped at the top of the sidebar)
+        var portalsListHtml = visiblePortals.map(function (p) {
+          var isActPortal = (p.id === activePortalId);
+          var pTitle = isEs ? p.titleEs : p.titleEn;
+          var pTag = p.id.replace('portal', 'P');
+          var pModCount = p.primaryTabs.filter(function (tb) {
+            return scope.apps.indexOf(tb.key) !== -1;
+          }).length;
+          return (
+            '<button class="sb-portal-btn' + (isActPortal ? ' active' : '') + '" ' +
+              'style="width:100%;justify-content:space-between;" ' +
+              'title="' + pTitle.replace(/"/g, '&quot;') + ' - Filters module list to ' + pModCount + ' modules" ' +
+              'onclick="selectPortalScope(\'' + p.id + '\')">' +
+              '<span style="display:flex;align-items:center;gap:8px;min-width:0;overflow:hidden;">' +
+                '<span class="sb-p-tag" style="' + (!isActPortal ? 'color:' + p.badgeColor + ';border-color:' + p.badgeColor + '55;' : '') + '">' + pTag + '</span>' +
+                '<span class="sb-item-lbl sb-text-hide">' + pTitle + '</span>' +
+              '</span>' +
+              '<span class="sb-text-hide" style="font-size:9.5px;font-weight:800;padding:1px 5px;border-radius:4px;background:' + (isActPortal ? '#DBEAFE' : '#FFFFFF') + ';color:' + (isActPortal ? '#1E40AF' : '#64748B') + ';border:1px solid ' + (isActPortal ? '#93C5FD' : '#CBD5E1') + ';">' + pModCount + 'M</span>' +
+            '</button>'
+          );
+        }).join('');
+
+        var topPortalsSectionHtml =
+          '<div class="sb-section">' +
+            '<div class="sb-sec-head">' +
+              '<span class="sb-text-hide">' + (isEs ? '1. Portales en tu Rol (' + visiblePortals.length + ')' : '1. Portals in Your Scope (' + visiblePortals.length + ')') + '</span>' +
+              '<span style="font-size:9px;color:#64748B;">' + (isEs ? 'Filtrar' : 'Select to Filter') + '</span>' +
+            '</div>' +
+            '<div class="sb-portal-grid">' + portalsListHtml + '</div>' +
+          '</div>';
+
+        // 2. SEARCH ACROSS ALL VIEWABLE MODULES (When search query is active)
         var q = sidebarFilterQuery;
         if (q) {
           var matchingApps = scope.apps.filter(function (k) {
@@ -3140,82 +3185,35 @@
             return s.toLowerCase().indexOf(q) !== -1;
           });
           var flatHtml = matchingApps.map(function (k) {
-            return buildSidebarAppBtnHtml(k, APP_LABELS[k], pDef.shortBadge);
+            return buildSidebarAppBtnHtml(k, APP_LABELS[k], 'SEARCH MATCH');
           }).join('');
           sbScroll.innerHTML =
+            topPortalsSectionHtml +
             '<div class="sb-section">' +
               '<div class="sb-sec-head">' +
-                '<span class="sb-text-hide">' + (isEs ? 'Modulos Visibles (' + matchingApps.length + ')' : 'Viewable Matches (' + matchingApps.length + ')') + '</span>' +
+                '<span class="sb-text-hide">' + (isEs ? 'Resultados de Busqueda (' + matchingApps.length + ')' : 'Search Matches (' + matchingApps.length + ')') + '</span>' +
                 '<span>' + matchingApps.length + '</span>' +
               '</div>' +
-              '<div class="sb-portal-grid">' + (flatHtml || '<div style="padding:8px;font-size:11px;color:#64748B;">No viewable modules match filter</div>') + '</div>' +
+              '<div class="sb-portal-grid">' + (flatHtml || '<div style="padding:8px;font-size:11px;color:#64748B;">No viewable modules match search</div>') + '</div>' +
             '</div>';
           return;
         }
 
-        // EXPANDED FOCUSED SIDEBAR:
-        // 1. Active Portal Primary Modules right at the top for immediate 1-click focus
+        // 3. STRICTLY FILTERED MODULES FOR THE SELECTED PORTAL
         var activeModulesHtml = activePrimaryTabs.map(function (tb) {
           var lbl = isEs ? tb.labelEs : tb.labelEn;
           return buildSidebarAppBtnHtml(tb.key, lbl, pDef.shortBadge);
         }).join('');
 
-        // 2. Viewable Role Portals for this login
-        var portalsListHtml = visiblePortals.map(function (p) {
-          var isActPortal = (p.id === activePortalId);
-          var pTitle = isEs ? p.titleEs : p.titleEn;
-          var pTag = p.id.replace('portal', 'P');
-          return (
-            '<button class="sb-portal-btn' + (isActPortal ? ' active' : '') + '" ' +
-              'style="width:100%;justify-content:space-between;" ' +
-              'title="' + pTitle.replace(/"/g, '&quot;') + '" ' +
-              'onclick="selectPortalScope(\'' + p.id + '\')">' +
-              '<span style="display:flex;align-items:center;gap:8px;min-width:0;overflow:hidden;">' +
-                '<span class="sb-p-tag" style="' + (!isActPortal ? 'color:' + p.badgeColor + ';border-color:' + p.badgeColor + '66;' : '') + '">' + pTag + '</span>' +
-                '<span class="sb-item-lbl sb-text-hide">' + pTitle + '</span>' +
-              '</span>' +
-              '<span class="sb-text-hide" style="font-size:9.5px;color:' + (isActPortal ? '#FFB81C' : '#64748B') + ';">' + (isActPortal ? 'ACTIVE' : 'OPEN') + '</span>' +
-            '</button>'
-          );
-        }).join('');
-
-        // 3. Other Viewable Modules (only if the current login has additional allowed modules outside the active portal)
-        var otherSectionHtml = '';
-        if (otherKeys.length > 0) {
-          var isOtherClosed = Boolean(collapsedCategories['other_modules']);
-          var otherItemsHtml = otherKeys.map(function (k) {
-            return buildSidebarAppBtnHtml(k, APP_LABELS[k], 'ADDITIONAL MODULE');
-          }).join('');
-          otherSectionHtml =
-            '<div class="sb-section">' +
-              '<div class="sb-cat-head" onclick="toggleSidebarCategory(\'other_modules\')">' +
-                '<span>' + (isEs ? 'Mas Modulos del Rol (' + otherKeys.length + ')' : 'Other Role Modules (' + otherKeys.length + ')') + '</span>' +
-                '<span>' + (isOtherClosed ? '+' : '-') + '</span>' +
-              '</div>' +
-              '<div class="sb-cat-body' + (isOtherClosed ? ' closed' : '') + '">' +
-                otherItemsHtml +
-              '</div>' +
-            '</div>';
-        }
-
         sbScroll.innerHTML =
+          topPortalsSectionHtml +
           '<div class="sb-section">' +
             '<div class="sb-sec-head" style="color:' + pDef.badgeColor + ';">' +
-              '<span class="sb-text-hide">' + pDef.shortBadge + ' Modules</span>' +
-              '<span>' + activePrimaryTabs.length + '</span>' +
+              '<span class="sb-text-hide">2. ' + pDef.shortBadge + ' Modules</span>' +
+              '<span style="font-size:9px;background:#F1F5F9;color:#334155;border:1px solid #CBD5E1;border-radius:4px;padding:0 5px;">' + activePrimaryTabs.length + ' Shown</span>' +
             '</div>' +
             '<div class="sb-portal-grid">' + activeModulesHtml + '</div>' +
-          '</div>' +
-          (visiblePortals.length > 1
-            ? '<div class="sb-section">' +
-                '<div class="sb-sec-head">' +
-                  '<span class="sb-text-hide">' + (isEs ? 'Portales Accesibles (' + visiblePortals.length + ')' : 'Viewable Portals (' + visiblePortals.length + ')') + '</span>' +
-                  '<span>' + visiblePortals.length + '</span>' +
-                '</div>' +
-                '<div class="sb-portal-grid">' + portalsListHtml + '</div>' +
-              '</div>'
-            : '') +
-          otherSectionHtml;
+          '</div>';
       }
 
       function renderViewsDrawer() {
@@ -5191,6 +5189,8 @@
         } catch (e) {}
       };
 
+      
+      
       
       // ======================================================================
       // DIRECT URL KIOSK & PORTAL BOOKMARK ROUTER (#portal=, #tab=, #mode=podium, #split=1)

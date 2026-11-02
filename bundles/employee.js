@@ -1,5 +1,12 @@
 (function() {
-var React = window.React; var { useState, useEffect, useMemo, useRef, useCallback } = React;
+var React = window.React;
+var {
+  useState,
+  useEffect,
+  useMemo,
+  useRef,
+  useCallback
+} = React;
 
 // ============================================================================
 // PORTAL 1: LEAD + EMPLOYEE MOBILE & PODIUM TABLET HUB
@@ -8,6 +15,33 @@ var React = window.React; var { useState, useEffect, useMemo, useRef, useCallbac
 // Strictly 7-bit ASCII (0x00-0x7F) - Bilingual English / Espanol (MX)
 // ============================================================================
 
+const IS_PUBLIC_DEMO = Boolean(typeof window !== 'undefined' && (window.__APEX_DEMO_ENGINE__ || window.parent && window.parent !== window && window.parent.__APEX_DEMO_ENGINE__ || window.top && window.top !== window && window.top.__APEX_DEMO_ENGINE__));
+function getPortalEngine() {
+  try {
+    if (window.parent && window.parent !== window && window.parent.__MidwestPlant_SPEED_ENGINE__) {
+      return window.parent.__MidwestPlant_SPEED_ENGINE__;
+    }
+  } catch {}
+  try {
+    if (window.top && window.top !== window && window.top.__MidwestPlant_SPEED_ENGINE__) {
+      return window.top.__MidwestPlant_SPEED_ENGINE__;
+    }
+  } catch {}
+  return window.__MidwestPlant_SPEED_ENGINE__ || null;
+}
+const DEFAULT_SKILLS = [{
+  name: '0 Drains & Sanitizer Step',
+  level: 'Certified (L3)'
+}, {
+  name: 'PIC Infrastructure & Foam',
+  level: 'Certified (L3)'
+}, {
+  name: 'Breading Line Teardown & LOTO',
+  level: 'Certified (L2)'
+}, {
+  name: 'Allergen Changeover Verification',
+  level: 'In Training (L1)'
+}];
 const DEMO_EMP = {
   id: 'a0000099-0000-4000-8000-000000000099',
   name: 'Rivera, Alex (Demo)',
@@ -21,20 +55,32 @@ const DEMO_EMP = {
   lead: 'Mendez, Carlos',
   inTraining: true,
   trainingArea: 'breading',
-  skills: [{
-    name: '0 Drains & Sanitizer Step',
-    level: 'Certified (L3)'
-  }, {
-    name: 'PIC Infrastructure & Foam',
-    level: 'Certified (L3)'
-  }, {
-    name: 'Breading Line Teardown & LOTO',
-    level: 'Certified (L2)'
-  }, {
-    name: 'Allergen Changeover Verification',
-    level: 'In Training (L1)'
-  }]
+  skills: DEFAULT_SKILLS
 };
+function buildInitialLiveEmployee() {
+  if (IS_PUBLIC_DEMO) return DEMO_EMP;
+  const eng = getPortalEngine();
+  const eff = eng && typeof eng.getEffectiveUser === 'function' ? eng.getEffectiveUser() : null;
+  const uName = eff && eff.userName ? String(eff.userName).trim() : 'Authenticated Employee';
+  const uId = eff && (eff.employeeId || eff.userId) ? String(eff.employeeId || eff.userId).replace(/[{}]/g, '').trim().toLowerCase() : '';
+  const uRole = eff && (eff.roleName || eff.title) ? String(eff.roleName || eff.title).trim() : 'Sanitarian';
+  const uCrew = eff && eff.crew && eff.crew !== 'ALL' ? String(eff.crew).trim() : 'A';
+  return {
+    id: uId || 'live-session-user',
+    name: uName,
+    fullName: uName,
+    badge: 'APX-LIVE',
+    pin: '',
+    role: uRole,
+    shift: uCrew,
+    area: 'breading',
+    room: 'bakery',
+    lead: 'Shift Lead',
+    inTraining: false,
+    trainingArea: 'breading',
+    skills: DEFAULT_SKILLS
+  };
+}
 function cleanGuid(v) {
   return String(v === undefined || v === null ? '' : v).replace(/[{}]/g, '').trim().toLowerCase();
 }
@@ -65,7 +111,12 @@ window.__PORTAL_APP_COMPONENT__ = window.__DEMO_APP_COMPONENT__ = function Emplo
   const [detailMode, setDetailMode] = useState(false);
   const [podiumLocked, setPodiumLocked] = useState(() => {
     try {
-      return window.location.hash.indexOf('mode=podium') >= 0 || window.location.search.indexOf('mode=podium') >= 0;
+      const own = window.location.hash.indexOf('mode=podium') >= 0 || window.location.search.indexOf('mode=podium') >= 0;
+      if (own) return true;
+      if (window.parent && window.parent !== window) {
+        return String(window.parent.location.hash || '').indexOf('mode=podium') >= 0;
+      }
+      return false;
     } catch {
       return false;
     }
@@ -75,14 +126,15 @@ window.__PORTAL_APP_COMPONENT__ = window.__DEMO_APP_COMPONENT__ = function Emplo
   const [requirePinMode, setRequirePinMode] = useState(false);
   const [cameraActive, setCameraActive] = useState(false);
   const [scanStatus, setScanStatus] = useState('');
+  const [scanError, setScanError] = useState('');
   const [scanHistory, setScanHistory] = useState([]);
   const videoRef = useRef(null);
   const wedgeBufRef = useRef({
     chars: '',
     lastMs: 0
   });
-  const [employees, setEmployees] = useState([DEMO_EMP]);
-  const [activeEmployee, setActiveEmployee] = useState(DEMO_EMP);
+  const [employees, setEmployees] = useState(() => IS_PUBLIC_DEMO ? [DEMO_EMP] : []);
+  const [activeEmployee, setActiveEmployee] = useState(() => buildInitialLiveEmployee());
   const [activeCard, setActiveCard] = useState(null);
 
   // Operational data states
@@ -181,26 +233,51 @@ window.__PORTAL_APP_COMPONENT__ = window.__DEMO_APP_COMPONENT__ = function Emplo
   }, []);
   const loadAllFloorData = useCallback(async () => {
     try {
+      const eng = getPortalEngine();
+      const eff = eng && typeof eng.getEffectiveUser === 'function' ? eng.getEffectiveUser() : null;
+
       // 1. Employees
       const empRes = await fetch('/api/data/v9.2/craa5___1_a_employees?$top=250');
+      let liveEmployees = [];
       if (empRes.ok) {
         const empJson = await empRes.json();
-        const mapped = (empJson.value || []).map((r, idx) => ({
-          id: cleanGuid(r.craa5___1_a_employeeid || r.id),
-          name: String(r.craa5_employeename || r.craa5_name || 'Employee').trim(),
-          fullName: String(r.craa5_employeename || r.craa5_name || 'Employee').trim(),
-          badge: String(r.craa5_badgenumber || r.craa5_badge || `APX-${100 + idx}`).trim(),
-          role: String(r.craa5_role || r['craa5_role@OData.Community.Display.V1.FormattedValue'] || 'Sanitarian').trim(),
-          shift: String(r.craa5_shift || r.craa5_crew || 'B').trim(),
-          area: String(r.craa5_trainingarea || 'breading').trim(),
-          room: 'bakery',
-          lead: 'Mendez, Carlos',
-          inTraining: Boolean(r.craa5_intraining),
-          trainingArea: String(r.craa5_trainingarea || 'breading').trim(),
-          skills: DEMO_EMP.skills
-        })).filter(e => e.id);
-        const withDemo = [DEMO_EMP, ...mapped.filter(e => e.badge !== 'DEMO-101')];
-        setEmployees(withDemo);
+        const SHIFT_MAP = {
+          '1': 'A',
+          '2': 'B',
+          '3': 'C',
+          '4': 'D'
+        };
+        const mapped = (empJson.value || []).filter(r => r.statecode === 0 || r.statecode === undefined).map((r, idx) => {
+          const rawShift = String(r['craa5_shift@OData.Community.Display.V1.FormattedValue'] || r.craa5_shift || r.craa5_crew || 'A').trim();
+          const normShift = SHIFT_MAP[rawShift] || rawShift;
+          return {
+            id: cleanGuid(r.craa5___1_a_employeeid || r.id),
+            name: String(r.craa5_employeename || r.craa5_name || 'Employee').trim(),
+            fullName: String(r.craa5_employeename || r.craa5_name || 'Employee').trim(),
+            email: String(r.craa5_email || '').trim().toLowerCase(),
+            badge: String(r.craa5_badgenumber || r.craa5_badge || `APX-${100 + idx}`).trim(),
+            role: String(r['_craa5_roleid_value@OData.Community.Display.V1.FormattedValue'] || r['craa5_role@OData.Community.Display.V1.FormattedValue'] || r.craa5_role || 'Sanitarian').trim(),
+            shift: normShift,
+            area: String(r.craa5_trainingarea || 'breading').trim(),
+            room: 'bakery',
+            lead: 'Mendez, Carlos',
+            inTraining: Boolean(r.craa5_intraining),
+            trainingArea: String(r.craa5_trainingarea || 'breading').trim(),
+            skills: DEFAULT_SKILLS
+          };
+        }).filter(e => e.id);
+        liveEmployees = IS_PUBLIC_DEMO ? [DEMO_EMP, ...mapped.filter(e => e.badge !== 'DEMO-101')] : mapped;
+        setEmployees(liveEmployees);
+        if (!IS_PUBLIC_DEMO && mapped.length > 0) {
+          const effId = cleanGuid(eff && (eff.employeeId || eff.userId));
+          const effEmail = String(eff && eff.email || '').trim().toLowerCase();
+          const effName = String(eff && eff.userName || '').trim().toLowerCase();
+          const matchedEmp = mapped.find(e => effId && e.id === effId) || mapped.find(e => effEmail && e.email && e.email === effEmail) || mapped.find(e => effName && e.name.toLowerCase() === effName) || mapped.find(e => effName && effName.indexOf('vance') >= 0 && e.name.toLowerCase().indexOf('vance') >= 0) || (eff && eff.isSimulated ? mapped.find(e => e.shift === (eff.crew || 'A')) : null) || mapped[0];
+          if (matchedEmp) {
+            setActiveEmployee(matchedEmp);
+            setHfRecipientId(prev => prev || (mapped.find(e => e.id !== matchedEmp.id) || mapped[0]).id);
+          }
+        }
       }
 
       // 2. Assets for area
@@ -234,18 +311,20 @@ window.__PORTAL_APP_COMPONENT__ = window.__DEMO_APP_COMPONENT__ = function Emplo
       let taskRows = [];
       if (asgRes && asgRes.ok) {
         const asgJson = await asgRes.json();
-        taskRows = (asgJson.value || []).slice(0, 12).map(a => {
+        taskRows = (asgJson.value || []).slice(0, 16).map(a => {
           const eqGuid = cleanGuid(a.craa5_equipmentguid || a.craa5___1_g_assignmentid);
           return {
             id: eqGuid,
             name: String(a.craa5_equipment || 'Assigned Equipment'),
             area: String(a.craa5_area || 'breading'),
+            employeeGuid: cleanGuid(a.craa5_employeeguid),
+            employeeName: String(a.craa5_employee || ''),
             mins: Number(a.craa5_stdminutes) || 35,
             status: doneSet.has(eqGuid) ? 'done' : 'working'
           };
         });
       }
-      if (taskRows.length === 0 && allAssets.length > 0) {
+      if (IS_PUBLIC_DEMO && taskRows.length === 0 && allAssets.length > 0) {
         taskRows = allAssets.slice(0, 6).map((a, idx) => ({
           id: a.id,
           name: a.name,
@@ -287,7 +366,7 @@ window.__PORTAL_APP_COMPONENT__ = window.__DEMO_APP_COMPONENT__ = function Emplo
           }
         }
       }
-      if (loadedGoals.length === 0) {
+      if (IS_PUBLIC_DEMO && loadedGoals.length === 0) {
         loadedGoals = [{
           id: 'g-6',
           quarterTarget: '6:00',
@@ -339,15 +418,15 @@ window.__PORTAL_APP_COMPONENT__ = window.__DEMO_APP_COMPONENT__ = function Emplo
             to: String(n.craa5_employee || 'Teammate'),
             from: String(n.craa5_givenby || 'Crew Lead'),
             tag: String(n.craa5_tag || 'Teamwork'),
-            note: String(n.craa5_note || 'Outstanding detail scrub and Pre-Op readiness!'),
+            note: String(n.craa5_note || ''),
             area: String(n.craa5_area || 'breading'),
             at: n.craa5_notedat ? new Date(n.craa5_notedat).toLocaleTimeString([], {
               hour: '2-digit',
               minute: '2-digit'
-            }) : '10:45 AM'
+            }) : ''
           }));
         }
-        if (loadedHf.length === 0) {
+        if (IS_PUBLIC_DEMO && loadedHf.length === 0) {
           loadedHf = [{
             id: 'hf-seed-1',
             to: 'Vance, Marcus T',
@@ -436,8 +515,9 @@ window.__PORTAL_APP_COMPONENT__ = window.__DEMO_APP_COMPONENT__ = function Emplo
   const handleBadgeVerify = async (rawCode, methodLabel) => {
     const code = String(rawCode || badgeInput || '').trim().toUpperCase();
     if (!code) return;
+    setScanError('');
     let matched = employees.find(e => String(e.badge || '').toUpperCase() === code || e.name.toUpperCase().indexOf(code) >= 0);
-    if (!matched && (code === 'DEMO-101' || code === '101' || code === '1234')) {
+    if (!matched && IS_PUBLIC_DEMO && (code === 'DEMO-101' || code === '101' || code === '1234')) {
       matched = DEMO_EMP;
     }
     if (!matched) {
@@ -460,13 +540,19 @@ window.__PORTAL_APP_COMPONENT__ = window.__DEMO_APP_COMPONENT__ = function Emplo
               lead: 'Mendez, Carlos',
               inTraining: Boolean(r.craa5_intraining),
               trainingArea: String(r.craa5_trainingarea || 'breading'),
-              skills: DEMO_EMP.skills
+              skills: DEFAULT_SKILLS
             };
           }
         }
       } catch {}
     }
-    if (!matched) matched = DEMO_EMP;
+    if (!matched && IS_PUBLIC_DEMO) {
+      matched = DEMO_EMP;
+    }
+    if (!matched) {
+      setScanError(`[ERR-BADGE-NOT-FOUND] ${tr('Badge not found in live Dataverse employee roster:', 'Gafete no encontrado en la lista de empleados de Dataverse:')} ${code}`);
+      return;
+    }
     setActiveEmployee(matched);
     setPodiumLocked(false);
     setCameraActive(false);
@@ -679,7 +765,7 @@ window.__PORTAL_APP_COMPONENT__ = window.__DEMO_APP_COMPONENT__ = function Emplo
 
   // Submit High Five
   const handleSendHighFive = async (overrideNote, overrideTag) => {
-    const recip = employees.find(e => e.id === hfRecipientId) || employees[1] || DEMO_EMP;
+    const recip = employees.find(e => e.id === hfRecipientId) || employees[0] || activeEmployee;
     const noteText = typeof overrideNote === 'string' && overrideNote.trim() ? overrideNote.trim() : hfNote.trim();
     const tagText = typeof overrideTag === 'string' && overrideTag.trim() ? overrideTag.trim() : hfTag;
     if (!noteText) return;
@@ -723,11 +809,12 @@ window.__PORTAL_APP_COMPONENT__ = window.__DEMO_APP_COMPONENT__ = function Emplo
       });
     } catch {}
   };
+  const quickPresetBadge = IS_PUBLIC_DEMO ? 'DEMO-101' : activeEmployee.badge || employees[0] && employees[0].badge || 'APX-100';
   useEffect(() => {
     window.__PORTAL_APP_COMMANDS__ = {
       openTab: cardId => setActiveCard(cardId || null),
       setLang: l => setLang(l === 'es' ? 'es' : 'en'),
-      unlockPodium: badgeCode => handleBadgeVerify(badgeCode || 'DEMO-101', 'VP Tour Scan'),
+      unlockPodium: badgeCode => handleBadgeVerify(badgeCode || quickPresetBadge, 'Badge Scan'),
       lockPodium: () => setPodiumLocked(true),
       sendDemoHighFive: () => {
         setActiveCard('highfive');
@@ -735,13 +822,13 @@ window.__PORTAL_APP_COMPONENT__ = window.__DEMO_APP_COMPONENT__ = function Emplo
       },
       callDemoPreInspect: () => {
         setActiveCard('preinspect');
-        handleCallPreInspection('breading', 'Breading Machine 1 & Wire Belt (VP Tour Live Call)');
+        handleCallPreInspection('breading', 'Breading Machine 1 & Wire Belt');
       }
     };
   });
   const doneTasksCount = useMemo(() => myTasks.filter(t => t.status === 'done').length, [myTasks]);
-  const totalTasksCount = Math.max(1, myTasks.length);
-  const areaCompletionPct = Math.round(doneTasksCount / totalTasksCount * 100);
+  const totalTasksCount = myTasks.length;
+  const areaCompletionPct = totalTasksCount > 0 ? Math.round(doneTasksCount / totalTasksCount * 100) : 0;
   const latestPreInspect = preInspectRequests[0] || null;
 
   // PODIUM LOCK SCREEN
@@ -796,7 +883,18 @@ window.__PORTAL_APP_COMPONENT__ = window.__DEMO_APP_COMPONENT__ = function Emplo
         color: '#CBD5E1',
         margin: '0 0 18px'
       }
-    }, tr('Present barcode to the podium scanner, use camera, or enter your badge number below.', 'Presente el codigo de barras al escaner del podio, use la camara o ingrese su numero de gafete.')), /*#__PURE__*/React.createElement("div", {
+    }, tr('Present barcode to the podium scanner, use camera, or enter your badge number below.', 'Presente el codigo de barras al escaner del podio, use la camara o ingrese su numero de gafete.')), scanError && /*#__PURE__*/React.createElement("div", {
+      style: {
+        marginBottom: 12,
+        padding: '8px 12px',
+        borderRadius: 10,
+        background: 'rgba(228,0,43,0.2)',
+        border: '1px solid #F87171',
+        color: '#FECACA',
+        fontSize: 12,
+        fontWeight: 800
+      }
+    }, scanError), /*#__PURE__*/React.createElement("div", {
       style: {
         display: 'flex',
         gap: 8,
@@ -806,7 +904,7 @@ window.__PORTAL_APP_COMPONENT__ = window.__DEMO_APP_COMPONENT__ = function Emplo
       type: "text",
       value: badgeInput,
       onChange: e => setBadgeInput(e.target.value),
-      placeholder: tr('Badge # (e.g. DEMO-101)', 'No. Gafete (ej. DEMO-101)'),
+      placeholder: tr(`Badge # (e.g. ${quickPresetBadge})`, `No. Gafete (ej. ${quickPresetBadge})`),
       style: {
         flex: 1,
         height: 52,
@@ -844,24 +942,25 @@ window.__PORTAL_APP_COMPONENT__ = window.__DEMO_APP_COMPONENT__ = function Emplo
         gap: 10,
         marginBottom: 16
       }
-    }, ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'CLR', '0', 'DEMO-101'].map(k => /*#__PURE__*/React.createElement("button", {
+    }, ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'CLR', '0', quickPresetBadge].map(k => /*#__PURE__*/React.createElement("button", {
       key: k,
       type: "button",
       onClick: () => {
         if (k === 'CLR') {
           setBadgeInput('');
           setPinInput('');
-        } else if (k === 'DEMO-101') {
-          handleBadgeVerify('DEMO-101', 'Demo Badge Preset');
+          setScanError('');
+        } else if (k === quickPresetBadge) {
+          handleBadgeVerify(quickPresetBadge, 'Badge Preset');
         } else setBadgeInput(prev => prev + k);
       },
       style: {
         height: 58,
         borderRadius: 12,
         border: '1px solid rgba(255,255,255,0.2)',
-        background: k === 'DEMO-101' ? '#FFB81C' : 'rgba(255,255,255,0.08)',
-        color: k === 'DEMO-101' ? '#0F172A' : '#FFFFFF',
-        fontSize: k === 'DEMO-101' ? 13 : 20,
+        background: k === quickPresetBadge ? '#FFB81C' : 'rgba(255,255,255,0.08)',
+        color: k === quickPresetBadge ? '#0F172A' : '#FFFFFF',
+        fontSize: k === quickPresetBadge ? 13 : 20,
         fontWeight: 900,
         cursor: 'pointer'
       }
@@ -872,7 +971,7 @@ window.__PORTAL_APP_COMPONENT__ = window.__DEMO_APP_COMPONENT__ = function Emplo
       }
     }, /*#__PURE__*/React.createElement("button", {
       type: "button",
-      onClick: () => handleBadgeVerify(badgeInput || 'DEMO-101', 'Podium Keypad'),
+      onClick: () => handleBadgeVerify(badgeInput || quickPresetBadge, 'Podium Keypad'),
       style: {
         flex: 1,
         height: 54,
@@ -976,7 +1075,7 @@ window.__PORTAL_APP_COMPONENT__ = window.__DEMO_APP_COMPONENT__ = function Emplo
     }
   }, /*#__PURE__*/React.createElement("button", {
     type: "button",
-    onClick: () => handleBadgeVerify('DEMO-101', 'Quick Badge Scan'),
+    onClick: () => handleBadgeVerify(quickPresetBadge, 'Quick Badge Scan'),
     style: {
       background: '#FFB81C',
       color: '#0F172A',
@@ -987,7 +1086,7 @@ window.__PORTAL_APP_COMPONENT__ = window.__DEMO_APP_COMPONENT__ = function Emplo
       fontWeight: 900,
       cursor: 'pointer'
     }
-  }, tr('Scan Badge (DEMO-101)', 'Escanear Gafete (DEMO-101)')), /*#__PURE__*/React.createElement("button", {
+  }, tr(`Scan Badge (${quickPresetBadge})`, `Escanear Gafete (${quickPresetBadge})`)), /*#__PURE__*/React.createElement("button", {
     type: "button",
     onClick: () => setCameraActive(prev => !prev),
     style: {
@@ -1678,7 +1777,17 @@ window.__PORTAL_APP_COMPONENT__ = window.__DEMO_APP_COMPONENT__ = function Emplo
       color: '#002B55',
       margin: '0 0 12px'
     }
-  }, tr('My Assigned Shift Tasks', 'Mis Tareas Asignadas del Turno'), " (", activeEmployee.area.toUpperCase(), ")"), /*#__PURE__*/React.createElement("div", {
+  }, tr('My Assigned Shift Tasks', 'Mis Tareas Asignadas del Turno'), " (", activeEmployee.area.toUpperCase(), ")"), myTasks.length === 0 ? /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: '18px',
+      borderRadius: 12,
+      background: '#F8FAFC',
+      border: '1.5px dashed #CBD5E1',
+      color: '#475569',
+      fontSize: 13,
+      fontWeight: 700
+    }
+  }, tr('0 tasks currently assigned in Dataverse (craa5___1_g_assignments). Use Team Builder (Shift Start) to assign equipment to this shift.', '0 tareas asignadas actualmente en Dataverse (craa5___1_g_assignments).')) : /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'grid',
       gap: 10
@@ -1958,7 +2067,17 @@ window.__PORTAL_APP_COMPONENT__ = window.__DEMO_APP_COMPONENT__ = function Emplo
       color: '#002B55',
       margin: '0 0 10px'
     }
-  }, tr('Supervisor 6-9-12-3 Shift Goals', 'Metas del Supervisor 6-9-12-3')), /*#__PURE__*/React.createElement("div", {
+  }, tr('Supervisor 6-9-12-3 Shift Goals', 'Metas del Supervisor 6-9-12-3')), supervisorGoals.length === 0 ? /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: '18px',
+      borderRadius: 12,
+      background: '#F8FAFC',
+      border: '1.5px dashed #CBD5E1',
+      color: '#475569',
+      fontSize: 13,
+      fontWeight: 700
+    }
+  }, tr('0 shift goals published in Dataverse (craa5___1_s_shiftboards). Use Supervisor Hub or Team Builder to publish 6-9-12-3 shift milestones.', '0 metas de turno publicadas en Dataverse (craa5___1_s_shiftboards).')) : /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'grid',
       gap: 10
@@ -2322,5 +2441,5 @@ window.__PORTAL_APP_COMPONENT__ = window.__DEMO_APP_COMPONENT__ = function Emplo
       fontWeight: 900
     }
   }, sk.level)))))))));
-}
+};
 })();

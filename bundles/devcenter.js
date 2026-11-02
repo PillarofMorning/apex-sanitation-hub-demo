@@ -383,18 +383,24 @@ const I18N = {
     detailBanner: 'Modo de Detalle Desbloqueado con el Logo - Cargas Crudas y Tiempos Visibles'
   }
 };
+const IS_PUBLIC_DEMO = Boolean(typeof window !== 'undefined' && (window.__APEX_DEMO_ENGINE__ || window.parent && window.parent !== window && window.parent.__APEX_DEMO_ENGINE__ || window.top && window.top !== window && window.top.__APEX_DEMO_ENGINE__));
 function getSpeedEngine() {
   const w = window;
-  if (w.__MidwestPlant_SPEED_ENGINE__) return w.__MidwestPlant_SPEED_ENGINE__;
-  if (w.MidwestPlantSpeedEngine) return w.MidwestPlantSpeedEngine;
+  try {
+    if (window.parent && window.parent !== window && window.parent.__MidwestPlant_SPEED_ENGINE__) {
+      return window.parent.__MidwestPlant_SPEED_ENGINE__;
+    }
+  } catch (_e) {}
   try {
     if (window.top && window.top.__MidwestPlant_SPEED_ENGINE__) {
       return window.top.__MidwestPlant_SPEED_ENGINE__;
     }
   } catch (_e) {}
+  if (w.__MidwestPlant_SPEED_ENGINE__) return w.__MidwestPlant_SPEED_ENGINE__;
+  if (w.MidwestPlantSpeedEngine) return w.MidwestPlantSpeedEngine;
   return null;
 }
-var __MAIN_COMP__ = function DeveloperConsoleApp() {
+window.__PORTAL_APP_COMPONENT__ = window.__DEMO_APP_COMPONENT__ = function DeveloperConsoleApp() {
   const [lang, setLang] = useState(() => {
     try {
       return localStorage.getItem('__1_ss_lang_v1') === 'es' ? 'es' : 'en';
@@ -438,43 +444,49 @@ var __MAIN_COMP__ = function DeveloperConsoleApp() {
     setTimeout(() => setCopyToast(''), 2600);
   }, []);
 
-  // Probe ecosystem tables via fetch('/api/data/v9.2/' + spec.entitySet)
+  // Probe ecosystem tables in controlled batches of 8 so the browser connection pool never stalls
   const runEcosystemProbe = useCallback(async () => {
     setProbing(true);
     const nextStats = {};
-    await Promise.all(ECOSYSTEM_TABLES.map(async spec => {
-      const t0 = performance.now();
-      try {
-        const r = await fetch(`/api/data/v9.2/${spec.entitySet}?$top=250`);
-        const ms = Math.max(1, Math.round(performance.now() - t0));
-        if (r.ok) {
-          const d = await r.json();
-          const entities = Array.isArray(d?.value) ? d.value : [];
-          const first = entities[0];
-          const sample = first ? String(first[spec.primaryCol] || first.craa5_title || first.craa5_name || 'Record') : undefined;
-          nextStats[spec.logical] = {
-            count: entities.length,
-            ms,
-            status: entities.length > 0 ? 'OK' : 'EMPTY',
-            samplePrimary: sample
-          };
-        } else {
+    const batchSize = 8;
+    for (let i = 0; i < ECOSYSTEM_TABLES.length; i += batchSize) {
+      const slice = ECOSYSTEM_TABLES.slice(i, i + batchSize);
+      await Promise.all(slice.map(async spec => {
+        const t0 = performance.now();
+        try {
+          const r = await fetch(`/api/data/v9.2/${spec.entitySet}?$top=250`);
+          const ms = Math.max(1, Math.round(performance.now() - t0));
+          if (r.ok) {
+            const d = await r.json();
+            const entities = Array.isArray(d?.value) ? d.value : [];
+            const first = entities[0];
+            const sample = first ? String(first[spec.primaryCol] || first.craa5_title || first.craa5_name || 'Record') : undefined;
+            nextStats[spec.logical] = {
+              count: entities.length,
+              ms,
+              status: entities.length > 0 ? 'OK' : 'EMPTY',
+              samplePrimary: sample
+            };
+          } else {
+            nextStats[spec.logical] = {
+              count: 0,
+              ms,
+              status: 'EMPTY'
+            };
+          }
+        } catch (_err) {
+          const ms = Math.max(1, Math.round(performance.now() - t0));
           nextStats[spec.logical] = {
             count: 0,
             ms,
             status: 'EMPTY'
           };
         }
-      } catch (_err) {
-        const ms = Math.max(1, Math.round(performance.now() - t0));
-        nextStats[spec.logical] = {
-          count: 0,
-          ms,
-          status: 'EMPTY'
-        };
-      }
-    }));
-    setTableStats(nextStats);
+      }));
+      setTableStats({
+        ...nextStats
+      });
+    }
     setProbing(false);
   }, []);
 
@@ -554,7 +566,7 @@ var __MAIN_COMP__ = function DeveloperConsoleApp() {
     }
   }, [selectedTable, odataSelect, odataFilter, odataTop]);
 
-  // Initial load & listeners
+  // Initial load & listeners (run once on mount so typing in OData inputs never re-probes 44 tables)
   useEffect(() => {
     runEcosystemProbe();
     refreshTelemetry();
@@ -599,7 +611,8 @@ var __MAIN_COMP__ = function DeveloperConsoleApp() {
     };
     window.addEventListener('message', onMessage);
     return () => window.removeEventListener('message', onMessage);
-  }, [runEcosystemProbe, refreshTelemetry, executeODataQuery]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const domains = useMemo(() => {
     const s = new Set();
     ECOSYSTEM_TABLES.forEach(item => s.add(item.domain));
@@ -614,7 +627,7 @@ var __MAIN_COMP__ = function DeveloperConsoleApp() {
     });
   }, [domainFilter, searchQuery]);
 
-  // Compute Telemetry Metrics
+  // Compute Telemetry Metrics (pure live data on internal portal)
   const telemetryMetrics = useMemo(() => {
     const preInspectItems = hubConfigs.filter(c => String(c.craa5_configkey || c.craa5_configname || '').startsWith('PREINSPECT|'));
     const capaItems = hubConfigs.filter(c => String(c.craa5_configkey || c.craa5_configname || '').startsWith('CAPA_STUDY|'));
@@ -627,10 +640,11 @@ var __MAIN_COMP__ = function DeveloperConsoleApp() {
         const st = String(parsed.status || 'open').toLowerCase();
         if (st === 'passed' || st === 'verified' || st === 'completed') {
           verifiedPreInspect++;
-          if (parsed.requestedAt && parsed.result?.verifiedAt) {
-            const diffMin = Math.max(1, Math.round((new Date(parsed.result.verifiedAt).getTime() - new Date(parsed.requestedAt).getTime()) / 60000));
+          const verStamp = parsed.result?.verifiedAt || parsed.result?.at;
+          if (parsed.requestedAt && verStamp) {
+            const diffMin = Math.max(1, Math.round((new Date(verStamp).getTime() - new Date(parsed.requestedAt).getTime()) / 60000));
             if (diffMin > 0 && diffMin < 240) waitMinutes.push(diffMin);
-          } else {
+          } else if (IS_PUBLIC_DEMO) {
             waitMinutes.push(5);
           }
         } else {
@@ -641,19 +655,19 @@ var __MAIN_COMP__ = function DeveloperConsoleApp() {
       }
     });
     const sortedWaits = waitMinutes.slice().sort((a, b) => a - b);
-    const medianWait = sortedWaits.length > 0 ? sortedWaits[Math.floor(sortedWaits.length / 2)] : 5.2;
+    const medianWait = sortedWaits.length > 0 ? sortedWaits[Math.floor(sortedWaits.length / 2)] : IS_PUBLIC_DEMO ? 5.2 : 0;
     const positiveSwabs = swabLogs.filter(s => {
       const res = String(s.craa5_result || s.result || '').toLowerCase();
       return res === 'positive' || res === 'fail' || res === 'pos' || res === 'hold';
     });
-    const swabPosRate = swabLogs.length > 0 ? (positiveSwabs.length / swabLogs.length * 100).toFixed(2) : '3.25';
+    const swabPosRate = swabLogs.length > 0 ? (positiveSwabs.length / swabLogs.length * 100).toFixed(2) : IS_PUBLIC_DEMO ? '3.25' : '0.00';
     const totalRowsLoaded = Object.values(tableStats).reduce((acc, st) => acc + (st.count || 0), 0);
     const activeTablesCount = Object.values(tableStats).filter(st => st.count > 0).length;
     return {
       openPreInspect,
       verifiedPreInspect,
       totalPreInspect: preInspectItems.length,
-      capaCount: Math.max(1, capaItems.length),
+      capaCount: IS_PUBLIC_DEMO ? Math.max(1, capaItems.length) : capaItems.length,
       medianWait,
       swabTotal: swabLogs.length,
       swabPositives: positiveSwabs.length,
@@ -1736,6 +1750,4 @@ var __MAIN_COMP__ = function DeveloperConsoleApp() {
     }
   }, item.cmd))))));
 };
-window.__PORTAL_APP_COMPONENT__ = __MAIN_COMP__;
-window.__DEMO_APP_COMPONENT__ = __MAIN_COMP__;
 })();

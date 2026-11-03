@@ -23,21 +23,44 @@
       padding: 0;
       width: 100%;
       height: 100%;
-      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+      font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
       background: #F8FAFC;
       color: #0F172A;
+      -webkit-font-smoothing: antialiased;
     }
+    ::-webkit-scrollbar { width: 7px; height: 7px; }
+    ::-webkit-scrollbar-track { background: #F1F5F9; }
+    ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+    /* Clean Executive Embedded Mode: Hide redundant duplicate brand logo, View-As, Welcome pill, Lang & Theme buttons inside HubStandardTopBar when Detail Mode is OFF */
     html[data-hub-embedded="1"][data-hub-detail="0"] [data-hub-chrome="identity"],
-    html[data-hub-detail="0"] [data-hub-detail-only="1"] {
+    html[data-hub-detail="0"] [data-hub-detail-only="1"],
+    html[data-hub-embedded="1"][data-hub-detail="0"] [data-testid="hub-standard-topbar"] > div:first-child,
+    html[data-hub-embedded="1"][data-hub-detail="0"] [data-testid$="-brand-logo"],
+    html[data-hub-embedded="1"][data-hub-detail="0"] [data-testid$="-brand-logo"] + div,
+    html[data-hub-embedded="1"][data-hub-detail="0"] [data-testid="hub-top-view-as"],
+    html[data-hub-embedded="1"][data-hub-detail="0"] [data-testid="hub-top-welcome-bar"],
+    html[data-hub-embedded="1"][data-hub-detail="0"] [data-testid="hub-top-lang-toggle"],
+    html[data-hub-embedded="1"][data-hub-detail="0"] [data-testid="hub-top-theme-toggle"] {
       display: none !important;
+    }
+    html[data-hub-embedded="1"] [data-testid="hub-standard-topbar"] {
+      background: #FFFFFF !important;
+      border-bottom: 1px solid #E2E8F0 !important;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03) !important;
+    }
+    html[data-hub-embedded="1"] [data-testid="hub-standard-topbar"] > div:last-child {
+      padding: 6px 16px !important;
+      min-height: 44px !important;
     }
     /* Light Executive Top Header Normalization across embedded modules */
     #root header {
       background: #FFFFFF !important;
       color: #0F172A !important;
-      border-bottom: 1px solid #CBD5E1 !important;
-      border-top: 3px solid #2563EB !important;
-      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05) !important;
+      border-bottom: 1px solid #E2E8F0 !important;
+      border-top: 2px solid #00468B !important;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04) !important;
     }
     #root header h1, #root header h2, #root header h3 {
       color: #0F172A !important;
@@ -132,6 +155,10 @@
         if (d.type === 'hub:detail') {
           var isOn = Boolean(d.on);
           document.documentElement.setAttribute('data-hub-detail', isOn ? '1' : '0');
+          try {
+            localStorage.setItem('hub_std_unlocked_v1', isOn ? '1' : '0');
+            localStorage.setItem('apex_hub_std_unlock_v1', isOn ? '1' : '0');
+          } catch (e) {}
           if (typeof window.__PORTAL_SET_DETAIL__ === 'function') {
             try { window.__PORTAL_SET_DETAIL__(isOn); } catch (e) {}
           }
@@ -140,6 +167,8 @@
             localStorage.setItem('__1_ss_lang_v1', d.lang);
             localStorage.setItem('ss_lang_v1', d.lang);
             localStorage.setItem('__1_hub_lang', d.lang);
+            localStorage.setItem('hub_lang', d.lang);
+            localStorage.setItem('apex_hub_std_lang_v1', d.lang);
           } catch (e) {}
         } else if (d.type === 'hub:remount') {
           if (typeof window.__PORTAL_REMOUNT_APP__ === 'function') {

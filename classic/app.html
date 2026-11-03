@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="icon" href="data:," />
+  <title>Apex Foods Sanitation Hub - Application Frame</title>
+  <script>
+    window.__PORTAL_OFFLINE_DEMO__ = true;
+    window.tailwind = window.tailwind || {};
+    window.tailwind.config = { darkMode: 'class' };
+  </script>
+  <script id="tailwind-cdn" src="vendor/tailwind.js"></script>
+  <script src="vendor/react.production.min.js"></script>
+  <script src="vendor/react-dom.production.min.js"></script>
+  <script src="fluent_ui_shim.js?v=16"></script>
+  <script src="demo_seed_data.js?v=16"></script>
+  <script src="mock_dataverse_engine.js?v=16"></script>
+  <style>
+    html, body, #root {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+      background: #F8FAFC;
+      color: #0F172A;
+    }
+    html[data-hub-embedded="1"][data-hub-detail="0"] [data-hub-chrome="identity"],
+    html[data-hub-detail="0"] [data-hub-detail-only="1"] {
+      display: none !important;
+    }
+    /* Light Executive Top Header Normalization across embedded modules */
+    #root header {
+      background: #FFFFFF !important;
+      color: #0F172A !important;
+      border-bottom: 1px solid #CBD5E1 !important;
+      border-top: 3px solid #2563EB !important;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05) !important;
+    }
+    #root header h1, #root header h2, #root header h3 {
+      color: #0F172A !important;
+    }
+    #root header img, #root nav img {
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    html[data-hub-detail="1"] #root header img {
+      box-shadow: 0 0 0 2px #D97706;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var appKey = (params.get('app') || 'calendar').toLowerCase().replace(/[^a-z0-9]/g, '');
+      var validApps = [
+        'calendar', 'ganttly', 'shiftstart', 'mss', 'director',
+        'bolo', 'manager', 'prodsched', 'pbed', 'training',
+        'ordering', 'mapsubmit', 'ecosystem',
+        'employee', 'inspect', 'supervisor', 'people', 'devcenter'
+      ];
+      if (validApps.indexOf(appKey) === -1) appKey = 'calendar';
+      window.__PORTAL_APP_KEY__ = appKey;
+      document.documentElement.setAttribute('data-hub-detail', '0');
+
+      if (window.self !== window.top) {
+        document.documentElement.setAttribute('data-hub-embedded', '1');
+      }
+
+      var engine = null;
+      try {
+        if (window.parent && window.parent !== window && (window.parent.__MIDWESTPLANT_SPEED_ENGINE__ || window.parent.__MidwestPlant_SPEED_ENGINE__)) {
+          engine = window.parent.__MIDWESTPLANT_SPEED_ENGINE__ || window.parent.__MidwestPlant_SPEED_ENGINE__;
+        }
+      } catch (e) {}
+      if (!engine) {
+        engine = window.__MIDWESTPLANT_SPEED_ENGINE__ || window.__MidwestPlant_SPEED_ENGINE__ || null;
+      }
+
+      // Bind this iframe's window.Xrm, window.fetch, and dataApi to the parent engine BEFORE bundle loads
+      // so HUB PAYLOAD DIVERSION v1.6 wraps the parent-bound Xrm and fetch cleanly.
+      var binding = (engine && typeof engine.createFrameBinding === 'function')
+        ? engine.createFrameBinding(window, appKey)
+        : null;
+
+      function reportFrameError(code, message, detail) {
+        var errCode = String(code || 'ERR-APP-RUNTIME-500');
+        var errMsg = String(message || 'Unexpected error in module [' + appKey + ']');
+        window.__LAST_FRAME_ERROR__ = errCode + ': ' + errMsg + (detail ? ' (' + detail + ')' : '');
+        try {
+          if (engine && typeof engine.emitEngineError === 'function') {
+            engine.emitEngineError(errCode, errMsg, { appKey: appKey, detail: detail || '' });
+          }
+        } catch (e) {}
+        try {
+          if (window.parent && window.parent !== window) {
+            window.parent.postMessage({
+              type: 'hub:app-error',
+              appKey: appKey,
+              code: errCode,
+              message: errMsg,
+              detail: String(detail || '')
+            }, '*');
+          }
+        } catch (e) {}
+      }
+
+      window.addEventListener('error', function (ev) {
+        var msg = (ev && ev.message) ? String(ev.message) : 'Runtime script error';
+        if (/ResizeObserver loop/i.test(msg)) return;
+        reportFrameError('ERR-JS-RUNTIME-500', '[' + appKey.toUpperCase() + '] ' + msg, (ev && ev.filename ? ev.filename + ':' + ev.lineno : ''));
+      });
+
+      window.addEventListener('unhandledrejection', function (ev) {
+        var reason = ev && ev.reason;
+        var msg = reason && reason.message ? String(reason.message) : String(reason || 'Unhandled async promise rejection');
+        var code = (reason && (reason.code || reason.errorCode)) ? String(reason.code || reason.errorCode) : 'ERR-PROMISE-REJECT-500';
+        if (reason && reason.isSimulatedReadOnly) code = 'ERR-SIM-READONLY-403';
+        if (code.indexOf('ERR-DV-') === 0 || /\[ERR-DV-/i.test(msg)) return;
+        if (document.documentElement.getAttribute('data-hub-detail') !== '1') return;
+        reportFrameError(code, '[' + appKey.toUpperCase() + '] ' + msg, '');
+      });
+
+      window.addEventListener('message', function (ev) {
+        var d = ev && ev.data;
+        if (!d || typeof d !== 'object') return;
+        if (d.type === 'hub:detail') {
+          var isOn = Boolean(d.on);
+          document.documentElement.setAttribute('data-hub-detail', isOn ? '1' : '0');
+          if (typeof window.__PORTAL_SET_DETAIL__ === 'function') {
+            try { window.__PORTAL_SET_DETAIL__(isOn); } catch (e) {}
+          }
+        } else if (d.type === 'hub:lang' && d.lang) {
+          try {
+            localStorage.setItem('__1_ss_lang_v1', d.lang);
+            localStorage.setItem('ss_lang_v1', d.lang);
+            localStorage.setItem('__1_hub_lang', d.lang);
+          } catch (e) {}
+        } else if (d.type === 'hub:remount') {
+          if (typeof window.__PORTAL_REMOUNT_APP__ === 'function') {
+            window.__PORTAL_REMOUNT_APP__();
+          }
+        }
+      });
+
+      window.addEventListener('click', function (ev) {
+        var t = ev.target;
+        if (!t || !t.tagName) return;
+        if (t.tagName.toUpperCase() === 'IMG') {
+          var r = t.getBoundingClientRect();
+          if (r.top >= 0 && r.top <= 110 && r.width >= 28 && r.width <= 260) {
+            try {
+              if (window.parent && window.parent !== window) {
+                window.parent.postMessage({ type: 'hub:toggle-detail', sourceApp: appKey }, '*');
+              } else {
+                var cur = document.documentElement.getAttribute('data-hub-detail') === '1';
+                var next = !cur;
+                document.documentElement.setAttribute('data-hub-detail', next ? '1' : '0');
+                if (typeof window.__PORTAL_SET_DETAIL__ === 'function') window.__PORTAL_SET_DETAIL__(next);
+              }
+            } catch (e) {}
+          }
+        }
+      }, true);
+
+      window.addEventListener('keydown', function (e) {
+        var k = String(e.key || '').toLowerCase();
+        var isCtrlK = (e.ctrlKey || e.metaKey) && k === 'k';
+        var isAltNum = e.altKey && /^[1-8f]$/.test(k);
+        if (!isCtrlK && !isAltNum) return;
+        e.preventDefault();
+        try {
+          if (window.parent && window.parent !== window) {
+            window.parent.postMessage({
+              type: 'hub:shortcut',
+              key: k,
+              ctrl: Boolean(e.ctrlKey || e.metaKey),
+              alt: Boolean(e.altKey)
+            }, '*');
+          }
+        } catch (err) {}
+      }, true);
+
+      function markRedundantIdentityChrome() {
+        if (document.documentElement.getAttribute('data-hub-embedded') !== '1') return;
+        if (appKey === 'bolo' || appKey === 'director' || appKey === 'manager') return;
+        var candidates = document.querySelectorAll('#root div');
+        for (var i = 0; i < candidates.length && i < 35; i++) {
+          var el = candidates[i];
+          if (el.getAttribute('data-hub-chrome')) continue;
+          if (el.childElementCount > 8) continue;
+          if (el.querySelector('select, input, textarea, a[href]')) continue;
+          if (el.querySelectorAll('button').length > 2) continue;
+          var txt = String(el.textContent || '').replace(/\s+/g, ' ').trim();
+          if (!txt) continue;
+          var isWelcomeStrip = (/^(?:Welcome|Bienvenido|MSS Log Input Connected)/i.test(txt) && /(?:Microsoft ID|to Production Scheduler|to Ganttly|to MSS)/i.test(txt));
+          if (!isWelcomeStrip) continue;
+          var rect = el.getBoundingClientRect();
+          if (rect.top >= 0 && rect.top <= 75 && rect.height >= 18 && rect.height <= 48) {
+            el.setAttribute('data-hub-chrome', 'identity');
+          }
+        }
+      }
+
+      var obsQueued = false;
+      var rootTarget = document.getElementById('root');
+      var observer = null;
+      if (rootTarget && typeof MutationObserver !== 'undefined') {
+        observer = new MutationObserver(function () {
+          if (obsQueued) return;
+          obsQueued = true;
+          window.requestAnimationFrame(function () {
+            obsQueued = false;
+            markRedundantIdentityChrome();
+          });
+        });
+        observer.observe(rootTarget, { childList: true, subtree: true });
+        setTimeout(function () {
+          try { if (observer) observer.disconnect(); } catch (e) {}
+        }, 8000);
+      }
+
+      var PortalErrorBoundary = null;
+      if (window.React && window.React.Component) {
+        PortalErrorBoundary = function (props) {
+          window.React.Component.call(this, props);
+          this.state = { hasError: false, errorCode: '', errorMsg: '' };
+        };
+        PortalErrorBoundary.prototype = Object.create(window.React.Component.prototype);
+        PortalErrorBoundary.prototype.constructor = PortalErrorBoundary;
+        PortalErrorBoundary.getDerivedStateFromError = function (error) {
+          return {
+            hasError: true,
+            errorCode: 'ERR-REACT-RENDER-500',
+            errorMsg: error && error.message ? String(error.message) : String(error || 'Component render error')
+          };
+        };
+        PortalErrorBoundary.prototype.componentDidCatch = function (error, info) {
+          var stack = (info && info.componentStack) ? String(info.componentStack).slice(0, 400) : '';
+          reportFrameError(
+            'ERR-REACT-RENDER-500',
+            '[' + appKey.toUpperCase() + '] React render failed: ' + (error && error.message ? error.message : String(error)),
+            stack
+          );
+        };
+        PortalErrorBoundary.prototype.render = function () {
+          var self = this;
+          if (this.state.hasError) {
+            return window.React.createElement('div', {
+              style: {
+                padding: '28px', maxWidth: '620px', margin: '40px auto', background: '#FFFFFF',
+                border: '2px solid #EA580C', borderRadius: '10px', boxShadow: '0 8px 24px rgba(15,23,42,0.12)',
+                fontFamily: 'Segoe UI, sans-serif'
+              }
+            },
+              window.React.createElement('div', {
+                style: { fontSize: '11px', fontWeight: '800', color: '#9A3412', marginBottom: '6px' }
+              }, this.state.errorCode + ' - MODULE: ' + appKey.toUpperCase()),
+              window.React.createElement('h3', {
+                style: { margin: '0 0 8px 0', fontSize: '16px', fontWeight: '800', color: '#002B55' }
+              }, 'Module Render Interrupted'),
+              window.React.createElement('p', {
+                style: { margin: '0 0 14px 0', fontSize: '12.5px', color: '#334155', lineHeight: '1.5' }
+              }, this.state.errorMsg),
+              window.React.createElement('button', {
+                onClick: function () {
+                  self.setState({ hasError: false, errorCode: '', errorMsg: '' });
+                  if (typeof window.__PORTAL_REMOUNT_APP__ === 'function') window.__PORTAL_REMOUNT_APP__();
+                },
+                style: {
+                  background: '#002B55', color: '#FFFFFF', border: 'none', borderRadius: '6px',
+                  padding: '8px 14px', fontSize: '12px', fontWeight: '800', cursor: 'pointer'
+                }
+              }, 'Remount Module')
+            );
+          }
+          return this.props.children;
+        };
+      }
+
+      var reactRoot = null;
+      var LoadedComponent = null;
+      var mountKeySeq = 1;
+
+      function renderApp() {
+        var rootEl = document.getElementById('root');
+        if (!LoadedComponent || !rootEl) return;
+        if (!reactRoot) {
+          reactRoot = ReactDOM.createRoot(rootEl);
+        }
+        if (!binding && engine && typeof engine.createFrameBinding === 'function') {
+          binding = engine.createFrameBinding(window, appKey);
+        }
+        if (binding && binding.context && engine && typeof engine.getEffectiveUser === 'function') {
+          try {
+            var eff = engine.getEffectiveUser();
+            if (eff && binding.context.userSettings) {
+              binding.context.userSettings.userId = eff.id;
+              binding.context.userSettings.userName = eff.name;
+              binding.context.userSettings.userEmail = eff.email;
+            }
+          } catch (e) {}
+        }
+        if (typeof hubDiversionInstallFetch === 'function') {
+          try { hubDiversionInstallFetch(appKey); } catch (e) {}
+        }
+        var currentBinding = binding;
+        var resolvedDataApi = currentBinding ? currentBinding.dataApi : window.__APEX_DEMO_DATA_API__;
+        if (typeof hubDiversionWrapDataApi === 'function' && resolvedDataApi) {
+          try { resolvedDataApi = hubDiversionWrapDataApi(resolvedDataApi, appKey); } catch (e) {}
+        }
+        var props = {
+          key: 'mount_' + mountKeySeq,
+          dataApi: resolvedDataApi,
+          context: currentBinding ? currentBinding.context : window.__APEX_DEMO_CONTEXT__,
+          webAPI: window.Xrm && window.Xrm.WebApi
+        };
+        if (engine && typeof engine.markFrameSynced === 'function') {
+          engine.markFrameSynced(appKey);
+        }
+        var appEl = React.createElement(LoadedComponent, props);
+        if (PortalErrorBoundary) {
+          appEl = React.createElement(PortalErrorBoundary, { key: 'eb_' + mountKeySeq }, appEl);
+        }
+        reactRoot.render(appEl);
+        setTimeout(markRedundantIdentityChrome, 120);
+        setTimeout(markRedundantIdentityChrome, 600);
+        try {
+          if (window.parent && window.parent !== window) {
+            window.parent.postMessage({ type: 'hub:app-mounted', appKey: appKey }, '*');
+          }
+        } catch (e) {}
+      }
+
+      window.__PORTAL_REMOUNT_APP__ = function () {
+        mountKeySeq++;
+        renderApp();
+      };
+
+      var s = document.createElement('script');
+      s.src = 'bundles/' + appKey + '.js?v=16';
+      s.onload = function () {
+        LoadedComponent = window.__DEMO_APP_COMPONENT__ || window.__MIDWESTPLANT_APP_COMPONENT__ || window.__PORTAL_APP_COMPONENT__;
+        var rootEl = document.getElementById('root');
+        if (!LoadedComponent) {
+          rootEl.innerHTML = '<div style="padding:24px;color:#EA580C;font-weight:bold;">[ERR-APP-INIT-500] Failed to load component for ' + appKey + '</div>';
+          return;
+        }
+        renderApp();
+      };
+      s.onerror = function () {
+        document.getElementById('root').innerHTML = '<div style="padding:24px;color:#EA580C;font-weight:bold;">[ERR-BUNDLE-LOAD-404] Error loading bundle: ' + appKey + '</div>';
+      };
+      document.body.appendChild(s);
+    })();
+  </script>
+</body>
+</html>

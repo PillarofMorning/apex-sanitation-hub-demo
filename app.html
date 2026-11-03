@@ -14,9 +14,9 @@
   <script id="tailwind-cdn" src="vendor/tailwind.js"></script>
   <script src="vendor/react.production.min.js"></script>
   <script src="vendor/react-dom.production.min.js"></script>
-  <script src="fluent_ui_shim.js?v=15"></script>
-  <script src="demo_seed_data.js?v=15"></script>
-  <script src="mock_dataverse_engine.js?v=15"></script>
+  <script src="fluent_ui_shim.js?v=16"></script>
+  <script src="demo_seed_data.js?v=16"></script>
+  <script src="mock_dataverse_engine.js?v=16"></script>
   <style>
     html, body, #root {
       margin: 0;
@@ -82,6 +82,12 @@
         engine = window.__MIDWESTPLANT_SPEED_ENGINE__ || window.__MidwestPlant_SPEED_ENGINE__ || null;
       }
 
+      // Bind this iframe's window.Xrm, window.fetch, and dataApi to the parent engine BEFORE bundle loads
+      // so HUB PAYLOAD DIVERSION v1.6 wraps the parent-bound Xrm and fetch cleanly.
+      var binding = (engine && typeof engine.createFrameBinding === 'function')
+        ? engine.createFrameBinding(window, appKey)
+        : null;
+
       function reportFrameError(code, message, detail) {
         var errCode = String(code || 'ERR-APP-RUNTIME-500');
         var errMsg = String(message || 'Unexpected error in module [' + appKey + ']');
@@ -108,6 +114,16 @@
         var msg = (ev && ev.message) ? String(ev.message) : 'Runtime script error';
         if (/ResizeObserver loop/i.test(msg)) return;
         reportFrameError('ERR-JS-RUNTIME-500', '[' + appKey.toUpperCase() + '] ' + msg, (ev && ev.filename ? ev.filename + ':' + ev.lineno : ''));
+      });
+
+      window.addEventListener('unhandledrejection', function (ev) {
+        var reason = ev && ev.reason;
+        var msg = reason && reason.message ? String(reason.message) : String(reason || 'Unhandled async promise rejection');
+        var code = (reason && (reason.code || reason.errorCode)) ? String(reason.code || reason.errorCode) : 'ERR-PROMISE-REJECT-500';
+        if (reason && reason.isSimulatedReadOnly) code = 'ERR-SIM-READONLY-403';
+        if (code.indexOf('ERR-DV-') === 0 || /\[ERR-DV-/i.test(msg)) return;
+        if (document.documentElement.getAttribute('data-hub-detail') !== '1') return;
+        reportFrameError(code, '[' + appKey.toUpperCase() + '] ' + msg, '');
       });
 
       window.addEventListener('message', function (ev) {
@@ -277,12 +293,30 @@
         if (!reactRoot) {
           reactRoot = ReactDOM.createRoot(rootEl);
         }
-        var currentBinding = (engine && typeof engine.createFrameBinding === 'function')
-          ? engine.createFrameBinding(window, appKey)
-          : null;
+        if (!binding && engine && typeof engine.createFrameBinding === 'function') {
+          binding = engine.createFrameBinding(window, appKey);
+        }
+        if (binding && binding.context && engine && typeof engine.getEffectiveUser === 'function') {
+          try {
+            var eff = engine.getEffectiveUser();
+            if (eff && binding.context.userSettings) {
+              binding.context.userSettings.userId = eff.id;
+              binding.context.userSettings.userName = eff.name;
+              binding.context.userSettings.userEmail = eff.email;
+            }
+          } catch (e) {}
+        }
+        if (typeof hubDiversionInstallFetch === 'function') {
+          try { hubDiversionInstallFetch(appKey); } catch (e) {}
+        }
+        var currentBinding = binding;
+        var resolvedDataApi = currentBinding ? currentBinding.dataApi : window.__APEX_DEMO_DATA_API__;
+        if (typeof hubDiversionWrapDataApi === 'function' && resolvedDataApi) {
+          try { resolvedDataApi = hubDiversionWrapDataApi(resolvedDataApi, appKey); } catch (e) {}
+        }
         var props = {
           key: 'mount_' + mountKeySeq,
-          dataApi: currentBinding ? currentBinding.dataApi : window.__APEX_DEMO_DATA_API__,
+          dataApi: resolvedDataApi,
           context: currentBinding ? currentBinding.context : window.__APEX_DEMO_CONTEXT__,
           webAPI: window.Xrm && window.Xrm.WebApi
         };
@@ -309,7 +343,7 @@
       };
 
       var s = document.createElement('script');
-      s.src = 'bundles/' + appKey + '.js?v=15';
+      s.src = 'bundles/' + appKey + '.js?v=16';
       s.onload = function () {
         LoadedComponent = window.__DEMO_APP_COMPONENT__ || window.__MIDWESTPLANT_APP_COMPONENT__ || window.__PORTAL_APP_COMPONENT__;
         var rootEl = document.getElementById('root');

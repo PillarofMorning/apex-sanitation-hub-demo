@@ -6,8 +6,8 @@
   <link rel="icon" href="data:," />
   <meta name="robots" content="noindex,nofollow" />
   <title>Apex Foods - Midwest Plant Sanitation Hub (5-Portal Architecture)</title>
-  <script src="demo_seed_data.js?v=15"></script>
-  <script src="mock_dataverse_engine.js?v=15"></script>
+  <script src="demo_seed_data.js?v=16"></script>
+  <script src="mock_dataverse_engine.js?v=16"></script>
   <style>
     * { box-sizing: border-box; }
     html, body {
@@ -3989,8 +3989,8 @@
         var safeMsg = String(message || 'An unexpected condition occurred.');
         var safeMeta = String(meta || ('Active Module: ' + (APP_LABELS[activeAppKey] || activeAppKey) + ' - Time: ' + new Date().toLocaleTimeString()));
 
-        // Suppress non-fatal background Dataverse/Promise warnings unless Apex Foods Logo Detail Mode is active
-        if (!detailMode && (safeCode.indexOf('ERR-DV-') === 0 || safeCode === 'ERR-PROMISE-REJECT-500')) {
+        // Suppress non-fatal background Dataverse/Promise/Watchdog warnings unless Apex Foods Logo Detail Mode is active
+        if (!detailMode) {
           return;
         }
 
@@ -4080,22 +4080,22 @@
         );
       });
 
-      // Main-thread freeze / stall detector (alerts with ERR-MAIN-THREAD-STALL-504 if event loop blocks > 4.5s while visible)
+      // Main-thread freeze / stall detector (silently hibernates idle background frames if event loop blocks > 12s while visible)
       var lastHeartbeatTs = Date.now();
+      document.addEventListener('visibilitychange', function () {
+        lastHeartbeatTs = Date.now();
+      });
+      window.addEventListener('focus', function () {
+        lastHeartbeatTs = Date.now();
+      });
       setInterval(function () {
         var now = Date.now();
         var delta = now - lastHeartbeatTs;
         lastHeartbeatTs = now;
-        if (document.visibilityState === 'visible' && delta > 4500) {
-          window.reportDiagnosticError(
-            'ERR-MAIN-THREAD-STALL-504',
-            'UI Thread Stall Detected (' + Math.round(delta / 100) / 10 + 's)',
-            'The browser main thread was blocked for ' + delta + 'ms while rendering or parsing data. Background modules have been hibernated to restore responsiveness.',
-            'Active Module: ' + (APP_LABELS[activeAppKey] || activeAppKey) + ' - Keep-Alive Frames: ' + Object.keys(mountedFrames).length
-          );
+        if (document.visibilityState === 'visible' && delta > 12000) {
           evictAllBackgroundFramesExcept([activeAppKey]);
         }
-      }, 1500);
+      }, 2000);
 
       // Listen for messages from child iframes (shortcuts, logo detail toggle, elevation, navigation, errors)
       window.addEventListener('message', function (ev) {

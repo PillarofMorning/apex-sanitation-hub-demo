@@ -138,6 +138,8 @@
     'craa5___1_s_updatepresets': 'craa5___1_s_updatepreset',
     'craa5___1_s_saporder': 'craa5___1_s_saporder',
     'craa5___1_s_saporders': 'craa5___1_s_saporder',
+    'craa5_s_saporder': 'craa5___1_s_saporder',
+    'craa5_s_saporders': 'craa5___1_s_saporder',
     'craa5___1_b_swabresult': 'craa5___1_b_swabresult',
     'craa5___1_b_swabresults': 'craa5___1_b_swabresult',
     'craa5__b_swabresult': 'craa5___1_b_swabresult',
@@ -148,16 +150,122 @@
     'craa5___1_b_correctiveactions': 'craa5___1_b_correctiveaction',
     'craa5__b_correctiveaction': 'craa5___1_b_correctiveaction',
     'craa5__b_correctiveactions': 'craa5___1_b_correctiveaction',
+    'craa5_b_correctiveaction': 'craa5___1_b_correctiveaction',
+    'craa5_b_correctiveactions': 'craa5___1_b_correctiveaction',
     'craa5___1_b_facilityobservation': 'craa5___1_b_facilityobservation',
     'craa5___1_b_facilityobservations': 'craa5___1_b_facilityobservation',
     'craa5__facilityobservation': 'craa5___1_b_facilityobservation',
     'craa5__facilityobservations': 'craa5___1_b_facilityobservation',
+    'craa5_facilityobservation': 'craa5___1_b_facilityobservation',
+    'craa5_facilityobservations': 'craa5___1_b_facilityobservation',
     'craa5___1_b_swabcatalog': 'craa5___1_b_swabcatalog',
     'craa5___1_b_swabcatalogs': 'craa5___1_b_swabcatalog',
     'craa5_pathogenboloswabcatalog9900': 'craa5___1_b_swabcatalog',
     'craa5_pathogenboloswabcatalog9900s': 'craa5___1_b_swabcatalog',
-    'craa5_pathogenboloswabcatalog9900': 'craa5___1_b_swabcatalog',
-    'craa5_pathogenboloswabcatalog9900s': 'craa5___1_b_swabcatalog',
+    'craa5_aa_ms_assets': 'craa5___1_a_mss_area',
+    'craa5_aa_ms_assetses': 'craa5___1_a_mss_area',
+    'craa5__0_hubconfig': 'craa5___1_e_hubconfig',
+    'craa5__0_hubconfigs': 'craa5___1_e_hubconfig',
+    'craa5__e_datamigration': 'craa5___1_e_datamigration',
+    'craa5__e_datamigrations': 'craa5___1_e_datamigration',
+    'craa5___1_e_datamigration': 'craa5___1_e_datamigration',
+    'craa5___1_e_datamigrations': 'craa5___1_e_datamigration',
+    'craa5_e_laborrate': 'craa5___1_e_laborrate',
+    'craa5_e_laborrates': 'craa5___1_e_laborrate',
+    'craa5_e_shifttask': 'craa5___1_e_shifttask',
+    'craa5_e_shifttasks': 'craa5___1_e_shifttask',
+    'craa5_g_assignment': 'craa5___1_g_assignment',
+    'craa5_g_assignments': 'craa5___1_g_assignment',
+    'craa5_g_handover': 'craa5___1_g_handover',
+    'craa5_g_handovers': 'craa5___1_g_handover',
+    'craa5_g_passoff': 'craa5___1_g_passoff',
+    'craa5_g_passoffs': 'craa5___1_g_passoff',
+    'craa5_g_note': 'craa5___1_g_note',
+    'craa5_g_notes': 'craa5___1_g_note',
+    'craa5_g_personnelnote': 'craa5___1_g_note',
+    'craa5_g_personnelnotes': 'craa5___1_g_note',
+    'craa5___maps': 'craa5___1_g_maps',
+    'craa5___mapses': 'craa5___1_g_maps',
+    'craa5_g_maps': 'craa5___1_g_maps',
+    'craa5_g_mapses': 'craa5___1_g_maps',
+    'craa5_m_employeenote': 'craa5___1_m_employeenote',
+    'craa5_m_employeenotes': 'craa5___1_m_employeenote',
+    'craa5_m_quicktask': 'craa5___1_m_quicktask',
+    'craa5_m_quicktasks': 'craa5___1_m_quicktask',
+    'craa5_m_supervisortodo': 'craa5___1_m_supervisortodo',
+    'craa5_m_supervisortodos': 'craa5___1_m_supervisortodo',
+    'craa5_p_changeoverrule': 'craa5___1_p_changeoverrule',
+    'craa5_p_changeoverrules': 'craa5___1_p_changeoverrule',
+    'craa5_p_linepriority': 'craa5___1_p_linepriority',
+    'craa5_p_linepriorities': 'craa5___1_p_linepriority',
+    'craa5__p_plan': 'craa5___1_p_plan',
+    'craa5__p_plans': 'craa5___1_p_plan',
+    'craa5_p_plan': 'craa5___1_p_plan',
+    'craa5_p_plans': 'craa5___1_p_plan',
+    'craa5__p_milestone': 'craa5___1_p_milestone',
+    'craa5__p_milestones': 'craa5___1_p_milestone',
+    'craa5_p_milestone': 'craa5___1_p_milestone',
+    'craa5_p_milestones': 'craa5___1_p_milestone',
+    'craa5___1_p_milestone': 'craa5___1_p_milestone',
+    'craa5___1_p_milestones': 'craa5___1_p_milestone',
+    'craa5__p_workorder': 'craa5___1_p_workorder',
+    'craa5__p_workorders': 'craa5___1_p_workorder',
+    'craa5_p_workorder': 'craa5___1_p_workorder',
+    'craa5_p_workorders': 'craa5___1_p_workorder',
+    'craa5___1_p_workorder': 'craa5___1_p_workorder',
+    'craa5___1_p_workorders': 'craa5___1_p_workorder',
+    'craa5__p_flocmap': 'craa5___1_p_flocmap',
+    'craa5__p_flocmaps': 'craa5___1_p_flocmap',
+    'craa5_p_flocmap': 'craa5___1_p_flocmap',
+    'craa5_p_flocmaps': 'craa5___1_p_flocmap',
+    'craa5___1_p_flocmap': 'craa5___1_p_flocmap',
+    'craa5___1_p_flocmaps': 'craa5___1_p_flocmap',
+    'craa5_p_schedulechange': 'craa5___1_p_schedulechange',
+    'craa5_p_schedulechanges': 'craa5___1_p_schedulechange',
+    'craa5___1_p_schedulechange': 'craa5___1_p_schedulechange',
+    'craa5___1_p_schedulechanges': 'craa5___1_p_schedulechange',
+    'craa5_p_skumaster': 'craa5___1_p_skumaster',
+    'craa5_p_skumasters': 'craa5___1_p_skumaster',
+    'craa5_s_cleancheckoff': 'craa5___1_s_cleancheckoff',
+    'craa5_s_cleancheckoffs': 'craa5___1_s_cleancheckoff',
+    'craa5_s_shiftlog': 'craa5___1_s_shiftlog',
+    'craa5_s_shiftlogs': 'craa5___1_s_shiftlog',
+    'craa5_s_shiftplan': 'craa5___1_s_shiftplan',
+    'craa5_s_shiftplans': 'craa5___1_s_shiftplan',
+    'craa5_s_shiftpreset': 'craa5___1_s_shiftpreset',
+    'craa5_s_shiftpresets': 'craa5___1_s_shiftpreset',
+    'craa5_s_taskassignment': 'craa5___1_s_taskassignment',
+    'craa5_s_taskassignments': 'craa5___1_s_taskassignment',
+    'craa5_s_updatepreset': 'craa5___1_s_updatepreset',
+    'craa5_s_updatepresets': 'craa5___1_s_updatepreset',
+    'craa5__t_skill': 'craa5___1_t_skill',
+    'craa5__t_skills': 'craa5___1_t_skill',
+    'craa5_t_skill': 'craa5___1_t_skill',
+    'craa5_t_skills': 'craa5___1_t_skill',
+    'craa5___1_t_skill': 'craa5___1_t_skill',
+    'craa5___1_t_skills': 'craa5___1_t_skill',
+    'craa5__t_skilllevel': 'craa5___1_t_skilllevel',
+    'craa5__t_skilllevels': 'craa5___1_t_skilllevel',
+    'craa5_t_skilllevel': 'craa5___1_t_skilllevel',
+    'craa5_t_skilllevels': 'craa5___1_t_skilllevel',
+    'craa5___1_t_skilllevel': 'craa5___1_t_skilllevel',
+    'craa5___1_t_skilllevels': 'craa5___1_t_skilllevel',
+    'craa5__t_employeecertification': 'craa5___1_t_cert',
+    'craa5__t_employeecertifications': 'craa5___1_t_cert',
+    'craa5___1_t_cert': 'craa5___1_t_cert',
+    'craa5___1_t_certs': 'craa5___1_t_cert',
+    'craa5__t_trainingevent': 'craa5___1_t_event',
+    'craa5__t_trainingevents': 'craa5___1_t_event',
+    'craa5___1_t_event': 'craa5___1_t_event',
+    'craa5___1_t_events': 'craa5___1_t_event',
+    'organization': 'organization',
+    'organizations': 'organization',
+    'role': 'role',
+    'roles': 'role',
+    'privilege': 'privilege',
+    'privileges': 'privilege',
+    'entitydefinition': 'entitydefinition',
+    'entitydefinitions': 'entitydefinition',
     'systemuser': 'systemuser',
     'systemusers': 'systemuser'
   };
@@ -179,6 +287,10 @@
 
   function primaryKeyOf(canon) {
     if (canon === 'systemuser') return 'systemuserid';
+    if (canon === 'organization') return 'organizationid';
+    if (canon === 'role') return 'roleid';
+    if (canon === 'privilege') return 'privilegeid';
+    if (canon === 'entitydefinition') return 'MetadataId';
     if (canon === 'craa5___1_b_swabresult') return 'craa5___1_b_swabresultid';
     if (canon === 'craa5___1_b_correctiveaction') return 'craa5___1_b_correctiveactionid';
     if (canon === 'craa5___1_b_facilityobservation') return 'craa5___1_b_facilityobservationid';
@@ -965,16 +1077,24 @@
       }
     }
 
-    // Check duplicate key if client supplied primary key
+    // Upsert if client supplied primary key that already exists
     if (suppliedId) {
-      var exists = rows.some(function (r) {
+      var dupIdx = rows.findIndex(function (r) {
         return cleanGuid(r[pk] || r.id) === suppliedId;
       });
-      if (exists) {
-        var dupErr = new Error('Cannot insert duplicate key: a record with matching key values already exists (0x80040237)');
-        dupErr.status = 412;
-        dupErr.code = 0x80040237;
-        throw dupErr;
+      if (dupIdx >= 0) {
+        var upserted = Object.assign({}, rows[dupIdx], payload, {
+          modifiedon: new Date().toISOString(),
+          __modified: true
+        });
+        upserted[pk] = suppliedId;
+        rows[dupIdx] = upserted;
+        setTableRows(canon, rows);
+        if (canon === 'craa5___1_l_log') {
+          syncLogToCheckoff(upserted);
+        }
+        recordOp('update', canon, 'id=' + suppliedId);
+        return decorateRow(canon, upserted);
       }
     }
 
@@ -1125,8 +1245,8 @@
       if (rid === id) { idx = i; break; }
     }
     if (idx === -1) {
-      if (allowUpsert) {
-        payload[pk] = id;
+      if (allowUpsert !== false) {
+        payload[pk] = id || newGuid();
         return createInternal(canon, payload);
       }
       var missErr = new Error("Entity '" + canon + "' With Id = " + id + " Does Not Exist (0x80040217)");
@@ -1225,7 +1345,7 @@
     updateRecord: function (tableName, id, data) {
       return new Promise(function (resolve, reject) {
         try {
-          updateInternal(tableName, id, data, false);
+          updateInternal(tableName, id, data, true);
           resolve({ id: cleanGuid(id), entityType: canonicalTable(tableName) });
         } catch (e) {
           reject(e);
@@ -1245,6 +1365,12 @@
 
   function makeGlobalContext() {
     var db = ensureDb();
+    var eff = (global.ApexDemoEngine && typeof global.ApexDemoEngine.getEffectiveUser === 'function')
+      ? global.ApexDemoEngine.getEffectiveUser()
+      : null;
+    var uId = String((eff && eff.userId) || db.currentUser.userId || 'a0000001-0000-4000-8000-000000000001').replace(/[{}]/g, '');
+    var uName = String((eff && eff.userName) || db.currentUser.userName || 'Marcus Vance');
+    var uEmail = String((eff && eff.email) || db.currentUser.email || 'marcus.vance@apexfoods.demo');
     var roleObjs = (db.currentUser.roles || ['System Administrator', 'Sanitation Supervisor']).map(function (r, idx) {
       return { id: 'role-000' + idx, name: r };
     });
@@ -1252,8 +1378,11 @@
       getClientUrl: function () { return 'https://demo.apexfoods.local'; },
       getCurrentAppUrl: function () { return 'https://demo.apexfoods.local'; },
       userSettings: {
-        userId: '{' + db.currentUser.userId.toUpperCase() + '}',
-        userName: db.currentUser.userName,
+        userId: '{' + uId.toUpperCase() + '}',
+        userName: uName,
+        email: uEmail,
+        userEmail: uEmail,
+        userPrincipalName: uEmail,
         securityRoles: roleObjs.map(function (r) { return r.id; }),
         roles: {
           getAll: function () { return roleObjs; },
@@ -1311,7 +1440,7 @@
     updateRow: function (tableName, id, payload) {
       return new Promise(function (resolve, reject) {
         try {
-          var updated = updateInternal(tableName, id, payload, false);
+          var updated = updateInternal(tableName, id, payload, true);
           resolve(Object.assign({ id: cleanGuid(id) }, updated));
         } catch (e) {
           reject(e);
@@ -1350,6 +1479,64 @@
     };
   }
 
+  function synthesizeEntityDefinition(logicalRaw, db) {
+    var logical = String(logicalRaw || '').trim().toLowerCase();
+    var canon = canonicalTable(logical);
+    var pk = primaryKeyOf(canon);
+    var setName = /s$/i.test(logical) ? (logical + 'es') : (logical + 's');
+    var sampleRows = (db && db.tables && db.tables[canon]) ? db.tables[canon] : [];
+    var colMap = {};
+    colMap[pk] = 'Uniqueidentifier';
+    colMap.craa5_name = 'String';
+    colMap.craa5_title = 'String';
+    colMap.craa5_configkey = 'String';
+    colMap.craa5_configname = 'String';
+    colMap.craa5_configjson = 'Memo';
+    colMap.craa5_manifestjson = 'Memo';
+    colMap.craa5_details = 'Memo';
+    colMap.craa5_payload = 'Memo';
+    colMap.craa5_payloadjson = 'Memo';
+    colMap.statecode = 'State';
+    colMap.statuscode = 'Status';
+    colMap.createdon = 'DateTime';
+    colMap.modifiedon = 'DateTime';
+    for (var i = 0; i < sampleRows.length && i < 10; i++) {
+      var r = sampleRows[i];
+      if (!r || typeof r !== 'object') continue;
+      Object.keys(r).forEach(function (k) {
+        if (k.indexOf('@') !== -1 || k.indexOf('__') === 0) return;
+        if (!colMap[k]) {
+          var val = r[k];
+          colMap[k] = typeof val === 'number' ? 'Integer' : (typeof val === 'boolean' ? 'Boolean' : 'String');
+        }
+      });
+    }
+    var attrs = Object.keys(colMap).map(function (cName) {
+      return {
+        MetadataId: '00000000-0000-4000-8000-' + String(Math.abs(cName.split('').reduce(function (a, b) { return ((a << 5) - a) + b.charCodeAt(0); }, 0))).padStart(12, '0').slice(0, 12),
+        LogicalName: cName,
+        SchemaName: cName,
+        AttributeType: colMap[cName],
+        IsPrimaryId: cName === pk,
+        IsPrimaryName: cName === 'craa5_title' || cName === 'craa5_name' || cName === 'craa5_configkey',
+        MaxLength: colMap[cName] === 'Memo' ? 1048576 : 4000,
+        DisplayName: { UserLocalizedLabel: { Label: cName } }
+      };
+    });
+    return {
+      MetadataId: '00000000-0000-4000-9000-' + String(Math.abs(logical.split('').reduce(function (a, b) { return ((a << 5) - a) + b.charCodeAt(0); }, 0))).padStart(12, '0').slice(0, 12),
+      LogicalName: logical,
+      SchemaName: logical,
+      EntitySetName: setName,
+      PrimaryIdAttribute: pk,
+      PrimaryNameAttribute: 'craa5_title',
+      OwnershipType: 'UserOwned',
+      IsCustomEntity: logical.indexOf('craa5_') === 0,
+      DisplayName: { UserLocalizedLabel: { Label: logical } },
+      Attributes: attrs
+    };
+  }
+
   function handleSingleApiRequest(method, urlStr, headers, bodyText) {
     var db = ensureDb();
     var mMethod = String(method || 'GET').toUpperCase();
@@ -1362,16 +1549,97 @@
 
     // 1. WhoAmI
     if (/^WhoAmI(\(\))?$/i.test(pathPart)) {
+      var effUser = (global.ApexDemoEngine && typeof global.ApexDemoEngine.getEffectiveUser === 'function')
+        ? global.ApexDemoEngine.getEffectiveUser()
+        : null;
       return makeJsonResponse(200, {
-        UserId: db.currentUser.userId,
+        UserId: (effUser && effUser.userId) || db.currentUser.userId,
         BusinessUnitId: 'b0000001-0000-4000-8000-000000000001',
         OrganizationId: 'o0000001-0000-4000-8000-000000000001'
       });
     }
 
-    // 2. PublishAllXml
-    if (/^PublishAllXml/i.test(pathPart)) {
+    // 2. PublishAllXml / PublishXml
+    if (/^Publish(?:All)?Xml/i.test(pathPart)) {
       return makeJsonResponse(204, null);
+    }
+
+    // 2b. EntityDefinitions metadata endpoints (used by Dataverse Ecosystem & Manager Hub Data Check)
+    if (/^EntityDefinitions/i.test(pathPart)) {
+      var memoMatch = pathPart.match(/^EntityDefinitions\(LogicalName=['"]([^'"]+)['"]\)\/Attributes\(LogicalName=['"]([^'"]+)['"]\)(?:\/Microsoft\.Dynamics\.CRM\.[A-Za-z]+)?$/i);
+      if (memoMatch) {
+        if (mMethod === 'PATCH' || mMethod === 'PUT' || mMethod === 'POST') {
+          return makeJsonResponse(204, null);
+        }
+        return makeJsonResponse(200, {
+          MetadataId: newGuid(),
+          LogicalName: memoMatch[2].toLowerCase(),
+          AttributeType: 'Memo',
+          MaxLength: 1048576
+        });
+      }
+      var attrCollMatch = pathPart.match(/^EntityDefinitions\(LogicalName=['"]([^'"]+)['"]\)\/Attributes$/i);
+      if (attrCollMatch) {
+        var edAttr = synthesizeEntityDefinition(attrCollMatch[1], db);
+        if (mMethod === 'POST' || mMethod === 'PATCH' || mMethod === 'PUT') {
+          return makeJsonResponse(204, null);
+        }
+        return makeJsonResponse(200, { value: edAttr.Attributes });
+      }
+      var singleEdMatch = pathPart.match(/^EntityDefinitions\(LogicalName=['"]([^'"]+)['"]\)$/i);
+      if (singleEdMatch) {
+        if (mMethod === 'PATCH' || mMethod === 'PUT' || mMethod === 'DELETE') {
+          return makeJsonResponse(204, null);
+        }
+        return makeJsonResponse(200, synthesizeEntityDefinition(singleEdMatch[1], db));
+      }
+      if (mMethod === 'POST' || mMethod === 'PATCH' || mMethod === 'PUT') {
+        return makeJsonResponse(204, null);
+      }
+      var knownLogicalNames = Object.keys(db.tables || {}).concat([
+        'craa5__e_hubconfig', 'craa5__0_hubconfig', 'craa5__e_datamigration',
+        'craa5___1_e_hubconfig', 'craa5___1_e_datamigration',
+        'craa5_aa_assets', 'craa5_aa_ms_assets', 'craa5__aa_employee',
+        'craa5__b_swabresult', 'craa5__b_correctiveaction', 'craa5__facilityobservation',
+        'craa5_pathogenboloswabcatalog9900', 'craa5_directorsetpoint'
+      ]);
+      var seenEd = {};
+      var edList = [];
+      knownLogicalNames.forEach(function (ln) {
+        var low = String(ln || '').toLowerCase();
+        if (!low || seenEd[low]) return;
+        seenEd[low] = true;
+        edList.push(synthesizeEntityDefinition(low, db));
+      });
+      return makeJsonResponse(200, { value: edList });
+    }
+
+    // 2c. RetrieveRolePrivilegesRole / privileges / roles metadata
+    if (/^RetrieveRolePrivilegesRole/i.test(pathPart)) {
+      return makeJsonResponse(200, { RolePrivileges: [] });
+    }
+    if (/^privileges$/i.test(pathPart)) {
+      return makeJsonResponse(200, { value: [] });
+    }
+    if (/^roles$/i.test(pathPart)) {
+      var demoRoles = (db.currentUser.roles || ['System Administrator', 'Sanitation Supervisor', 'Sanitation Manager']).map(function (r, idx) {
+        return {
+          roleid: '00000000-0000-4000-8000-00000000000' + (idx + 1),
+          name: r,
+          ismanaged: idx === 0,
+          _businessunitid_value: 'b0000001-0000-4000-8000-000000000001',
+          _parentrootroleid_value: null
+        };
+      });
+      return makeJsonResponse(200, { value: demoRoles });
+    }
+    if (/^organizations$/i.test(pathPart)) {
+      return makeJsonResponse(200, {
+        value: [{
+          organizationid: 'o0000001-0000-4000-8000-000000000001',
+          name: 'Apex Foods Plant #4 Demo Org'
+        }]
+      });
     }
 
     // 3. systemusers(id)/systemuserroles_association
@@ -1504,7 +1772,10 @@
 
   global.fetch = function (input, init) {
     var urlStr = typeof input === 'string' ? input : (input && input.url ? input.url : String(input || ''));
-    if (urlStr.indexOf('/api/data/v9.') > -1) {
+    if (/(?:127\.0\.0\.1|localhost):8787/i.test(urlStr)) {
+      return Promise.resolve(makeJsonResponse(200, { ok: false, status: 'offline', bridge: false }));
+    }
+    if (urlStr.indexOf('/api/data/v9.') > -1 || urlStr.indexOf('/_api/') > -1) {
       var method = (init && init.method) || (input && input.method) || 'GET';
       var headers = (init && init.headers) || {};
       var body = init && init.body;
@@ -1531,6 +1802,25 @@
     create: createInternal,
     update: updateInternal,
     delete: deleteInternal,
+    createFrameBinding: function (targetWin, appKey) {
+      var w = targetWin || global;
+      var ctx = makeGlobalContext();
+      if (w && !w.Xrm) {
+        w.Xrm = global.Xrm;
+      }
+      if (w && !w.__APEX_DEMO_DATA_API__) {
+        w.__APEX_DEMO_DATA_API__ = dataApi;
+      }
+      if (w) {
+        w.__APEX_DEMO_CONTEXT__ = ctx;
+      }
+      return {
+        Xrm: (w && w.Xrm) || global.Xrm,
+        dataApi: (w && w.__APEX_DEMO_DATA_API__) || dataApi,
+        context: ctx,
+        fetch: (w && w.fetch) || global.fetch
+      };
+    },
     resetToSeed: function () {
       var rw = getRootWin();
       var seed = (rw.__APEX_DEMO_SEED__ || global.__APEX_DEMO_SEED__ || { tables: {}, currentUser: {} });
